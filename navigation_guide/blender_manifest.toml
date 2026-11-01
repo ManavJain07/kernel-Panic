@@ -1,0 +1,11 @@
+schema_version = "1.0.0"
+
+id = "navigation_guide"
+version = "0.1.0"
+name = "Blender Navigation Guide"
+tagline = "Context-aware guidance for Blender beginners"
+maintainer = "Your Team <you@example.com>"
+type = "add-on"
+
+blender_version_min = "4.2.0"
+license = ["SPDX:MIT"]
