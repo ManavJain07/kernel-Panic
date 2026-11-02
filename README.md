@@ -5,7 +5,8 @@ A Blender add-on that tells beginners **where they are** in Blender and
 
 > Built for the DevLups Labs hackathon. Problem statement: make digital
 > experiences more accessible for people with limited technical literacy.
-
+## How to install :
+click on final project . zip and see its description .
 ## Who it is for
 First-time Blender users who feel lost in the interface.
 
@@ -64,6 +65,10 @@ Manav
 Raghya
 avadhoot
 shashank
+
+
+
+so overall a fun project :)
 
 ## License
 MIT
