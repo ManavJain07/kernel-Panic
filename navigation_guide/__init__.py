@@ -1,6 +1,6 @@
-from . import operators, panel_nav, panel_tutorial, props
+from . import goal_ops, operators, overlay, panel_nav, panel_tutorial, props, session
 
-modules = (props, operators, panel_nav, panel_tutorial)
+modules = (props, operators, goal_ops, session, overlay, panel_nav, panel_tutorial)
 
 
 def register():

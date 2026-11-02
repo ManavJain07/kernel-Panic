@@ -1,0 +1,306 @@
+{
+  "recipes": [
+    {
+      "id": "wall",
+      "title": "Build a wall",
+      "summary": "Turn a cube into a long, thin, tall wall that stands on the ground.",
+      "keywords": [
+        "wall",
+        "fence",
+        "barrier",
+        "partition",
+        "brick",
+        "boundary"
+      ],
+      "steps": [
+        {
+          "short": "Have a cube",
+          "text": "Make sure there is a cube in the scene. Add one if not.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "min_mesh_objects": 1
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Select the cube",
+          "text": "Click the cube in the viewport so it has an orange outline.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          }
+        },
+        {
+          "short": "Make it long",
+          "text": "With the mouse over the viewport, press S, then X, type 4 and press Enter. This stretches the cube into a long wall.",
+          "shortcut": "S, X, 4, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "x": 6
+            }
+          }
+        },
+        {
+          "short": "Make it thin",
+          "text": "Press S, then Y, type 0.2 and press Enter to make the wall thin.",
+          "shortcut": "S, Y, 0.2, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_max": {
+              "y": 1
+            }
+          }
+        },
+        {
+          "short": "Make it tall",
+          "text": "Press S, then Z, type 1.5 and press Enter to make the wall taller.",
+          "shortcut": "S, Z, 1.5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "z": 2.5
+            }
+          }
+        },
+        {
+          "short": "Lift onto ground",
+          "text": "The wall is sunk into the ground grid. Press G, then Z, type 1.5 and press Enter to lift it.",
+          "shortcut": "G, Z, 1.5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "bottom_z_min": -0.05
+          }
+        }
+      ]
+    },
+    {
+      "id": "window_hole",
+      "title": "Cut a window or door hole in a wall",
+      "summary": "Use a second cube and a Boolean modifier to cut an opening.",
+      "keywords": [
+        "window",
+        "door",
+        "hole",
+        "opening",
+        "cut",
+        "boolean",
+        "doorway",
+        "gap"
+      ],
+      "steps": [
+        {
+          "short": "Select the wall",
+          "text": "Click the wall you want to cut a hole in.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          }
+        },
+        {
+          "short": "Add a cutter cube",
+          "text": "Add a new cube. It will be the shape of the hole.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Place the cutter",
+          "text": "Move (G) and scale (S) the new cube so it overlaps the wall where the window or door should be. Click when it looks right, then press 'I did this'.",
+          "shortcut": "G / S",
+          "mode": "OBJECT"
+        },
+        {
+          "short": "Select the wall again",
+          "text": "Click the wall (not the cutter) to select it. Then press 'I did this'.",
+          "shortcut": "Left click",
+          "mode": "OBJECT"
+        },
+        {
+          "short": "Add Boolean modifier",
+          "text": "In the Properties editor on the right, open the Modifiers tab (wrench icon). Click Add Modifier > Generate > Boolean.",
+          "shortcut": "Wrench tab > Add Modifier",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "BOOLEAN"
+          }
+        },
+        {
+          "short": "Pick the cutter",
+          "text": "In the Boolean modifier, keep Operation on Difference and click the Object box. Choose your cutter cube.",
+          "shortcut": "Boolean > Object",
+          "mode": "OBJECT",
+          "done": {
+            "modifier_ready": "BOOLEAN"
+          }
+        },
+        {
+          "short": "Hide the cutter",
+          "text": "Click the cutter cube, then press H to hide it. The hole is now visible. Press 'I did this' when done.",
+          "shortcut": "H",
+          "mode": "OBJECT"
+        }
+      ]
+    },
+    {
+      "id": "colour",
+      "title": "Add colour to an object",
+      "summary": "Create a material and see it in the viewport.",
+      "keywords": [
+        "colour",
+        "color",
+        "paint",
+        "material",
+        "tint",
+        "shade",
+        "red",
+        "blue",
+        "green"
+      ],
+      "steps": [
+        {
+          "short": "Select the object",
+          "text": "Click the object you want to colour.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          }
+        },
+        {
+          "short": "Create a material",
+          "text": "In the Properties editor on the right, open the Material tab (round sphere icon near the bottom of the tab column) and click New.",
+          "shortcut": "Material tab > New",
+          "done": {
+            "has_material": true
+          }
+        },
+        {
+          "short": "Pick a colour",
+          "text": "Click the Base Color box and choose a colour. Press 'I did this' when finished.",
+          "shortcut": "Base Color"
+        },
+        {
+          "short": "Preview colours",
+          "text": "Switch the viewport to Material Preview (third sphere icon at the top-right of the viewport) so you can see the colour.",
+          "shortcut": "Viewport shading buttons",
+          "done": {
+            "shading": "MATERIAL"
+          },
+          "action": "material_preview",
+          "action_label": "Material Preview"
+        }
+      ]
+    },
+    {
+      "id": "column",
+      "title": "Build a column",
+      "summary": "Turn a cylinder into a tall, narrow column on the ground.",
+      "keywords": [
+        "column",
+        "pillar",
+        "pole",
+        "post",
+        "tower",
+        "cylinder",
+        "pier",
+        "pipe"
+      ],
+      "steps": [
+        {
+          "short": "Add a cylinder",
+          "text": "Add a cylinder to the scene.",
+          "shortcut": "Shift + A > Mesh > Cylinder",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true,
+            "active_type": "MESH"
+          }
+        },
+        {
+          "short": "Make it tall",
+          "text": "Press S, then Z, type 3 and press Enter to stretch it upward.",
+          "shortcut": "S, Z, 3, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "z": 4
+            }
+          }
+        },
+        {
+          "short": "Make it narrow",
+          "text": "Press S, then Shift + Z, type 0.5 and press Enter. Shift + Z scales everything except the height.",
+          "shortcut": "S, Shift + Z, 0.5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_max": {
+              "x": 1.5
+            }
+          }
+        },
+        {
+          "short": "Lift onto ground",
+          "text": "Press G, then Z, type 3 and press Enter to stand the column on the ground.",
+          "shortcut": "G, Z, 3, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "bottom_z_min": -0.05
+          }
+        }
+      ]
+    },
+    {
+      "id": "round_edges",
+      "title": "Round off sharp edges",
+      "summary": "Add a Bevel modifier so corners look softer.",
+      "keywords": [
+        "round",
+        "rounded",
+        "edges",
+        "corners",
+        "bevel",
+        "soft",
+        "smooth",
+        "sharp"
+      ],
+      "steps": [
+        {
+          "short": "Select the object",
+          "text": "Click the object whose corners you want to round.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          }
+        },
+        {
+          "short": "Add Bevel modifier",
+          "text": "In the Properties editor, open the Modifiers tab (wrench icon). Click Add Modifier > Generate > Bevel.",
+          "shortcut": "Wrench tab > Add Modifier",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "BEVEL"
+          }
+        },
+        {
+          "short": "Adjust the width",
+          "text": "Change Width in the Bevel modifier until the corners look right. Press 'I did this' when finished.",
+          "shortcut": "Bevel > Width"
+        }
+      ]
+    }
+  ]
+}

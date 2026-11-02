@@ -26,14 +26,27 @@ def register():
     # tutorial
     wm.navguide_task = bpy.props.EnumProperty(name="Task", items=task_items, update=on_task_change)
     wm.navguide_step = bpy.props.IntProperty(default=0, min=0)
-    # navigation
+    # navigation: find a tool
     wm.navguide_query = bpy.props.StringProperty(
         name="Find a tool", description="Describe what you want to do", options={"TEXTEDIT_UPDATE"}
+    )
+    # navigation: guided goal
+    wm.navguide_goal_query = bpy.props.StringProperty(
+        name="Goal", description="What do you want to make? e.g. a wall"
+    )
+    wm.navguide_goal_id = bpy.props.StringProperty()
+    wm.navguide_goal_step = bpy.props.IntProperty(default=0, min=0)
+    wm.navguide_goal_baseline = bpy.props.IntProperty(default=0, min=0)
+    wm.navguide_overlay = bpy.props.BoolProperty(
+        name="Show hints in the viewport", default=True
     )
 
 
 def unregister():
     wm = bpy.types.WindowManager
-    del wm.navguide_task
-    del wm.navguide_step
-    del wm.navguide_query
+    for name in (
+        "navguide_task", "navguide_step", "navguide_query", "navguide_goal_query",
+        "navguide_goal_id", "navguide_goal_step", "navguide_goal_baseline", "navguide_overlay",
+    ):
+        if hasattr(wm, name):
+            delattr(wm, name)

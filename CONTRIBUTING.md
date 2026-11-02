@@ -39,9 +39,9 @@ Two sub-teams work on the same add-on, so keep to your own files.
 | Area | Navigation team | Tutorial team |
 |---|---|---|
 | Panel | `panel_nav.py` | `panel_tutorial.py` |
-| Logic | `finder.py`, `context.py` | `tasks.py` |
-| Data | `tools/tools.json` | `tasks/tasks.json` |
-| Validator | `scripts/validate_tools.py` | `scripts/validate_tasks.py` |
+| Logic | `navigator.py`, `finder.py`, `context.py`, `session.py`, `overlay.py`, `goal_ops.py` | `tasks.py` |
+| Data | `recipes/recipes.json`, `tools/tools.json` | `tasks/tasks.json` |
+| Validator | `scripts/validate_recipes.py`, `validate_tools.py` | `scripts/validate_tasks.py` |
 
 Shared files (`__init__.py`, `props.py`, `operators.py`, `utils.py`): make
 small edits, one block per feature, and tell the other team in your pull request.
@@ -50,3 +50,14 @@ small edits, one block per feature, and tell the other team in your pull request
 Every entry in `tools/tools.json` has `"verified": false` until someone has
 tested the menu path and shortcut in Blender 4.2. After testing, change it to
 `true`. `python scripts/validate_tools.py` lists what is still unverified.
+
+## Adding a guided goal (navigation team)
+Goals live in `navigation_guide/recipes/recipes.json`. A step with a `done`
+condition advances by itself when Blender's live state matches; a step without
+one shows an "I did this" button. Allowed condition keys are listed in
+`KNOWN_KEYS` in `navigator.py`. Add a new key by extending `get_state()` in
+`context.py` and `check_condition()` in `navigator.py`. Then run:
+
+```
+python scripts/validate_recipes.py
+```
