@@ -1,0 +1,1044 @@
+{
+  "recipes": [
+    {
+      "id": "view_around",
+      "title": "Move around the 3D view",
+      "summary": "Orbit, pan, zoom and get unlost.",
+      "keywords": [
+        "navigate",
+        "look",
+        "orbit",
+        "pan",
+        "zoom",
+        "view",
+        "rotate view",
+        "around",
+        "camera view",
+        "lost"
+      ],
+      "steps": [
+        {
+          "short": "Orbit",
+          "text": "Hold the middle mouse button and drag over the viewport to rotate your view. No middle button? Drag the small axis gizmo at the top-right of the viewport. Press 'I did this' when done.",
+          "shortcut": "Middle mouse drag"
+        },
+        {
+          "short": "Pan",
+          "text": "Hold Shift and drag with the middle mouse button to slide the view sideways. Press 'I did this' when done.",
+          "shortcut": "Shift + Middle mouse drag"
+        },
+        {
+          "short": "Zoom",
+          "text": "Scroll the mouse wheel to zoom in and out. Press 'I did this' when done.",
+          "shortcut": "Scroll wheel"
+        },
+        {
+          "short": "Zoom to object",
+          "text": "Select an object, then zoom to it. On a laptop use View > Frame Selected.",
+          "shortcut": "Numpad .",
+          "action": "frame_selected",
+          "action_label": "Frame selected"
+        },
+        {
+          "short": "Show everything",
+          "text": "Lost? Show the whole scene.",
+          "shortcut": "Home",
+          "action": "view_all",
+          "action_label": "Show everything"
+        }
+      ]
+    },
+    {
+      "id": "wall",
+      "title": "Build a wall",
+      "summary": "Turn a cube into a long, thin, tall wall that stands on the ground.",
+      "keywords": [
+        "wall",
+        "fence",
+        "barrier",
+        "partition",
+        "brick",
+        "boundary"
+      ],
+      "steps": [
+        {
+          "short": "Have a cube",
+          "text": "Make sure there is a cube in the scene. Add one if not.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "min_mesh_objects": 1
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Select the cube",
+          "text": "Click the cube in the viewport so it has an orange outline.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Make it long",
+          "text": "With the mouse over the viewport, press S, then X, type 4 and press Enter. This stretches the cube into a long wall.",
+          "shortcut": "S, X, 4, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "x": 6
+            }
+          },
+          "axis": "X",
+          "highlight": true
+        },
+        {
+          "short": "Make it thin",
+          "text": "Press S, then Y, type 0.2 and press Enter to make the wall thin.",
+          "shortcut": "S, Y, 0.2, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_max": {
+              "y": 1
+            }
+          },
+          "axis": "Y",
+          "highlight": true
+        },
+        {
+          "short": "Make it tall",
+          "text": "Press S, then Z, type 1.5 and press Enter to make the wall taller.",
+          "shortcut": "S, Z, 1.5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "z": 2.5
+            }
+          },
+          "axis": "Z",
+          "highlight": true
+        },
+        {
+          "short": "Lift onto ground",
+          "text": "The wall is sunk into the ground grid. Press G, then Z, type 1.5 and press Enter to lift it.",
+          "shortcut": "G, Z, 1.5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "bottom_z_min": -0.05
+          },
+          "axis": "Z",
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "slab",
+      "title": "Build a floor slab",
+      "summary": "Flatten a cube into a wide, thin slab that sits on the ground.",
+      "keywords": [
+        "slab",
+        "floor",
+        "foundation",
+        "base",
+        "deck",
+        "platform",
+        "plinth"
+      ],
+      "steps": [
+        {
+          "short": "Add a cube",
+          "text": "Add a new cube.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true,
+            "active_type": "MESH"
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube",
+          "highlight": true
+        },
+        {
+          "short": "Make it wide",
+          "text": "Press S, then X, type 5 and press Enter to stretch it along X.",
+          "shortcut": "S, X, 5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "x": 8
+            }
+          },
+          "axis": "X",
+          "highlight": true
+        },
+        {
+          "short": "Make it deep",
+          "text": "Press S, then Y, type 5 and press Enter to stretch it along Y.",
+          "shortcut": "S, Y, 5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "y": 8
+            }
+          },
+          "axis": "Y",
+          "highlight": true
+        },
+        {
+          "short": "Make it thin",
+          "text": "Press S, then Z, type 0.1 and press Enter to flatten it into a slab.",
+          "shortcut": "S, Z, 0.1, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_max": {
+              "z": 0.5
+            }
+          },
+          "axis": "Z",
+          "highlight": true
+        },
+        {
+          "short": "Lift onto ground",
+          "text": "Press G, then Z, type 0.1 and press Enter so the slab sits on the ground.",
+          "shortcut": "G, Z, 0.1, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "bottom_z_min": -0.05
+          },
+          "axis": "Z",
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "column",
+      "title": "Build a column",
+      "summary": "Turn a cylinder into a tall, narrow column on the ground.",
+      "keywords": [
+        "column",
+        "pillar",
+        "pole",
+        "post",
+        "tower",
+        "cylinder",
+        "pier",
+        "pipe"
+      ],
+      "steps": [
+        {
+          "short": "Add a cylinder",
+          "text": "Add a cylinder to the scene.",
+          "shortcut": "Shift + A > Mesh > Cylinder",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Make it tall",
+          "text": "Press S, then Z, type 3 and press Enter to stretch it upward.",
+          "shortcut": "S, Z, 3, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "z": 4
+            }
+          },
+          "axis": "Z",
+          "highlight": true
+        },
+        {
+          "short": "Make it narrow",
+          "text": "Press S, then Shift + Z, type 0.5 and press Enter. Shift + Z scales everything except the height.",
+          "shortcut": "S, Shift + Z, 0.5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_max": {
+              "x": 1.5
+            }
+          },
+          "highlight": true
+        },
+        {
+          "short": "Lift onto ground",
+          "text": "Press G, then Z, type 3 and press Enter to stand the column on the ground.",
+          "shortcut": "G, Z, 3, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "bottom_z_min": -0.05
+          },
+          "axis": "Z",
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "ground",
+      "title": "Add a large ground plane",
+      "summary": "A big flat plane to stand your model on.",
+      "keywords": [
+        "ground",
+        "floor",
+        "plane",
+        "terrain",
+        "land",
+        "soil",
+        "base",
+        "site"
+      ],
+      "steps": [
+        {
+          "short": "Add a plane",
+          "text": "Add a plane to the scene.",
+          "shortcut": "Shift + A > Mesh > Plane",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Make it big",
+          "text": "Press S, type 10 and press Enter. The plane becomes about 20 metres wide.",
+          "shortcut": "S, 10, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "x": 15
+            }
+          },
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "duplicate",
+      "title": "Copy an object",
+      "summary": "Make a second copy of something.",
+      "keywords": [
+        "duplicate",
+        "copy",
+        "clone",
+        "another",
+        "second",
+        "twin",
+        "replicate"
+      ],
+      "steps": [
+        {
+          "short": "Select the object",
+          "text": "Click the object you want to copy.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1
+          },
+          "highlight": true
+        },
+        {
+          "short": "Duplicate it",
+          "text": "Press Shift + D, move the mouse and click to place the copy. (Press Esc or right-click to leave the copy where it is.)",
+          "shortcut": "Shift + D",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true
+          },
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "repeat",
+      "title": "Repeat an object in a row",
+      "summary": "Use an Array modifier for fences, columns and railings.",
+      "keywords": [
+        "repeat",
+        "array",
+        "row",
+        "fence",
+        "columns",
+        "line of",
+        "copies",
+        "pattern",
+        "multiple",
+        "railing"
+      ],
+      "steps": [
+        {
+          "short": "Select the object",
+          "text": "Click the object you want to repeat.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Add Array modifier",
+          "text": "In the Properties editor on the right, open the Modifiers tab (wrench icon). Click Add Modifier > Generate > Array.",
+          "shortcut": "Wrench tab > Add Modifier",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "ARRAY"
+          }
+        },
+        {
+          "short": "Set the count",
+          "text": "Change Count to how many copies you want, for example 5. By default the copies sit side by side along X. Press 'I did this' when done.",
+          "shortcut": "Array > Count"
+        },
+        {
+          "short": "Set the spacing",
+          "text": "Change Factor X under Relative Offset to adjust gaps: 1 means touching, 1.5 leaves a gap. Press 'I did this' when done.",
+          "shortcut": "Array > Relative Offset"
+        }
+      ]
+    },
+    {
+      "id": "window_hole",
+      "title": "Cut a window or door hole in a wall",
+      "summary": "Use a second cube and a Boolean modifier to cut an opening.",
+      "keywords": [
+        "window",
+        "door",
+        "hole",
+        "opening",
+        "cut",
+        "boolean",
+        "doorway",
+        "gap"
+      ],
+      "steps": [
+        {
+          "short": "Select the wall",
+          "text": "Click the wall you want to cut a hole in.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Add a cutter cube",
+          "text": "Add a new cube. It will be the shape of the hole.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube",
+          "highlight": true
+        },
+        {
+          "short": "Place the cutter",
+          "text": "Move (G) and scale (S) the new cube so it overlaps the wall where the window or door should be. Click when it looks right, then press 'I did this'.",
+          "shortcut": "G",
+          "mode": "OBJECT",
+          "highlight": true
+        },
+        {
+          "short": "Select the wall again",
+          "text": "Click the wall (not the cutter) to select it. Then press 'I did this'.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "highlight": true
+        },
+        {
+          "short": "Add Boolean modifier",
+          "text": "In the Properties editor on the right, open the Modifiers tab (wrench icon). Click Add Modifier > Generate > Boolean.",
+          "shortcut": "Wrench tab > Add Modifier",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "BOOLEAN"
+          }
+        },
+        {
+          "short": "Pick the cutter",
+          "text": "In the Boolean modifier, keep Operation on Difference and click the Object box. Choose your cutter cube.",
+          "shortcut": "Boolean > Object",
+          "mode": "OBJECT",
+          "done": {
+            "modifier_ready": "BOOLEAN"
+          }
+        },
+        {
+          "short": "Hide the cutter",
+          "text": "Click the cutter cube, then press H to hide it. The hole is now visible. Press 'I did this' when done.",
+          "shortcut": "H",
+          "mode": "OBJECT"
+        }
+      ]
+    },
+    {
+      "id": "extrude_face",
+      "title": "Pull a shape out of a face",
+      "summary": "Extrude a face of a cube to add volume, like a porch or balcony.",
+      "keywords": [
+        "extrude",
+        "pull",
+        "bump",
+        "push out",
+        "protrusion",
+        "add volume",
+        "balcony",
+        "porch",
+        "extension"
+      ],
+      "steps": [
+        {
+          "short": "Enter Edit Mode",
+          "text": "Select a cube and press Tab to enter Edit Mode.",
+          "shortcut": "Tab",
+          "done": {
+            "mode": "EDIT_MESH"
+          },
+          "action": "toggle_edit_mode",
+          "action_label": "Switch mode",
+          "highlight": true
+        },
+        {
+          "short": "Pick a face",
+          "text": "Press 3 for face selection, then click one face of the cube. Press 'I did this' when a face is selected.",
+          "shortcut": "3",
+          "mode": "EDIT_MESH"
+        },
+        {
+          "short": "Extrude",
+          "text": "Press E, move the mouse to pull the face outward, then left-click to confirm. Press 'I did this' when done.",
+          "shortcut": "E",
+          "mode": "EDIT_MESH"
+        },
+        {
+          "short": "Back to Object Mode",
+          "text": "Press Tab to leave Edit Mode and see the result.",
+          "shortcut": "Tab",
+          "done": {
+            "mode": "OBJECT"
+          },
+          "action": "toggle_edit_mode",
+          "action_label": "Switch mode"
+        }
+      ]
+    },
+    {
+      "id": "round_edges",
+      "title": "Round off sharp edges",
+      "summary": "Add a Bevel modifier so corners look softer.",
+      "keywords": [
+        "round",
+        "rounded",
+        "edges",
+        "corners",
+        "bevel",
+        "soft",
+        "smooth",
+        "sharp"
+      ],
+      "steps": [
+        {
+          "short": "Select the object",
+          "text": "Click the object whose corners you want to round.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Add Bevel modifier",
+          "text": "In the Properties editor, open the Modifiers tab (wrench icon). Click Add Modifier > Generate > Bevel.",
+          "shortcut": "Wrench tab > Add Modifier",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "BEVEL"
+          }
+        },
+        {
+          "short": "Adjust the width",
+          "text": "Change Width in the Bevel modifier until the corners look right. Press 'I did this' when finished.",
+          "shortcut": "Bevel > Width"
+        }
+      ]
+    },
+    {
+      "id": "colour",
+      "title": "Add colour to an object",
+      "summary": "Create a material and see it in the viewport.",
+      "keywords": [
+        "colour",
+        "color",
+        "paint",
+        "material",
+        "tint",
+        "shade",
+        "red",
+        "blue",
+        "green"
+      ],
+      "steps": [
+        {
+          "short": "Select the object",
+          "text": "Click the object you want to colour.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Create a material",
+          "text": "In the Properties editor on the right, open the Material tab (round sphere icon near the bottom of the tab column) and click New.",
+          "shortcut": "Material tab > New",
+          "done": {
+            "has_material": true
+          }
+        },
+        {
+          "short": "Pick a colour",
+          "text": "Click the Base Color box and choose a colour. Press 'I did this' when finished.",
+          "shortcut": "Base Color"
+        },
+        {
+          "short": "Preview colours",
+          "text": "Switch the viewport to Material Preview (third sphere icon at the top-right of the viewport) so you can see the colour.",
+          "shortcut": "Viewport shading buttons",
+          "done": {
+            "shading": "MATERIAL"
+          },
+          "action": "material_preview",
+          "action_label": "Material Preview"
+        }
+      ]
+    },
+    {
+      "id": "turn",
+      "title": "Turn an object 90 degrees",
+      "summary": "Rotate an object a quarter-turn around the vertical axis.",
+      "keywords": [
+        "turn",
+        "rotate",
+        "spin",
+        "90",
+        "angle",
+        "orientation",
+        "quarter",
+        "rotation"
+      ],
+      "steps": [
+        {
+          "short": "Select the object",
+          "text": "Click the object you want to turn.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1
+          },
+          "highlight": true
+        },
+        {
+          "short": "Rotate it",
+          "text": "Press R, then Z, type 90 and press Enter.",
+          "shortcut": "R, Z, 90, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "rot_min": {
+              "z": 80
+            }
+          },
+          "axis": "Z",
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "join",
+      "title": "Join objects into one",
+      "summary": "Combine several objects into a single object.",
+      "keywords": [
+        "join",
+        "combine",
+        "merge",
+        "together",
+        "one object",
+        "attach",
+        "unite"
+      ],
+      "steps": [
+        {
+          "short": "Select the objects",
+          "text": "Click the first object, then hold Shift and click the others.",
+          "shortcut": "Shift + Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 2
+          }
+        },
+        {
+          "short": "Join them",
+          "text": "With the mouse over the viewport, press Ctrl + J.",
+          "shortcut": "Ctrl + J",
+          "mode": "OBJECT",
+          "done": {
+            "fewer_objects": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "clear",
+      "title": "Clear the scene",
+      "summary": "Delete everything and start fresh.",
+      "keywords": [
+        "clear",
+        "empty",
+        "reset",
+        "delete all",
+        "start fresh",
+        "clean",
+        "remove everything",
+        "wipe"
+      ],
+      "steps": [
+        {
+          "short": "Select everything",
+          "text": "Move the mouse over the viewport and press A to select everything. Press 'I did this' when done.",
+          "shortcut": "A",
+          "mode": "OBJECT"
+        },
+        {
+          "short": "Delete it",
+          "text": "Press Delete to remove the selected objects.",
+          "shortcut": "Delete",
+          "mode": "OBJECT",
+          "done": {
+            "max_objects": 0
+          },
+          "action": "delete_selected",
+          "action_label": "Delete selected"
+        }
+      ]
+    },
+    {
+      "id": "save",
+      "title": "Save your project",
+      "summary": "Save the file so you do not lose your work.",
+      "keywords": [
+        "save",
+        "store",
+        "keep",
+        "file",
+        "backup",
+        "write",
+        "lose work"
+      ],
+      "steps": [
+        {
+          "short": "Save",
+          "text": "Move the mouse over the viewport and press Ctrl + S. For a new file, type a name, choose a folder and click Save.",
+          "shortcut": "Ctrl + S",
+          "done": {
+            "saved": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "mirror",
+      "title": "Model one side, get both (Mirror)",
+      "summary": "Use a Mirror modifier so edits on one half appear on the other.",
+      "keywords": [
+        "mirror",
+        "symmetry",
+        "symmetric",
+        "half",
+        "both sides",
+        "reflect",
+        "car",
+        "face",
+        "character"
+      ],
+      "steps": [
+        {
+          "short": "Have a cube",
+          "text": "Make sure there is a cube in the scene. Add one if not.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "min_mesh_objects": 1
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Select the cube",
+          "text": "Click the cube in the viewport so it has an orange outline.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Add Mirror",
+          "text": "Open the Properties editor on the right, click the wrench tab, then Add Modifier > Generate > Mirror.",
+          "shortcut": "Wrench tab > Add Modifier > Generate > Mirror",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "MIRROR"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Edit one side",
+          "text": "Press Tab for Edit Mode, select some points on one side and move them with G. The other side copies you.",
+          "shortcut": "Tab, then G",
+          "mode": "EDIT_MESH",
+          "done": {
+            "mode": "EDIT_MESH"
+          }
+        },
+        {
+          "short": "Back to Object Mode",
+          "text": "Press Tab again to leave Edit Mode. Press 'I did this' when done.",
+          "shortcut": "Tab"
+        }
+      ]
+    },
+    {
+      "id": "stairs",
+      "title": "Build stairs",
+      "summary": "One thin step repeated with an Array modifier.",
+      "keywords": [
+        "stairs",
+        "steps",
+        "staircase",
+        "stair",
+        "climb",
+        "ladder",
+        "array",
+        "repeat"
+      ],
+      "steps": [
+        {
+          "short": "Have a cube",
+          "text": "Make sure there is a cube in the scene. Add one if not.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "min_mesh_objects": 1
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Select the cube",
+          "text": "Click the cube in the viewport so it has an orange outline.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Make a flat step",
+          "text": "With the mouse over the viewport press S, then Z, type 0.25 and press Enter. This makes one low step.",
+          "shortcut": "S, Z, 0.25, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_max": {
+              "z": 0.8
+            }
+          },
+          "axis": "Z",
+          "highlight": true
+        },
+        {
+          "short": "Add Array",
+          "text": "Wrench tab > Add Modifier > Generate > Array.",
+          "shortcut": "Wrench tab > Add Modifier > Generate > Array",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "ARRAY"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Make it climb",
+          "text": "In the Array settings set Count to 6. Under Relative Offset set X to 0, Y to 1 and Z to 1. Press 'I did this' when you see stairs.",
+          "shortcut": "Array panel"
+        }
+      ]
+    },
+    {
+      "id": "smooth",
+      "title": "Make an object smooth",
+      "summary": "Subdivision Surface plus Shade Smooth for a soft, rounded look.",
+      "keywords": [
+        "smooth",
+        "round",
+        "soft",
+        "rounded",
+        "blocky",
+        "polish",
+        "subdivision",
+        "organic"
+      ],
+      "steps": [
+        {
+          "short": "Have a cube",
+          "text": "Make sure there is a cube in the scene. Add one if not.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "min_mesh_objects": 1
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Select the cube",
+          "text": "Click the cube in the viewport so it has an orange outline.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Add smoothing",
+          "text": "Wrench tab > Add Modifier > Generate > Subdivision Surface. Or press Ctrl + 2.",
+          "shortcut": "Ctrl + 2",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "SUBSURF"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Shade smooth",
+          "text": "Object menu > Shade Smooth removes the faceted look. Press 'I did this' when done.",
+          "shortcut": "Object menu > Shade Smooth"
+        }
+      ]
+    },
+    {
+      "id": "lights_render",
+      "title": "Light the scene and render a picture",
+      "summary": "Add a light and a camera, look through the camera and render.",
+      "keywords": [
+        "render",
+        "light",
+        "lamp",
+        "camera",
+        "picture",
+        "image",
+        "photo",
+        "final",
+        "output",
+        "sun"
+      ],
+      "steps": [
+        {
+          "short": "Add a light",
+          "text": "Press Shift + A and choose Light > Sun (or Point). Without light a render is dark.",
+          "shortcut": "Shift + A > Light > Sun",
+          "mode": "OBJECT",
+          "done": {
+            "active_type": "LIGHT"
+          }
+        },
+        {
+          "short": "Add a camera",
+          "text": "Press Shift + A and choose Camera. The camera decides what the picture shows.",
+          "shortcut": "Shift + A > Camera",
+          "mode": "OBJECT",
+          "done": {
+            "active_type": "CAMERA"
+          }
+        },
+        {
+          "short": "Aim the camera",
+          "text": "Move around to the view you like, then press Ctrl + Alt + Numpad 0 to snap the camera to it. Press 'I did this' when done.",
+          "shortcut": "Ctrl + Alt + Numpad 0"
+        },
+        {
+          "short": "Look through it",
+          "text": "Press Numpad 0 to see the camera's view. Press 'I did this' when happy.",
+          "shortcut": "Numpad 0"
+        },
+        {
+          "short": "Render",
+          "text": "Press F12. Blender draws the picture in a new window. Press 'I did this' when done.",
+          "shortcut": "F12"
+        }
+      ]
+    },
+    {
+      "id": "parent_group",
+      "title": "Group objects so they move together",
+      "summary": "Parent one object to another.",
+      "keywords": [
+        "parent",
+        "child",
+        "group",
+        "attach",
+        "together",
+        "link",
+        "hierarchy",
+        "glue",
+        "wheel",
+        "door"
+      ],
+      "steps": [
+        {
+          "short": "Have two objects",
+          "text": "You need at least two objects. Add another with Shift + A.",
+          "shortcut": "Shift + A > Mesh",
+          "mode": "OBJECT",
+          "done": {
+            "min_mesh_objects": 2
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Pick child, then parent",
+          "text": "Click the object that should follow, then Shift + click the leader last so it is the active one. Press 'I did this' when done.",
+          "shortcut": "Click, then Shift + click"
+        },
+        {
+          "short": "Parent them",
+          "text": "With the mouse over the viewport press Ctrl + P and choose Object. Press 'I did this' when done.",
+          "shortcut": "Ctrl + P > Object"
+        },
+        {
+          "short": "Test it",
+          "text": "Select only the leader and press G to move it. The follower comes along. Right click to cancel.",
+          "shortcut": "G"
+        }
+      ]
+    }
+  ]
+}

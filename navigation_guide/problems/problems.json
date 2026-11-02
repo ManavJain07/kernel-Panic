@@ -1,0 +1,610 @@
+{
+  "problems": [
+    {
+      "id": "cant_see_object",
+      "title": "I can't see my object",
+      "summary": "Object invisible, vanished or lost from view.",
+      "keywords": [
+        "can't see",
+        "cannot see",
+        "invisible",
+        "disappeared",
+        "vanished",
+        "lost",
+        "missing",
+        "where is",
+        "not showing",
+        "gone"
+      ],
+      "causes": [
+        {
+          "text": "The scene is empty, so there is nothing to see yet.",
+          "when": {
+            "max_objects": 0
+          },
+          "quick": true,
+          "fix": "add_cube",
+          "fix_label": "Add a cube"
+        },
+        {
+          "text": "The active object is hidden. Reveal hidden objects.",
+          "when": {
+            "active_hidden": true
+          },
+          "quick": true,
+          "fix": "show_hidden",
+          "fix_label": "Show hidden"
+        },
+        {
+          "text": "You may be zoomed too far in or out. Show everything in the scene.",
+          "fix": "view_all",
+          "fix_label": "Show everything"
+        },
+        {
+          "text": "Select the object (click its name in the Outliner at the top-right), then zoom to it.",
+          "fix": "frame_selected",
+          "fix_label": "Zoom to selected"
+        },
+        {
+          "text": "In the Outliner, a closed eye icon means the object is hidden. Click the eye to show it."
+        }
+      ]
+    },
+    {
+      "id": "keys_do_nothing",
+      "title": "My shortcuts do nothing",
+      "summary": "Pressing keys has no effect.",
+      "keywords": [
+        "shortcut",
+        "key",
+        "keys",
+        "nothing happens",
+        "not working",
+        "doesn't work",
+        "press",
+        "no response",
+        "keyboard",
+        "ignored"
+      ],
+      "causes": [
+        {
+          "text": "Keep the mouse pointer over the 3D viewport. Shortcuts act on whichever area the pointer is over."
+        },
+        {
+          "text": "You are not in Object Mode. Many shortcuts behave differently in other modes.",
+          "when": {
+            "mode_not": "OBJECT"
+          },
+          "fix": "object_mode",
+          "fix_label": "Go to Object Mode"
+        },
+        {
+          "text": "Nothing is selected. Click an object first.",
+          "when": {
+            "max_selected": 0,
+            "min_objects": 1
+          },
+          "quick": true
+        },
+        {
+          "text": "If a text box is active, press Esc first, then move the pointer back to the viewport."
+        },
+        {
+          "text": "Number keys on the top row and the numpad do different things. No numpad? Turn on Emulate Numpad in Edit > Preferences > Input."
+        }
+      ]
+    },
+    {
+      "id": "stuck_mode",
+      "title": "I'm stuck in another mode",
+      "summary": "Stuck in Edit, Sculpt or another mode.",
+      "keywords": [
+        "stuck",
+        "edit mode",
+        "sculpt",
+        "mode",
+        "can't move",
+        "cannot move",
+        "weird mode",
+        "wrong mode",
+        "tab",
+        "paint mode"
+      ],
+      "causes": [
+        {
+          "text": "You are not in Object Mode. Press Tab, or use the mode menu at the top-left of the viewport.",
+          "when": {
+            "mode_not": "OBJECT"
+          },
+          "quick": true,
+          "fix": "object_mode",
+          "fix_label": "Go to Object Mode"
+        },
+        {
+          "text": "If you are in Object Mode already, you are fine. Press Tab with a mesh selected when you want to edit its shape."
+        }
+      ]
+    },
+    {
+      "id": "cant_select",
+      "title": "I can't select anything",
+      "summary": "Clicking does not select objects.",
+      "keywords": [
+        "select",
+        "selecting",
+        "click",
+        "clicking",
+        "can't select",
+        "cannot select",
+        "not selecting",
+        "pick",
+        "grab object"
+      ],
+      "causes": [
+        {
+          "text": "Make sure the Select Box tool is active at the top of the left toolbar."
+        },
+        {
+          "text": "You are in another mode. In Edit Mode you select parts of one object, not other objects.",
+          "when": {
+            "mode_not": "OBJECT"
+          },
+          "fix": "object_mode",
+          "fix_label": "Go to Object Mode"
+        },
+        {
+          "text": "The object may be locked from selection. In the Outliner, open the Filter menu, turn on the selectability arrow, then click the arrow beside the object."
+        },
+        {
+          "text": "Try selecting everything with A, or clear the selection with Alt + A, then click again.",
+          "fix": "select_all",
+          "fix_label": "Select all"
+        }
+      ]
+    },
+    {
+      "id": "looks_strange",
+      "title": "Everything looks like wireframe or see-through",
+      "summary": "Viewport shows lines only or looks transparent.",
+      "keywords": [
+        "wireframe",
+        "transparent",
+        "see-through",
+        "see through",
+        "lines only",
+        "x-ray",
+        "xray",
+        "skeleton",
+        "hollow",
+        "outline"
+      ],
+      "causes": [
+        {
+          "text": "The viewport is in Wireframe shading.",
+          "when": {
+            "shading": "WIREFRAME"
+          },
+          "quick": true,
+          "fix": "solid_view",
+          "fix_label": "Solid view"
+        },
+        {
+          "text": "Use the four shading buttons at the top-right of the viewport: Wireframe, Solid, Material Preview, Rendered. Solid is the normal working view.",
+          "fix": "solid_view",
+          "fix_label": "Solid view"
+        },
+        {
+          "text": "If the object looks see-through in Solid view, X-Ray may be on. Press Alt + Z to toggle it."
+        }
+      ]
+    },
+    {
+      "id": "dark_faces",
+      "title": "Faces look dark, black or inside-out",
+      "summary": "Shading looks wrong or surfaces are inverted.",
+      "keywords": [
+        "dark",
+        "black",
+        "inside out",
+        "inverted",
+        "normals",
+        "shading weird",
+        "flipped",
+        "wrong shading",
+        "shadow"
+      ],
+      "causes": [
+        {
+          "text": "Faces may be pointing the wrong way. In Edit Mode, select everything (A), then use Mesh > Normals > Recalculate Outside (Shift + N).",
+          "fix": "recalc_normals",
+          "fix_label": "Fix normals now"
+        },
+        {
+          "text": "To check, open the Overlays dropdown in the viewport header and turn on Face Orientation. Blue is correct, red is flipped."
+        },
+        {
+          "text": "In Material Preview without a light, things can look dark. Try Solid view.",
+          "fix": "solid_view",
+          "fix_label": "Solid view"
+        }
+      ]
+    },
+    {
+      "id": "accident",
+      "title": "I did something by accident",
+      "summary": "Moved, deleted or changed something by mistake.",
+      "keywords": [
+        "mistake",
+        "accident",
+        "accidentally",
+        "undo",
+        "oops",
+        "wrong",
+        "revert",
+        "go back",
+        "deleted",
+        "messed up"
+      ],
+      "causes": [
+        {
+          "text": "Undo it with Ctrl + Z. Press it again to go back further.",
+          "fix": "undo",
+          "fix_label": "Undo"
+        },
+        {
+          "text": "To jump back several steps at once, use Edit > Undo History."
+        }
+      ]
+    },
+    {
+      "id": "laptop",
+      "title": "No middle mouse button or numpad",
+      "summary": "Laptop or trackpad without the keys Blender expects.",
+      "keywords": [
+        "laptop",
+        "trackpad",
+        "touchpad",
+        "middle mouse",
+        "numpad",
+        "no middle button",
+        "mouse",
+        "orbit",
+        "no numpad"
+      ],
+      "causes": [
+        {
+          "text": "Turn on Emulate 3 Button Mouse in Edit > Preferences > Input. Then Alt + left-drag orbits the view."
+        },
+        {
+          "text": "Turn on Emulate Numpad in the same place to use the top number row as a numpad."
+        },
+        {
+          "text": "You can also drag the small axis gizmo at the top-right of the viewport to orbit, and use the View menu for standard views."
+        }
+      ]
+    },
+    {
+      "id": "blocky",
+      "title": "My object looks blocky or rough",
+      "summary": "Surfaces look faceted instead of smooth.",
+      "keywords": [
+        "blocky",
+        "rough",
+        "jagged",
+        "faceted",
+        "smooth",
+        "low poly",
+        "not smooth",
+        "angular",
+        "edges visible"
+      ],
+      "causes": [
+        {
+          "text": "With the object selected, open the Object menu (or right-click in the viewport) and choose Shade Smooth."
+        },
+        {
+          "text": "For a rounder shape, add a Subdivision Surface modifier with Ctrl + 1 in Object Mode."
+        }
+      ]
+    },
+    {
+      "id": "odd_size",
+      "title": "My object is tiny, huge or off-centre",
+      "summary": "Size or position looks wrong.",
+      "keywords": [
+        "tiny",
+        "huge",
+        "size",
+        "scale weird",
+        "off center",
+        "off centre",
+        "too big",
+        "too small",
+        "position",
+        "wrong place",
+        "far away"
+      ],
+      "causes": [
+        {
+          "text": "Press N in the viewport and open the Item tab to see Location, Rotation, Scale and Dimensions."
+        },
+        {
+          "text": "To reset in Object Mode: Alt + G clears location, Alt + R clears rotation, Alt + S clears scale."
+        },
+        {
+          "text": "Think the object is far away? Show everything in the scene.",
+          "fix": "view_all",
+          "fix_label": "Show everything"
+        }
+      ]
+    },
+    {
+      "id": "ui_missing",
+      "title": "A panel, toolbar or tab disappeared",
+      "summary": "Parts of the Blender screen are missing.",
+      "keywords": [
+        "panel",
+        "toolbar",
+        "tab",
+        "disappeared",
+        "layout",
+        "window",
+        "hidden",
+        "sidebar",
+        "properties",
+        "missing panel",
+        "outliner",
+        "timeline"
+      ],
+      "causes": [
+        {
+          "text": "With the pointer over the viewport, press N to show or hide the right sidebar and T to show or hide the left toolbar."
+        },
+        {
+          "text": "Ctrl + Space maximises the area under the pointer. Press it again to restore the layout."
+        },
+        {
+          "text": "Check the workspace tabs at the top (Layout, Modeling, Sculpting). Click Layout for the default arrangement."
+        },
+        {
+          "text": "The Properties editor (Modifiers and Material tabs) is on the right. Its tabs only appear when an object is selected."
+        }
+      ]
+    },
+    {
+      "id": "slow",
+      "title": "Blender is slow or laggy",
+      "summary": "Viewport is slow, choppy or freezing.",
+      "keywords": [
+        "slow",
+        "lag",
+        "laggy",
+        "freeze",
+        "freezing",
+        "crash",
+        "heavy",
+        "choppy",
+        "performance",
+        "stuttering"
+      ],
+      "causes": [
+        {
+          "text": "Rendered view is heavy. Switch to Solid.",
+          "when": {
+            "shading": "RENDERED"
+          },
+          "quick": true,
+          "fix": "solid_view",
+          "fix_label": "Solid view"
+        },
+        {
+          "text": "Material Preview is slower than Solid. Use Solid while modelling.",
+          "fix": "solid_view",
+          "fix_label": "Solid view"
+        },
+        {
+          "text": "High modifier levels (like Subdivision Surface) slow things down. Lower the Levels Viewport number."
+        }
+      ]
+    },
+    {
+      "id": "save_recover",
+      "title": "I want to save or recover my work",
+      "summary": "Saving files and recovering after a crash.",
+      "keywords": [
+        "save",
+        "lost work",
+        "recover",
+        "crash",
+        "backup",
+        "autosave",
+        "restore",
+        "lost file",
+        "reopen"
+      ],
+      "causes": [
+        {
+          "text": "Save with Ctrl + S over the viewport. The first time, choose a name and folder."
+        },
+        {
+          "text": "After a crash, try File > Recover > Recover Last Session."
+        },
+        {
+          "text": "Use File > Save As with a new name before big experiments."
+        }
+      ]
+    },
+    {
+      "id": "wrong_direction",
+      "title": "Moving or scaling goes the wrong way",
+      "summary": "Object jumps, slides sideways or snaps to odd places.",
+      "keywords": [
+        "wrong direction",
+        "jumps",
+        "snaps",
+        "sideways",
+        "slides",
+        "weird move",
+        "skips",
+        "jumpy",
+        "stuck to grid",
+        "axis"
+      ],
+      "causes": [
+        {
+          "text": "Snapping may be on (the magnet icon in the header is lit). Click the magnet to turn it off, or press Shift + Tab."
+        },
+        {
+          "text": "An axis lock may be active. While moving, press the same axis key (X, Y or Z) twice, or press the middle mouse button, to clear it."
+        },
+        {
+          "text": "Numbers you typed during the move count. Right click or Esc cancels the move and you can try again."
+        },
+        {
+          "text": "The pivot point may be set to something unusual. Check the Pivot dropdown in the header and choose Median Point."
+        },
+        {
+          "text": "Press Ctrl + Z to undo the odd move.",
+          "fix": "undo",
+          "fix_label": "Undo"
+        }
+      ]
+    },
+    {
+      "id": "odd_origin",
+      "title": "It rotates or scales around a strange point",
+      "summary": "Object swings around the wrong spot.",
+      "keywords": [
+        "origin",
+        "rotate around",
+        "swings",
+        "orbit",
+        "pivot",
+        "off centre",
+        "off center",
+        "scales from corner",
+        "wrong centre"
+      ],
+      "causes": [
+        {
+          "text": "The object's origin dot is not in the middle. Object menu > Set Origin > Origin to Geometry."
+        },
+        {
+          "text": "The Pivot Point may be set to 3D Cursor. Open the Pivot dropdown in the header and pick Median Point."
+        },
+        {
+          "text": "The 3D cursor may be far away. Press Shift + C to bring it back to the centre."
+        }
+      ]
+    },
+    {
+      "id": "modifier_nothing",
+      "title": "My modifier does nothing",
+      "summary": "Added Mirror, Array or another modifier and nothing changes.",
+      "keywords": [
+        "modifier",
+        "nothing happens",
+        "no effect",
+        "array",
+        "mirror",
+        "subdivision",
+        "bevel",
+        "solidify",
+        "not working"
+      ],
+      "causes": [
+        {
+          "text": "No modifier is on the active object. Select the object first, then open the wrench tab.",
+          "when": {
+            "max_selected": 0
+          },
+          "quick": true
+        },
+        {
+          "text": "The modifier may be switched off. In the wrench tab, make sure the monitor and camera icons on the modifier are lit."
+        },
+        {
+          "text": "Settings may be zero. Array needs Count above 1 and an offset. Solidify needs a Thickness other than 0."
+        },
+        {
+          "text": "The object's scale may not be applied. Press Ctrl + A > Scale in Object Mode."
+        },
+        {
+          "text": "You may be looking at the wrong object. Click the object with the modifier and look at the wrench tab."
+        }
+      ]
+    },
+    {
+      "id": "tool_edit_only",
+      "title": "Extrude, loop cut or bevel does nothing",
+      "summary": "A modelling tool refuses to work or does something strange.",
+      "keywords": [
+        "extrude",
+        "loop cut",
+        "bevel",
+        "inset",
+        "knife",
+        "does nothing",
+        "not working",
+        "greyed out",
+        "grayed out",
+        "edit mode"
+      ],
+      "causes": [
+        {
+          "text": "These tools only work in Edit Mode. Select your mesh and press Tab.",
+          "when": {
+            "mode": "OBJECT",
+            "active_type": "MESH"
+          },
+          "quick": true,
+          "fix": "toggle_edit_mode",
+          "fix_label": "Enter Edit Mode"
+        },
+        {
+          "text": "Nothing is selected. In Edit Mode select points, edges or faces first (keys 1, 2, 3 choose which).",
+          "when": {
+            "mode": "EDIT_MESH"
+          }
+        },
+        {
+          "text": "The mouse must be over the 3D viewport, not a side panel."
+        },
+        {
+          "text": "Press F9 or open the small panel at the bottom-left to adjust the settings."
+        }
+      ]
+    },
+    {
+      "id": "render_empty",
+      "title": "My render is black or empty",
+      "summary": "Pressing F12 gives a dark, blank or wrong picture.",
+      "keywords": [
+        "render",
+        "black",
+        "empty",
+        "dark",
+        "blank",
+        "f12",
+        "image",
+        "nothing",
+        "camera",
+        "light"
+      ],
+      "causes": [
+        {
+          "text": "There may be no camera. Add one with Shift + A > Camera, then press Ctrl + Alt + Numpad 0 to aim it."
+        },
+        {
+          "text": "The scene may have no light. Add one with Shift + A > Light > Sun."
+        },
+        {
+          "text": "The camera may be pointing away from your object. Press Numpad 0 to look through it and move it until you see the object."
+        },
+        {
+          "text": "Objects may be hidden in the render. In the Outliner check the camera icon next to the object."
+        }
+      ]
+    }
+  ]
+}
