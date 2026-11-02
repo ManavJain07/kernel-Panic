@@ -6,28 +6,26 @@ A Blender add-on that tells beginners **where they are** in Blender and
 > Built for the DevLups Labs hackathon. Problem statement: make digital
 > experiences more accessible for people with limited technical literacy.
 
-**Current version: v0.7.0** by team Kernel-Panic.
-
 ## Who it is for
 First-time Blender users who feel lost in the interface.
 
-## What's new in v0.7
-- New **My keys (accessibility)** panel (`keys.py`): learners can choose their own key for 12 actions (start, add menu, move, rotate, scale, edit mode, delete, undo, extrude, select vertices / edges / faces) if they cannot press the default ones
-- The tutorial accepts the learner's key, shows "Your keys" on the task card, and lets them start a lesson with their own key; Blender's normal keys keep working
-- Custom keys are normal Blender keymap items, so they also appear in Preferences > Keymap and are saved with the user's preferences
-- Tasks now list which key actions apply (`keys` field in `lessons.json`)
-- Animations for move, move-on-axis, rotate and scale were changed in this version
+## Features (v0.2)
+- Shows current mode, active object and selection count
+- Gives a plain-language hint and shortcut for the current situation
+- Lessons: mouse controls, add/delete, move/rotate/scale, edit mode, extrude, materials, a simple wall
+- "Do it for me" buttons on steps, so beginners see what a step does
+- **Lessons (v0.4):** each lesson dims the rest of the interface, shows "Lesson N" at the top of the viewport and a task checklist at the bottom-left. Tasks are crossed out when done (mouse tasks are detected automatically), and a **Hint** button plays a short how-to animation on the right
 
-## Lessons (7 lessons, 33 tasks)
-| # | Lesson | Tasks | Notes |
-|---|---|---|---|
-| 1 | Mouse controls | 4 |  |
-| 2 | Add and delete objects | 4 |  |
-| 3 | Move, rotate and scale | 6 |  |
-| 4 | Edit an object's shape | 5 |  |
-| 5 | Extrude a face | 4 |  |
-| 6 | Add colour to an object | 4 | keeps normal layout (uses Properties editor) |
-| 7 | Build a simple wall | 6 |  |
+- **Tutorial flow (v0.5):** click **Start tutorial**, hover over the viewport and press **M**; the bigger workspace opens and the lesson begins. Tasks unlock one at a time and every task is checked automatically. Progress is saved after each task, lessons unlock in order, and a dropdown shows which lessons are done, next, or locked.
+
+- **Two modes (v0.8):** when a tutorial starts, the viewport asks *Keyboard mode* (shortcuts and mouse) or *Accessible mode* (a list of every command the lesson needs on the right of the viewport; one click does what the shortcut does, see `commands.py`). The choice is remembered.
+- **Waits for your click (v0.8):** move / rotate / scale / extrude tasks only finish once you confirm with a click (or Enter). The hint animations now show the mouse moving, then clicking.
+- **Tutorial World (v0.8):** `python scripts/build_release.py` also builds `dist/BlenderTutorialWorld.zip`, a standalone Blender application template with launchers for Windows, macOS and Linux. Unzip, double-click, and the tutorial opens with no setup (see `tutorial_world/README.txt`).
+
+- **Two tabs (v0.9):** the sidebar now has a **Tutorial** tab and an **Accessibility** tab. Accessibility has big command buttons that work anywhere in Blender, your own shortcuts (keys or mouse buttons, each step *hold* or *tap*, in the order you choose), and your own commands (any Blender operator). While a tutorial runs in Accessible mode, its command list is shown there as well.
+
+- **20 lessons:** lessons 8-20 (duplicate and select many, views, more shapes, shading modes, names and collections, smooth shapes, loop cut / inset / bevel, shiny materials, join and separate, 3D text, light + camera + render, animation, and a final tiny-house project) come with their own hint animations. Every task also works in Accessible mode.
+- **navgen:** `scripts/navgen/` makes the hint animations for lessons 8-20: `python scripts/navgen/navgen.py navigation_guide/media [name ...]`.
 
 ## Install
 1. Install **Blender 4.2 LTS or newer**.
@@ -48,43 +46,27 @@ zip -r ../navigation_guide.zip .
 navigation_guide/
   blender_manifest.toml   extension metadata
   __init__.py             register / unregister
-  lesson.py               lesson mode: overlay drawing, task flow, progress, start/exit operators
-  panel.py                Nav Guide sidebar tab
-  actions.py              "Do it for me" helper actions
-  detect.py               task detectors that decide when a task is done
-  keys.py                 My keys: learner-chosen keys (accessibility)
   context.py              reads Blender state, produces hints
+  lesson.py               lessons: dimming, viewport checklist, hints, detection
   lessons/lessons.json    the lesson library
-  media/                  how-to animations (sprite sheets) + meta.json
-scripts/validate_lessons.py, validate_media.py check the lesson and animation data
-```
-
-`context.py` is not imported by any other file in this version. It is a leftover from v0.4 and can be removed or reused.
-
-## Check your changes
-```
-python scripts/validate_lessons.py
-python scripts/validate_media.py
+  media/                  hint animation frame sheets
+  actions.py              "Do it for me" helper actions
+  panel.py                sidebar UI
+scripts/validate_lessons.py checks lessons.json
+scripts/make_hint_gifs.py builds docs/gifs/*.gif and media/*.png
 ```
 
 ## Roadmap
 - [x] Skeleton panel and context detection
-- [x] Lesson mode with dimmed UI
-- [x] Auto-detect step completion (all 33 tasks)
-- [x] Saved progress and locked lessons
-- [x] Hint animations for every task
-- [x] One-task-at-a-time card with progress bar
-- [x] Accessibility: learner-chosen keys
-- [ ] More lessons (Boolean, modifiers, cameras)
+- [x] Lesson library (JSON) with task checklists and hint animations
+- [x] Step checklist UI
+- [x] Helper operators
+- [ ] Auto-detect step completion
+- [ ] More tasks (Boolean, modifiers, cameras)
 - [ ] User testing with beginners
 
 ## Team
-Kernel-Panic. 
-Manav
-Raghya
-avadhoot 
-Shashank
-
+Add names and roles here.
 
 ## License
 MIT

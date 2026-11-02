@@ -64,14 +64,6 @@
     "fps": 20
   },
   "g": {
-    "frames": 38,
-    "cols": 6,
-    "rows": 7,
-    "w": 360,
-    "h": 270,
-    "fps": 20
-  },
-  "g_axis": {
     "frames": 52,
     "cols": 6,
     "rows": 9,
@@ -79,18 +71,26 @@
     "h": 270,
     "fps": 20
   },
-  "r": {
-    "frames": 38,
+  "g_axis": {
+    "frames": 66,
     "cols": 6,
-    "rows": 7,
+    "rows": 11,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "r": {
+    "frames": 52,
+    "cols": 6,
+    "rows": 9,
     "w": 360,
     "h": 270,
     "fps": 20
   },
   "s": {
-    "frames": 38,
+    "frames": 52,
     "cols": 6,
-    "rows": 7,
+    "rows": 9,
     "w": 360,
     "h": 270,
     "fps": 20
@@ -136,17 +136,17 @@
     "fps": 20
   },
   "face_move": {
-    "frames": 66,
+    "frames": 80,
     "cols": 6,
-    "rows": 11,
+    "rows": 14,
     "w": 360,
     "h": 270,
     "fps": 20
   },
   "e": {
-    "frames": 38,
+    "frames": 52,
     "cols": 6,
-    "rows": 7,
+    "rows": 9,
     "w": 360,
     "h": 270,
     "fps": 20
@@ -179,6 +179,358 @@
     "frames": 66,
     "cols": 6,
     "rows": 11,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "dup": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "shift_click": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "sel_all": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "desel_all": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "view_front": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "view_top": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "view_persp": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "view_frame": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "add_sphere": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "add_cylinder": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "add_plane": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "add_monkey": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "shade_wire": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "shade_solid": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "xray": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "shade_mat": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "rename": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "hide": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "unhide": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "collection": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "smooth": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "subsurf2": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "subsurf3": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "loopcut": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "inset": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "bevel": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "metallic": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "roughness": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "join": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "separate": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "add_text": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "edit_text": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "text_extrude": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "add_light": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "cam_view": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "render": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "keyframe": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "frame_jump": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "keyframe2": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "play": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "cap_floor": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "cap_house": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "cap_roof": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "cap_paint": {
+    "frames": 42,
+    "cols": 6,
+    "rows": 7,
     "w": 360,
     "h": 270,
     "fps": 20

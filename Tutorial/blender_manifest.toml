@@ -1,10 +1,10 @@
 schema_version = "1.0.0"
 
 id = "navigation_guide"
-version = "0.7.0"
-name = "Blender Navigation Guide"
-tagline = "Context-aware guidance for Blender beginners"
-maintainer = "Kernel-Panic <you@example.com>"
+version = "0.9.0"
+name = "Blender Tutorial"
+tagline = "A step-by-step Blender tutorial with accessibility tools"
+maintainer = "Your Team <you@example.com>"
 type = "add-on"
 
 blender_version_min = "4.2.0"

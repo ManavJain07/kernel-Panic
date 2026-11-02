@@ -9,28 +9,42 @@
           "title": "Orbit (rotate your view)",
           "detect": "orbit",
           "gif": "orbit",
-          "hint": "Hold the middle mouse button and drag. Trackpad: swipe with two fingers, or drag the axis gizmo at the top-right of the viewport."
+          "hint": "Hold the middle mouse button and drag. Trackpad: swipe with two fingers, or drag the axis gizmo at the top-right of the viewport.",
+          "cmds": [
+            "orbit"
+          ]
         },
         {
           "id": "pan",
           "title": "Pan (slide your view)",
           "detect": "pan",
           "gif": "pan",
-          "hint": "Hold Shift + middle mouse button and drag. Trackpad: hold Shift and swipe with two fingers."
+          "hint": "Hold Shift + middle mouse button and drag. Trackpad: hold Shift and swipe with two fingers.",
+          "cmds": [
+            "pan"
+          ]
         },
         {
           "id": "zoom",
           "title": "Zoom in and out",
           "detect": "zoom",
           "gif": "zoom",
-          "hint": "Scroll the mouse wheel. Trackpad: pinch."
+          "hint": "Scroll the mouse wheel. Trackpad: pinch.",
+          "cmds": [
+            "zoom_in",
+            "zoom_out"
+          ]
         },
         {
           "id": "select",
           "title": "Select an object",
           "detect": "select",
           "gif": "select",
-          "hint": "Left-click empty space to deselect, then left-click the cube."
+          "hint": "Left-click empty space to deselect, then left-click the cube.",
+          "cmds": [
+            "deselect_all",
+            "select_cube"
+          ]
         }
       ]
     },
@@ -45,6 +59,9 @@
           "gif": "shift_a",
           "keys": [
             "add_menu"
+          ],
+          "cmds": [
+            "add_menu"
           ]
         },
         {
@@ -56,13 +73,20 @@
           "gif": "add_cube",
           "keys": [
             "add_menu"
+          ],
+          "cmds": [
+            "add_cube"
           ]
         },
         {
           "title": "Click empty space to deselect, then click the cube to select it",
           "hint": "A selected object has an orange outline. Shortcut: Left click",
           "detect": "select",
-          "gif": "select"
+          "gif": "select",
+          "cmds": [
+            "deselect_all",
+            "select_cube"
+          ]
         },
         {
           "title": "Remove the selected object",
@@ -72,6 +96,9 @@
           "detect": "delete",
           "gif": "delete",
           "keys": [
+            "delete"
+          ],
+          "cmds": [
             "delete"
           ]
         }
@@ -87,7 +114,11 @@
           "action": "add_cube",
           "action_label": "Add a cube",
           "detect": "select",
-          "gif": "select"
+          "gif": "select",
+          "cmds": [
+            "deselect_all",
+            "select_cube"
+          ]
         },
         {
           "title": "Press G to grab (move) the object",
@@ -95,6 +126,9 @@
           "detect": "move",
           "gif": "g",
           "keys": [
+            "move"
+          ],
+          "cmds": [
             "move"
           ]
         },
@@ -105,6 +139,11 @@
           "gif": "g_axis",
           "keys": [
             "move"
+          ],
+          "cmds": [
+            "move_x",
+            "move_y",
+            "move_z"
           ]
         },
         {
@@ -113,6 +152,9 @@
           "detect": "rotate",
           "gif": "r",
           "keys": [
+            "rotate"
+          ],
+          "cmds": [
             "rotate"
           ]
         },
@@ -123,6 +165,9 @@
           "gif": "s",
           "keys": [
             "scale"
+          ],
+          "cmds": [
+            "scale"
           ]
         },
         {
@@ -132,6 +177,9 @@
           "gif": "undo",
           "gif_mac": "undo_mac",
           "keys": [
+            "undo"
+          ],
+          "cmds": [
             "undo"
           ]
         }
@@ -147,7 +195,11 @@
           "action": "add_cube",
           "action_label": "Add a cube",
           "detect": "select",
-          "gif": "select"
+          "gif": "select",
+          "cmds": [
+            "deselect_all",
+            "select_cube"
+          ]
         },
         {
           "title": "Switch to Edit Mode",
@@ -158,6 +210,9 @@
           "gif": "tab",
           "keys": [
             "edit_mode"
+          ],
+          "cmds": [
+            "edit_mode"
           ]
         },
         {
@@ -166,6 +221,11 @@
           "detect": "select_modes",
           "gif": "keys_123",
           "keys": [
+            "sel_vert",
+            "sel_edge",
+            "sel_face"
+          ],
+          "cmds": [
             "sel_vert",
             "sel_edge",
             "sel_face"
@@ -179,6 +239,11 @@
           "keys": [
             "sel_face",
             "move"
+          ],
+          "cmds": [
+            "sel_face",
+            "pick_face",
+            "move_z"
           ]
         },
         {
@@ -189,6 +254,9 @@
           "detect": "object_mode",
           "gif": "tab",
           "keys": [
+            "edit_mode"
+          ],
+          "cmds": [
             "edit_mode"
           ]
         }
@@ -207,6 +275,9 @@
           "gif": "tab",
           "keys": [
             "edit_mode"
+          ],
+          "cmds": [
+            "edit_mode"
           ]
         },
         {
@@ -216,6 +287,10 @@
           "gif": "one_face",
           "keys": [
             "sel_face"
+          ],
+          "cmds": [
+            "sel_face",
+            "pick_face"
           ]
         },
         {
@@ -224,6 +299,9 @@
           "detect": "extrude",
           "gif": "e",
           "keys": [
+            "extrude"
+          ],
+          "cmds": [
             "extrude"
           ]
         },
@@ -235,6 +313,9 @@
           "detect": "object_mode",
           "gif": "tab",
           "keys": [
+            "edit_mode"
+          ],
+          "cmds": [
             "edit_mode"
           ]
         }
@@ -248,24 +329,38 @@
           "title": "Click empty space to deselect, then click the object you want to colour",
           "hint": "Shortcut: Left click",
           "detect": "select",
-          "gif": "select"
+          "gif": "select",
+          "cmds": [
+            "deselect_all",
+            "select_cube"
+          ]
         },
         {
           "title": "In the Properties editor on the right, open the Material tab (a round sphere icon near the bottom of the tab column)",
           "hint": "Shortcut: Properties > Material tab",
-          "detect": "material_tab"
+          "detect": "material_tab",
+          "cmds": [
+            "material_tab"
+          ]
         },
         {
           "title": "Click New, then click the Base Color box and pick a colour",
           "hint": "Shortcut: New > Base Color",
-          "detect": "material_color"
+          "detect": "material_color",
+          "cmds": [
+            "new_material",
+            "pick_colour"
+          ]
         },
         {
           "title": "To see the colour in the viewport, switch to Material Preview (the third sphere icon at the top-right of the viewport)",
           "hint": "Shortcut: Viewport shading buttons",
           "action": "material_preview",
           "action_label": "Material Preview",
-          "detect": "material_preview"
+          "detect": "material_preview",
+          "cmds": [
+            "material_preview"
+          ]
         }
       ],
       "needs_panels": true
@@ -283,6 +378,10 @@
           "gif": "delete",
           "keys": [
             "delete"
+          ],
+          "cmds": [
+            "select_cube",
+            "delete"
           ]
         },
         {
@@ -294,6 +393,9 @@
           "gif": "add_cube",
           "keys": [
             "add_menu"
+          ],
+          "cmds": [
+            "add_cube"
           ]
         },
         {
@@ -303,6 +405,9 @@
           "gif": "wall_len",
           "keys": [
             "scale"
+          ],
+          "cmds": [
+            "wall_x"
           ]
         },
         {
@@ -312,6 +417,9 @@
           "gif": "wall_thin",
           "keys": [
             "scale"
+          ],
+          "cmds": [
+            "wall_y"
           ]
         },
         {
@@ -321,6 +429,9 @@
           "gif": "wall_tall",
           "keys": [
             "scale"
+          ],
+          "cmds": [
+            "wall_z"
           ]
         },
         {
@@ -330,6 +441,740 @@
           "gif": "wall_lift",
           "keys": [
             "move"
+          ],
+          "cmds": [
+            "wall_lift"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "duplicate",
+      "title": "Duplicate and select many objects",
+      "steps": [
+        {
+          "title": "Click empty space to deselect, then click the cube",
+          "hint": "Shortcut: Left click",
+          "detect": "select",
+          "action": "add_cube",
+          "action_label": "Add a cube",
+          "gif": "select",
+          "cmds": [
+            "add_cube",
+            "deselect_all",
+            "select_cube"
+          ]
+        },
+        {
+          "title": "Press Shift + D, move the mouse and click to make a copy",
+          "hint": "The copy is a new object. Right-click or Esc keeps it in the same place. Shortcut: Shift + D",
+          "detect": "duplicate",
+          "action": "duplicate",
+          "action_label": "Duplicate it",
+          "gif": "dup",
+          "cmds": [
+            "duplicate"
+          ]
+        },
+        {
+          "title": "Select both cubes: click one, then hold Shift and click the other",
+          "hint": "A selected object has an orange outline. Shortcut: Shift + Left click",
+          "detect": "multi_select",
+          "gif": "shift_click",
+          "cmds": [
+            "select_both"
+          ]
+        },
+        {
+          "title": "Click empty space to deselect, then press A to select everything",
+          "hint": "Shortcut: A",
+          "detect": "select_all",
+          "action": "select_all",
+          "action_label": "Select all",
+          "gif": "sel_all",
+          "cmds": [
+            "deselect_all",
+            "select_all"
+          ]
+        },
+        {
+          "title": "Press Alt + A to deselect everything",
+          "hint": "On a Mac use Option + A. Shortcut: Alt + A",
+          "detect": "deselect_all",
+          "action": "deselect_all",
+          "action_label": "Deselect all",
+          "gif": "desel_all",
+          "cmds": [
+            "deselect_all"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "views",
+      "title": "Look at your scene from every side",
+      "steps": [
+        {
+          "title": "Look from the front: press Numpad 1",
+          "hint": "No numpad? Use View > Viewpoint > Front, or the button on the right. Shortcut: Numpad 1",
+          "detect": "view_front",
+          "action": "view_front",
+          "action_label": "Front view",
+          "gif": "view_front",
+          "cmds": [
+            "view_front"
+          ]
+        },
+        {
+          "title": "Look from above: press Numpad 7",
+          "hint": "Shortcut: Numpad 7  (View > Viewpoint > Top)",
+          "detect": "view_top",
+          "action": "view_top",
+          "action_label": "Top view",
+          "gif": "view_top",
+          "cmds": [
+            "view_top"
+          ]
+        },
+        {
+          "title": "Switch between perspective and flat (orthographic) view: Numpad 5",
+          "hint": "Perspective looks like real life, orthographic keeps parallel lines parallel. Shortcut: Numpad 5",
+          "detect": "view_persp",
+          "action": "view_persp",
+          "action_label": "Switch view type",
+          "gif": "view_persp",
+          "cmds": [
+            "view_persp"
+          ]
+        },
+        {
+          "title": "Click the cube, then press Numpad . (period) to zoom to it",
+          "hint": "Great when you are lost in a big scene. Shortcut: Numpad . (View > Frame Selected)",
+          "detect": "view_frame",
+          "action": "frame_selected",
+          "action_label": "Frame selected",
+          "gif": "view_frame",
+          "cmds": [
+            "select_cube",
+            "frame_selected"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shapes",
+      "title": "Add more shapes",
+      "steps": [
+        {
+          "title": "Add a sphere: Shift + A > Mesh > UV Sphere",
+          "hint": "Or use the button on the right. Shortcut: Shift + A > Mesh > UV Sphere",
+          "detect": "add_sphere",
+          "action": "add_sphere",
+          "action_label": "Add a sphere",
+          "gif": "add_sphere",
+          "keys": [
+            "add_menu"
+          ],
+          "cmds": [
+            "add_sphere"
+          ]
+        },
+        {
+          "title": "Add a cylinder: Shift + A > Mesh > Cylinder",
+          "hint": "Shortcut: Shift + A > Mesh > Cylinder",
+          "detect": "add_cylinder",
+          "action": "add_cylinder",
+          "action_label": "Add a cylinder",
+          "gif": "add_cylinder",
+          "keys": [
+            "add_menu"
+          ],
+          "cmds": [
+            "add_cylinder"
+          ]
+        },
+        {
+          "title": "Add a flat plane: Shift + A > Mesh > Plane",
+          "hint": "A plane is a single flat square, good for floors. Shortcut: Shift + A > Mesh > Plane",
+          "detect": "add_plane",
+          "action": "add_plane",
+          "action_label": "Add a plane",
+          "gif": "add_plane",
+          "keys": [
+            "add_menu"
+          ],
+          "cmds": [
+            "add_plane"
+          ]
+        },
+        {
+          "title": "Add the Blender monkey: Shift + A > Mesh > Monkey",
+          "hint": "His name is Suzanne. Shortcut: Shift + A > Mesh > Monkey",
+          "detect": "add_monkey",
+          "action": "add_monkey",
+          "action_label": "Add the monkey",
+          "gif": "add_monkey",
+          "keys": [
+            "add_menu"
+          ],
+          "cmds": [
+            "add_monkey"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shading",
+      "title": "See your model in different ways",
+      "steps": [
+        {
+          "title": "Show only the edges: press Shift + Z",
+          "hint": "Or click the first sphere icon at the top right of the viewport. Shortcut: Shift + Z",
+          "detect": "shade_wire",
+          "action": "shade_wire",
+          "action_label": "Wireframe",
+          "gif": "shade_wire",
+          "cmds": [
+            "shade_wire"
+          ]
+        },
+        {
+          "title": "Go back to solid view: press Shift + Z again",
+          "hint": "Or click the second sphere icon. Shortcut: Shift + Z",
+          "detect": "shade_solid",
+          "action": "shade_solid",
+          "action_label": "Solid view",
+          "gif": "shade_solid",
+          "cmds": [
+            "shade_solid"
+          ]
+        },
+        {
+          "title": "See through objects: press Alt + Z",
+          "hint": "On a Mac use Option + Z. X-ray shows what is hidden inside. Shortcut: Alt + Z",
+          "detect": "xray",
+          "action": "xray",
+          "action_label": "X-ray",
+          "gif": "xray",
+          "cmds": [
+            "xray"
+          ]
+        },
+        {
+          "title": "Show colours and light: choose Material Preview",
+          "hint": "The third sphere icon at the top right. Shortcut: Z, then Material Preview",
+          "detect": "material_preview",
+          "action": "material_preview",
+          "action_label": "Material preview",
+          "gif": "shade_mat",
+          "cmds": [
+            "material_preview"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "organise",
+      "title": "Name and organise your objects",
+      "steps": [
+        {
+          "title": "Click an object, then press F2 to rename it",
+          "hint": "Type a new name and press Enter. Good names save time later. Shortcut: F2",
+          "detect": "rename",
+          "action": "rename",
+          "action_label": "Rename it",
+          "gif": "rename",
+          "cmds": [
+            "select_cube",
+            "rename"
+          ]
+        },
+        {
+          "title": "Hide the selected object: press H",
+          "hint": "It is not deleted, only hidden. Shortcut: H",
+          "detect": "hide",
+          "action": "hide",
+          "action_label": "Hide it",
+          "gif": "hide",
+          "cmds": [
+            "hide"
+          ]
+        },
+        {
+          "title": "Show everything again: press Alt + H",
+          "hint": "On a Mac use Option + H. Shortcut: Alt + H",
+          "detect": "unhide",
+          "action": "unhide",
+          "action_label": "Show all",
+          "gif": "unhide",
+          "cmds": [
+            "unhide"
+          ]
+        },
+        {
+          "title": "Put the object in a new collection: press M, then choose + New Collection",
+          "hint": "Collections are folders for objects. Type a name and click OK. Shortcut: M",
+          "detect": "collection",
+          "action": "new_collection",
+          "action_label": "New collection",
+          "gif": "collection",
+          "cmds": [
+            "select_cube",
+            "new_collection"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "smooth",
+      "title": "Smooth shapes",
+      "steps": [
+        {
+          "title": "Add a sphere: Shift + A > Mesh > UV Sphere",
+          "hint": "Or use the button on the right. Shortcut: Shift + A > Mesh > UV Sphere",
+          "detect": "add_sphere",
+          "action": "add_sphere",
+          "action_label": "Add a sphere",
+          "gif": "add_sphere",
+          "keys": [
+            "add_menu"
+          ],
+          "cmds": [
+            "add_sphere"
+          ]
+        },
+        {
+          "title": "Make it look smooth: right-click it and choose Shade Smooth",
+          "hint": "Or Object > Shade Smooth. This only changes how light falls on it.",
+          "detect": "smooth",
+          "action": "shade_smooth",
+          "action_label": "Shade smooth",
+          "gif": "smooth",
+          "cmds": [
+            "shade_smooth"
+          ]
+        },
+        {
+          "title": "Add more detail: press Ctrl + 2",
+          "hint": "This adds a Subdivision Surface modifier, level 2. Shortcut: Ctrl + 2",
+          "detect": "subsurf2",
+          "action": "subsurf2",
+          "action_label": "Subdivide (2)",
+          "gif": "subsurf2",
+          "cmds": [
+            "subsurf2"
+          ]
+        },
+        {
+          "title": "Add even more detail: press Ctrl + 3",
+          "hint": "Higher numbers are smoother but heavier for your computer. Shortcut: Ctrl + 3",
+          "detect": "subsurf3",
+          "action": "subsurf3",
+          "action_label": "Subdivide (3)",
+          "gif": "subsurf3",
+          "cmds": [
+            "subsurf3"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "edit_tools",
+      "title": "Edit Mode tools: loop cut, inset, bevel",
+      "steps": [
+        {
+          "title": "Select a cube and enter Edit Mode",
+          "hint": "Add a cube if the scene is empty. Shortcut: Tab",
+          "detect": "edit_mode",
+          "action": "toggle_edit_mode",
+          "action_label": "Enter Edit Mode",
+          "gif": "tab",
+          "keys": [
+            "edit_mode"
+          ],
+          "cmds": [
+            "select_cube",
+            "edit_mode"
+          ]
+        },
+        {
+          "title": "Add a loop cut: press Ctrl + R, hover over the cube, click, then right-click",
+          "hint": "Scroll the mouse wheel before clicking for more cuts. Shortcut: Ctrl + R",
+          "detect": "loopcut",
+          "gif": "loopcut",
+          "cmds": [
+            "loopcut"
+          ]
+        },
+        {
+          "title": "Inset a face: press 3, click a face, press I, move the mouse and click",
+          "hint": "This draws a smaller face inside the face. Shortcut: I",
+          "detect": "inset",
+          "gif": "inset",
+          "cmds": [
+            "pick_face",
+            "inset"
+          ]
+        },
+        {
+          "title": "Round the edges: press 2, press A, press Ctrl + B, move the mouse and click",
+          "hint": "Scroll the mouse wheel to make the edges rounder. Shortcut: Ctrl + B",
+          "detect": "bevel",
+          "gif": "bevel",
+          "cmds": [
+            "bevel"
+          ]
+        },
+        {
+          "title": "Return to Object Mode",
+          "hint": "Shortcut: Tab",
+          "detect": "object_mode",
+          "action": "toggle_edit_mode",
+          "action_label": "Object Mode",
+          "gif": "tab",
+          "keys": [
+            "edit_mode"
+          ],
+          "cmds": [
+            "edit_mode"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "materials2",
+      "title": "Shiny, rough and metal materials",
+      "needs_panels": true,
+      "steps": [
+        {
+          "title": "Click empty space to deselect, then click the object",
+          "hint": "Shortcut: Left click",
+          "detect": "select",
+          "action": "add_cube",
+          "action_label": "Add a cube",
+          "gif": "select",
+          "cmds": [
+            "deselect_all",
+            "select_cube"
+          ]
+        },
+        {
+          "title": "Open the Material tab in the Properties editor",
+          "hint": "The round sphere icon near the bottom of the tab column. Click New if it has no material.",
+          "detect": "material_tab",
+          "cmds": [
+            "material_tab"
+          ]
+        },
+        {
+          "title": "Make it metal: set Metallic to 1",
+          "hint": "Drag the Metallic slider to the right, or double-click it and type 1.",
+          "detect": "metallic",
+          "gif": "metallic",
+          "cmds": [
+            "metallic"
+          ]
+        },
+        {
+          "title": "Make it shiny: set Roughness to 0.1",
+          "hint": "Low roughness is a mirror, high roughness is matt. Drag the slider left or type 0.1.",
+          "detect": "roughness",
+          "gif": "roughness",
+          "cmds": [
+            "roughness"
+          ]
+        },
+        {
+          "title": "To see it, switch to Material Preview",
+          "hint": "The third sphere icon at the top right of the viewport.",
+          "detect": "material_preview",
+          "action": "material_preview",
+          "action_label": "Material preview",
+          "gif": "shade_mat",
+          "cmds": [
+            "material_preview"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "join",
+      "title": "Join and separate",
+      "steps": [
+        {
+          "title": "Have two cubes in the scene",
+          "hint": "Click 'Add a cube', or Shift + A > Mesh > Cube. They appear in the same place.",
+          "detect": "two_meshes",
+          "action": "add_cube",
+          "action_label": "Add a cube",
+          "gif": "add_cube",
+          "keys": [
+            "add_menu"
+          ],
+          "cmds": [
+            "add_cube"
+          ]
+        },
+        {
+          "title": "Click empty space, then press A to select everything",
+          "hint": "Shortcut: A",
+          "detect": "select_all",
+          "action": "select_all",
+          "action_label": "Select all",
+          "gif": "sel_all",
+          "cmds": [
+            "select_all"
+          ]
+        },
+        {
+          "title": "Join them into one object: press Ctrl + J",
+          "hint": "Shortcut: Ctrl + J (Object > Join)",
+          "detect": "join",
+          "action": "join",
+          "action_label": "Join",
+          "gif": "join",
+          "cmds": [
+            "join"
+          ]
+        },
+        {
+          "title": "Split them again: Tab, A, P, choose By Loose Parts, then Tab",
+          "hint": "Edit Mode is needed for splitting. Shortcut: P",
+          "detect": "separate",
+          "gif": "separate",
+          "cmds": [
+            "separate"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "text",
+      "title": "Add 3D text",
+      "needs_panels": true,
+      "steps": [
+        {
+          "title": "Add text: Shift + A > Text",
+          "hint": "Shortcut: Shift + A > Text",
+          "detect": "add_text",
+          "action": "add_text",
+          "action_label": "Add text",
+          "gif": "add_text",
+          "keys": [
+            "add_menu"
+          ],
+          "cmds": [
+            "add_text"
+          ]
+        },
+        {
+          "title": "Change the words: press Tab, Backspace, type, then Tab",
+          "hint": "You are typing inside the object. Press Tab when you are done.",
+          "detect": "edit_text",
+          "gif": "edit_text",
+          "keys": [
+            "edit_mode"
+          ],
+          "cmds": [
+            "edit_text"
+          ]
+        },
+        {
+          "title": "Make it 3D: Data tab > Geometry > Extrude, type 0.2",
+          "hint": "The green letter 'a' tab in the Properties editor.",
+          "detect": "text_extrude",
+          "gif": "text_extrude",
+          "cmds": [
+            "text_extrude"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "render",
+      "title": "Light, camera, render",
+      "steps": [
+        {
+          "title": "Add a light: Shift + A > Light > Sun",
+          "hint": "Without light a picture is dark. Shortcut: Shift + A > Light > Sun",
+          "detect": "add_light",
+          "action": "add_sun",
+          "action_label": "Add a sun",
+          "gif": "add_light",
+          "keys": [
+            "add_menu"
+          ],
+          "cmds": [
+            "add_sun"
+          ]
+        },
+        {
+          "title": "Look through the camera: press Numpad 0",
+          "hint": "No numpad? View > Cameras > Active Camera. The camera is what the picture sees.",
+          "detect": "camera_view",
+          "action": "camera_view",
+          "action_label": "Camera view",
+          "gif": "cam_view",
+          "cmds": [
+            "camera_view"
+          ]
+        },
+        {
+          "title": "Take the picture: press F12",
+          "hint": "A new window shows your image. Close it when you are done. Shortcut: F12",
+          "detect": "render",
+          "action": "render_fast",
+          "action_label": "Render (fast)",
+          "gif": "render",
+          "cmds": [
+            "render_fast"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "animation",
+      "title": "Make it move",
+      "needs_panels": true,
+      "steps": [
+        {
+          "title": "Click empty space to deselect, then click the cube",
+          "hint": "Shortcut: Left click",
+          "detect": "select",
+          "action": "add_cube",
+          "action_label": "Add a cube",
+          "gif": "select",
+          "cmds": [
+            "deselect_all",
+            "select_cube"
+          ]
+        },
+        {
+          "title": "Save its position as a keyframe: press I",
+          "hint": "The Timeline at the bottom shows a yellow diamond. Shortcut: I",
+          "detect": "keyframe1",
+          "action": "keyframe",
+          "action_label": "Add keyframe",
+          "gif": "keyframe",
+          "cmds": [
+            "keyframe"
+          ]
+        },
+        {
+          "title": "Jump to frame 60: click or drag in the Timeline numbers",
+          "hint": "Frame 60 is about 2 seconds later.",
+          "detect": "frame_jump",
+          "action": "jump_frame",
+          "action_label": "Go to frame 60",
+          "gif": "frame_jump",
+          "cmds": [
+            "jump_frame"
+          ]
+        },
+        {
+          "title": "Move the cube (G), then press I again",
+          "hint": "Blender fills in everything between the two keyframes.",
+          "detect": "keyframe2",
+          "action": "move_and_key",
+          "action_label": "Move and key",
+          "gif": "keyframe2",
+          "keys": [
+            "move"
+          ],
+          "cmds": [
+            "move_and_key"
+          ]
+        },
+        {
+          "title": "Play it: hover over the viewport and press Space",
+          "hint": "Press Space again to stop.",
+          "detect": "play",
+          "action": "play",
+          "action_label": "Play",
+          "gif": "play",
+          "cmds": [
+            "play"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "house",
+      "title": "Final project: build a tiny house",
+      "needs_panels": true,
+      "steps": [
+        {
+          "title": "Delete the default cube",
+          "hint": "Click it, then press Delete. We start from an empty floor.",
+          "detect": "delete_cube",
+          "action": "delete_selected",
+          "action_label": "Delete it",
+          "gif": "delete",
+          "keys": [
+            "delete"
+          ],
+          "cmds": [
+            "select_cube",
+            "delete"
+          ]
+        },
+        {
+          "title": "Add a plane for the ground and make it big",
+          "hint": "Shift + A > Mesh > Plane, then press S, type 4, press Enter.",
+          "detect": "floor",
+          "gif": "cap_floor",
+          "keys": [
+            "add_menu",
+            "scale"
+          ],
+          "cmds": [
+            "add_floor"
+          ]
+        },
+        {
+          "title": "Add a cube for the house and lift it onto the ground",
+          "hint": "Shift + A > Mesh > Cube, then G, Z, 1, Enter. (The cube is 2 m tall.)",
+          "detect": "house",
+          "gif": "cap_house",
+          "keys": [
+            "add_menu",
+            "move"
+          ],
+          "cmds": [
+            "add_house"
+          ]
+        },
+        {
+          "title": "Add a cone for the roof and put it on top",
+          "hint": "Shift + A > Mesh > Cone, then G, Z, 3, Enter.",
+          "detect": "roof",
+          "gif": "cap_roof",
+          "keys": [
+            "add_menu",
+            "move"
+          ],
+          "cmds": [
+            "add_roof"
+          ]
+        },
+        {
+          "title": "Colour at least two objects",
+          "hint": "Select an object, Material tab > New > Base Color. Try red for the roof.",
+          "detect": "two_coloured",
+          "gif": "cap_paint",
+          "cmds": [
+            "paint_two"
+          ]
+        },
+        {
+          "title": "Take a picture of your house: press F12",
+          "hint": "Your first finished scene. Well done!",
+          "detect": "render",
+          "action": "render_fast",
+          "action_label": "Render (fast)",
+          "gif": "render",
+          "cmds": [
+            "render_fast"
           ]
         }
       ]

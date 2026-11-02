@@ -1,7 +1,7 @@
 """Lesson mode.
 
 How a session works
-  1. The user clicks "Start tutorial" in the Nav Guide tab. The add-on is now
+  1. The user clicks "Start tutorial" in the Tutorial tab. The add-on is now
      "armed": the interface is dimmed and the viewport asks the user to press M.
   2. Pressing M (mouse over the 3D viewport) opens the bigger workspace and
      begins the lesson. (Lessons with "needs_panels": true keep the normal
@@ -14,6 +14,14 @@ How a session works
   4. Progress is saved to disk after every task. Lessons unlock one by one, so
      the user cannot jump ahead; the sidebar dropdown shows done / current /
      locked lessons.
+
+  5. Two ways to do a lesson (chosen when the tutorial starts):
+       Keyboard mode    - use the shortcuts and the mouse, like in Blender.
+       Accessible mode  - a list of every command the lesson needs sits on the
+                          right of the viewport; one click on a command does what
+                          the shortcut would (see commands.py).
+     Move / rotate / scale / extrude tasks wait for the mouse click that
+     confirms the change before the next task unlocks (see detect.py).
 
 Lessons live in lessons/lessons.json.
 """
@@ -28,12 +36,13 @@ import gpu
 from bpy.app.handlers import persistent
 from gpu_extras.batch import batch_for_shader
 
-from . import actions, detect, keys
+from . import access, actions, commands, detect
 
 _DIR = os.path.dirname(__file__)
 _LESSONS_PATH = os.path.join(_DIR, "lessons", "lessons.json")
 _MEDIA = os.path.join(_DIR, "media")
 
+MODES = ("keyboard", "accessible")
 NOISE = 0.002       # ignore camera changes smaller than this per tick
 
 # Interface parts to dim: (Blender space class name, region types)
@@ -66,6 +75,9 @@ _S = {
     "hover": None,        # (kind, arg) under the mouse
     "eat_release": False,
     "gen": 0,
+    "mode": "keyboard",   # "keyboard" or "accessible" (chosen when starting)
+    "press": None,        # overlay button the mouse went down on
+    "note": None,         # (text, until) short message in the command list
     "tex": {},            # animation name -> (image, gpu texture) or False
 }
 
@@ -97,6 +109,7 @@ def _load_progress():
         _progress = {
             "completed": [x for x in data.get("completed", []) if isinstance(x, str)],
             "steps": {k: v for k, v in data.get("steps", {}).items() if isinstance(v, int)},
+            "mode": data.get("mode") if data.get("mode") in MODES else "keyboard",
         }
     return _progress
 
@@ -114,8 +127,16 @@ def _save_progress():
 
 def reset_progress():
     global _progress
-    _progress = {"completed": [], "steps": {}}
+    _progress = {"completed": [], "steps": {}, "mode": _load_progress().get("mode", "keyboard")}
     _save_progress()
+
+
+def saved_mode():
+    return _load_progress().get("mode", "keyboard")
+
+
+def mode():
+    return _S["mode"]
 
 
 def is_completed(lesson_id):
@@ -232,9 +253,17 @@ def note_key(flag):
 def begin_from_key(context):
     """The learner's own 'Start' key. Returns None or a message."""
     if _S["lesson"] is None or _S["phase"] != "armed":
-        return "Click Start tutorial in the Nav Guide tab first."
+        return "Click Start in the Tutorial tab first."
     begin(context.window, context.area)
     return None
+
+
+def current_commands():
+    """Command ids the current task needs (to highlight them in the sidebar)."""
+    lesson = _S["lesson"]
+    if lesson is None or _S["phase"] != "running" or _S["finished"]:
+        return set()
+    return set(lesson["steps"][_S["idx"]].get("cmds", ()))
 
 
 def progress():
@@ -360,20 +389,52 @@ def _ui_width(area):
     return sum(r.width for r in area.regions if r.type == "UI" and r.width > 1)
 
 
-def _draw_armed(region, area, s, lesson):
-    """Small card at the bottom-left: an animated M key and one line of text."""
+def _draw_choose(region, area, s, lesson, hits):
+    """First screen of a tutorial: pick Keyboard mode or Accessible mode."""
+    pad = 14 * s
+    x0, bottom = 80 * s, 30 * s
+    width = min(640 * s, max(region.width - _ui_width(area) - x0 - 24 * s, 320 * s))
+    bw = (width - 3 * pad) / 2
+    bh = 78 * s
+    H = pad * 3 + 26 * s + bh
+    _rect(x0, bottom, width, H, (0, 0, 0, 0.82))
+    _text(x0 + pad, bottom + H - pad - 20 * s, "How do you want to do this tutorial?", 20 * s, WHITE)
+    options = (("keyboard", "Keyboard mode", "Use the shortcuts and the mouse,"
+                " like in Blender."),
+               ("accessible", "Accessible mode", "Click commands in a list.\nNo shortcuts needed."))
+    for i, (key, title, sub) in enumerate(options):
+        bx, by = x0 + pad + i * (bw + pad), bottom + pad
+        hover = _S["hover"] == ("choose", key)
+        _rect(bx, by, bw, bh, (0.28, 0.52, 1.0, 1) if hover else (0.20, 0.22, 0.30, 1))
+        _text(bx + pad, by + bh - pad - 17 * s, title, 17 * s, WHITE)
+        lines = []
+        for part in sub.split("\n"):
+            lines += _wrap(part, 13 * s, bw - 2 * pad)
+        for n, line in enumerate(lines[:3]):
+            _text(bx + pad, by + bh - pad - 17 * s - (n + 1) * 18 * s - 4 * s, line, 13 * s, LIGHT)
+        hits.append((bx, by, bw, bh, "choose", key))
+
+
+def _draw_armed(region, area, s, lesson, hits):
+    """Small card at the bottom-left. Keyboard mode: an animated M key.
+    Accessible mode: a Start lesson button."""
     total = len(lesson["steps"])
     saved = min(saved_step(lesson["id"]), total)
-    meta = _meta().get("key_m")
+    accessible = _S["mode"] == "accessible"
+    meta = None if accessible else _meta().get("key_m")
     pad = 14 * s
     iw = meta["w"] * s * 0.7 if meta else 0
     ih = meta["h"] * s * 0.7 if meta else 0
 
-    mine = keys.start_label()
-    lines = [("Press M to start", 22, (1, 1, 1, 1)),
-             ("with the mouse over the 3D viewport", 13, (0.75, 0.75, 0.75, 1))]
-    if mine:
-        lines.append((f"Your start key: {mine}", 13, (0.30, 0.80, 0.40, 1)))
+    if accessible:
+        lines = [("Ready to start?", 22, (1, 1, 1, 1)),
+                 ("This opens the bigger workspace and the command list.", 13, (0.75, 0.75, 0.75, 1))]
+    else:
+        lines = [("Press M to start", 22, (1, 1, 1, 1)),
+                 ("with the mouse over the 3D viewport", 13, (0.75, 0.75, 0.75, 1))]
+        mine = access.start_label()
+        if mine:
+            lines.append((f"Your start key: {mine}", 13, (0.30, 0.80, 0.40, 1)))
     if saved:
         lines.append((f"Continuing at task {saved + 1} of {total}", 13, (0.30, 0.80, 0.40, 1)))
     text_w = 0
@@ -381,16 +442,21 @@ def _draw_armed(region, area, s, lesson):
         blf.size(0, size * s)
         text_w = max(text_w, blf.dimensions(0, text)[0])
     text_h = sum(size * 1.6 * s for _t, size, _c in lines)
+    btn_h = (26 * s + 10 * s) if accessible else 0
     cw = pad * 3 + iw + text_w
-    ch = max(ih, text_h) + pad * 2
+    ch = max(ih, text_h + btn_h) + pad * 2
     x, y = 80 * s, 30 * s
     _rect(x, y, cw, ch, (0, 0, 0, 0.78))
     if meta:
         _draw_sprite("key_m", x + pad, y + (ch - ih) / 2, iw, ih)
-    ty = y + ch / 2 + text_h / 2
+    ty = y + ch - pad
     for text, size, col in lines:
         ty -= size * 1.6 * s
         _text(x + pad * 2 + iw, ty + size * 0.3 * s, text, size * s, col)
+    if accessible:
+        blf.size(0, 15 * s)
+        bw = blf.dimensions(0, "Start lesson")[0] + 30 * s
+        _button(x + pad * 2 + iw, y + pad, bw, 28 * s, "Start lesson", 15 * s, "begin", "", hits)
 
 
 GREEN = (0.30, 0.80, 0.40, 1)
@@ -469,7 +535,9 @@ def _draw_task_card(region, area, s, lesson, hits):
     title_lines = _wrap(step["title"], 17 * s, text_w)
     hint_lines = _wrap(step["hint"], 13 * s, text_w) if step["hint"] else []
     msg_lines = _wrap(_S["msg"], 13 * s, text_w) if _S["msg"] else []
-    mine_text = keys.step_line(step)
+    mine_text = access.step_line(step)
+    if _S["mode"] == "accessible":
+        mine_text = "Accessible mode: click the highlighted command on the right."
     key_lines = _wrap(mine_text, 13 * s, text_w) if mine_text else []
     left_h = (len(title_lines) * 24 * s + (4 * s + len(hint_lines) * 18 * s if hint_lines else 0)
               + len(key_lines) * 18 * s
@@ -558,6 +626,58 @@ def _draw_done_card(region, area, s, lesson, hits):
         bx += bw + 8 * s
 
 
+def _draw_commands(region, area, s, lesson, hits):
+    """Accessible mode: every command this lesson needs, on the right.
+    The ones the current task needs are highlighted."""
+    ids = commands.lesson_commands(lesson)
+    if not ids:
+        return
+    current = set()
+    if not _S["finished"]:
+        current = set(lesson["steps"][_S["idx"]].get("cmds", ()))
+    pad, gap = 10 * s, 5 * s
+    width = 270 * s
+    head = 40 * s
+    top = region.height - 120 * s
+    note = _S["note"] if _S["note"] and time.time() < _S["note"][1] else None
+    note_lines = _wrap(note[0], 13 * s, width - 2 * pad) if note else []
+    note_h = (len(note_lines) * 18 * s + 6 * s) if note_lines else 0
+    avail = top - 24 * s - head - pad - note_h
+    row_h = max(24 * s, min(32 * s, avail / len(ids) - gap))
+    H = head + len(ids) * (row_h + gap) + pad + note_h
+    x = max(region.width - _ui_width(area) - width - 18 * s, 20 * s)
+    bottom = top - H
+    _rect(x, bottom, width, H, (0, 0, 0, 0.82))
+    _text(x + pad, top - pad - 17 * s, "Commands", 18 * s, WHITE)
+    _text(x + pad, top - pad - 17 * s - 17 * s, "Click one. It works like the shortcut.", 11 * s, GREY)
+    y = top - head
+    for cid in ids:
+        y -= row_h
+        hot = cid in current
+        hover = _S["hover"] == ("cmd", cid)
+        fill = (0.28, 0.52, 1.0, 1) if hover else ((0.20, 0.27, 0.46, 1) if hot else (0.20, 0.20, 0.24, 1))
+        bx, bw = x + pad, width - 2 * pad
+        _rect(bx, y, bw, row_h, fill)
+        if hot:
+            e = max(1.5, 2 * s)
+            _rect(bx, y, bw, e, AMBER)
+            _rect(bx, y + row_h - e, bw, e, AMBER)
+            _rect(bx, y, e, row_h, AMBER)
+            _rect(bx + bw - e, y, e, row_h, AMBER)
+        label, short = commands.label(cid), commands.shortcut(cid)
+        blf.size(0, 14 * s)
+        lw = blf.dimensions(0, label)[0]
+        blf.size(0, 11 * s)
+        sw = blf.dimensions(0, short)[0] if short else 0
+        _text(bx + 8 * s, y + row_h / 2 - 5 * s, label, 14 * s, WHITE if (hot or hover) else LIGHT)
+        if short and lw + sw + 28 * s < bw:
+            _text(bx + bw - sw - 8 * s, y + row_h / 2 - 4 * s, short, 11 * s, GREY)
+        hits.append((bx, y, bw, row_h, "cmd", cid))
+        y -= gap
+    for i, line in enumerate(note_lines):
+        _text(x + pad, bottom + pad + (len(note_lines) - 1 - i) * 18 * s, line, 13 * s, AMBER)
+
+
 def _draw_viewport():
     lesson = _S["lesson"]
     region = bpy.context.region
@@ -570,14 +690,19 @@ def _draw_viewport():
     gpu.state.blend_set("ALPHA")
     _draw_title(region, s, lesson)
 
-    if _S["phase"] != "running":
-        _draw_armed(region, area, s, lesson)
+    if _S["phase"] == "choose":
+        _draw_choose(region, area, s, lesson, hits)
+    elif _S["phase"] == "armed":
+        _draw_armed(region, area, s, lesson, hits)
     elif _S["finished"]:
         _draw_done_card(region, area, s, lesson, hits)
-    elif _S["flash"]:
-        _draw_flash_card(region, area, s, lesson)
     else:
-        _draw_task_card(region, area, s, lesson, hits)
+        if _S["flash"]:
+            _draw_flash_card(region, area, s, lesson)
+        else:
+            _draw_task_card(region, area, s, lesson, hits)
+        if _S["mode"] == "accessible":
+            _draw_commands(region, area, s, lesson, hits)
 
     gpu.state.blend_set("NONE")
     _S["hits"][area.as_pointer()] = hits
@@ -654,7 +779,7 @@ def _redraw_view3d():
 
 def _env():
     wm = bpy.context.window_manager
-    return detect.Env(list(wm.windows), _S["acc"], _S["flags"], _S["base"])
+    return detect.Env(list(wm.windows), _S["acc"], _S["flags"], _S["base"], wm)
 
 
 def _track_camera(windows):
@@ -728,7 +853,7 @@ def _tick():
     lesson = _S["lesson"]
     if lesson is None:
         return None
-    if _S["phase"] == "armed":
+    if _S["phase"] in ("choose", "armed"):
         _redraw_view3d()        # keep the M key animation playing
         return 0.05
     if _S["phase"] != "running" or _S["finished"]:
@@ -877,14 +1002,38 @@ def _set_nav_buttons(show):
                 region.tag_redraw()
 
 
-def start():
-    """Arm the tutorial for the current lesson. Returns False if none is left."""
+def _apply_mode(chosen):
+    """Remember the mode for this tutorial and for next time."""
+    _S["mode"] = chosen
+    _S["gif_on"] = chosen == "keyboard"       # accessible mode shows the commands instead
+    prog = _load_progress()
+    if prog.get("mode") != chosen:
+        prog["mode"] = chosen
+        _save_progress()
+    if chosen == "keyboard":
+        _load_texture("key_m")
+    _S["hint_t0"] = time.time()
+
+
+def choose_mode(chosen):
+    """The learner clicked Keyboard mode or Accessible mode."""
+    if _S["lesson"] is None or _S["phase"] != "choose" or chosen not in MODES:
+        return
+    _apply_mode(chosen)
+    _S["phase"] = "armed"
+    _redraw_all()
+
+
+def start(chosen=None):
+    """Start the tutorial for the current lesson. With no mode given, the viewport
+    first asks which mode to use. Returns False if no lesson is left."""
     lesson = current_lesson()
     if lesson is None:
         return False
     stop()
-    _S.update(lesson=lesson, phase="armed", idx=0, finished=False, base={}, flags=set(),
-              msg=None, last={}, hover=None, eat_release=False, hits={}, flash=None)
+    _S.update(lesson=lesson, phase="choose", idx=0, finished=False, base={}, flags=set(),
+              msg=None, last={}, hover=None, eat_release=False, press=None, note=None,
+              hits={}, flash=None)
     _S["gen"] += 1
     _S["acc"] = {"orbit": 0.0, "pan": 0.0, "zoom": 0.0}
 
@@ -903,7 +1052,9 @@ def start():
     )
     _set_nav_buttons(False)
     _S["hint_t0"] = time.time()
-    _load_texture("key_m")
+    if chosen in MODES:
+        _apply_mode(chosen)
+        _S["phase"] = "armed"
     if not bpy.app.timers.is_registered(_tick):
         bpy.app.timers.register(_tick, first_interval=0.1)
     _redraw_all()
@@ -949,7 +1100,8 @@ def stop():
         except (ValueError, RuntimeError):
             pass
         _S["view_handle"] = None
-    _S.update(lesson=None, phase=None, hits={}, finished=False, msg=None, flash=None)
+    _S.update(lesson=None, phase=None, hits={}, finished=False, msg=None, flash=None,
+              press=None, note=None)
     if bpy.app.timers.is_registered(_tick):
         bpy.app.timers.unregister(_tick)
     _free_textures()
@@ -1004,8 +1156,17 @@ class NAVGUIDE_OT_start_tutorial(bpy.types.Operator):
     bl_label = "Start tutorial"
     bl_options = {"INTERNAL"}
 
+    mode: bpy.props.EnumProperty(
+        name="Mode",
+        items=(("ASK", "Ask me", "Choose in the viewport"),
+               ("keyboard", "Keyboard mode", "Use the shortcuts and the mouse"),
+               ("accessible", "Accessible mode", "Click commands in a list, no shortcuts")),
+        default="ASK",
+        options={"SKIP_SAVE"},
+    )
+
     def invoke(self, context, event):
-        if not start():
+        if not start(None if self.mode == "ASK" else self.mode):
             self.report({"INFO"}, "You have finished every lesson.")
             return {"CANCELLED"}
         self._gen = _S["gen"]
@@ -1024,14 +1185,17 @@ class NAVGUIDE_OT_start_tutorial(bpy.types.Operator):
                 _redraw_view3d()
             return {"PASS_THROUGH"}
 
-        # --- armed: wait for M ------------------------------------------
+        if _S["phase"] == "choose":
+            return self._mouse(context, event)
+
+        # --- armed: wait for M (or a click on Start lesson) ----------------
         if _S["phase"] == "armed":
             if event.type == "M" and event.value == "PRESS":
                 over = _viewport_under_mouse(context, event)
                 if over:
                     begin(context.window, over[0])
                     return {"RUNNING_MODAL"}
-            return {"PASS_THROUGH"}
+            return self._mouse(context, event)
 
         # --- running: note the keys detectors care about ------------------
         if event.value == "PRESS" and event.type in {"A", "ONE", "TWO", "THREE"}:
@@ -1041,18 +1205,27 @@ class NAVGUIDE_OT_start_tutorial(bpy.types.Operator):
                 elif event.type in {"ONE", "TWO", "THREE"} and not (event.shift or event.ctrl or event.alt):
                     _S["flags"].add({"ONE": "key_1", "TWO": "key_2", "THREE": "key_3"}[event.type])
 
-        if event.type == "LEFTMOUSE":
-            if event.value in {"PRESS", "DOUBLE_CLICK"}:
-                found = _hit_test(context, event)
-                if found:
-                    area, region, kind, arg = found
-                    self._click(context, area, region, kind, arg)
-                    _S["eat_release"] = True
-                    return {"RUNNING_MODAL"}
-            elif event.value == "RELEASE" and _S["eat_release"]:
-                _S["eat_release"] = False
-                return {"RUNNING_MODAL"}
+        return self._mouse(context, event)
 
+    def _mouse(self, context, event):
+        """Overlay buttons act when the mouse is RELEASED on the same button it
+        went down on, so a command that starts a Blender tool never receives the
+        release of the click that started it."""
+        if event.type != "LEFTMOUSE":
+            return {"PASS_THROUGH"}
+        if event.value in {"PRESS", "DOUBLE_CLICK"}:
+            found = _hit_test(context, event)
+            if found:
+                _S["press"] = (found[2], found[3])
+                _S["eat_release"] = True
+                return {"RUNNING_MODAL"}
+        elif event.value == "RELEASE" and _S["eat_release"]:
+            _S["eat_release"] = False
+            pressed, _S["press"] = _S["press"], None
+            found = _hit_test(context, event)
+            if found and pressed == (found[2], found[3]):
+                self._click(context, found[0], found[1], found[2], found[3])
+            return {"RUNNING_MODAL"}
         return {"PASS_THROUGH"}
 
     def _click(self, context, area, region, kind, arg):
@@ -1080,6 +1253,16 @@ class NAVGUIDE_OT_start_tutorial(bpy.types.Operator):
                     problem = str(e).strip() or "That could not run here."
                 if problem:
                     self.report({"WARNING"}, problem)
+        elif kind == "choose":
+            choose_mode(arg)
+        elif kind == "begin" and _S["phase"] == "armed":
+            begin(context.window, area)
+        elif kind == "cmd" and _S["phase"] == "running" and not _S["finished"]:
+            with bpy.context.temp_override(window=context.window, area=area, region=region):
+                problem = commands.run(arg, bpy.context)
+            _S["note"] = (problem, time.time() + 5.0) if problem else None
+            if problem:
+                self.report({"WARNING"}, problem)
         elif kind == "next" and _S["finished"]:
             next_lesson()
         elif kind == "finish" and _S["finished"]:
