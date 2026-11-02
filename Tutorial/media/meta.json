@@ -30,5 +30,157 @@
     "w": 360,
     "h": 270,
     "fps": 20
+  },
+  "key_m": {
+    "frames": 24,
+    "cols": 6,
+    "rows": 4,
+    "w": 240,
+    "h": 130,
+    "fps": 20
+  },
+  "shift_a": {
+    "frames": 24,
+    "cols": 6,
+    "rows": 4,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "add_cube": {
+    "frames": 52,
+    "cols": 6,
+    "rows": 9,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "delete": {
+    "frames": 24,
+    "cols": 6,
+    "rows": 4,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "g": {
+    "frames": 38,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "g_axis": {
+    "frames": 52,
+    "cols": 6,
+    "rows": 9,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "r": {
+    "frames": 38,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "s": {
+    "frames": 38,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "undo": {
+    "frames": 24,
+    "cols": 6,
+    "rows": 4,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "undo_mac": {
+    "frames": 24,
+    "cols": 6,
+    "rows": 4,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "tab": {
+    "frames": 24,
+    "cols": 6,
+    "rows": 4,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "keys_123": {
+    "frames": 52,
+    "cols": 6,
+    "rows": 9,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "one_face": {
+    "frames": 38,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "face_move": {
+    "frames": 66,
+    "cols": 6,
+    "rows": 11,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "e": {
+    "frames": 38,
+    "cols": 6,
+    "rows": 7,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "wall_len": {
+    "frames": 66,
+    "cols": 6,
+    "rows": 11,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "wall_thin": {
+    "frames": 66,
+    "cols": 6,
+    "rows": 11,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "wall_tall": {
+    "frames": 66,
+    "cols": 6,
+    "rows": 11,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "wall_lift": {
+    "frames": 66,
+    "cols": 6,
+    "rows": 11,
+    "w": 360,
+    "h": 270,
+    "fps": 20
   }
 }

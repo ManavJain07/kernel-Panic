@@ -1,5 +1,4 @@
 import bpy
-from . import context as ctx
 from . import lesson
 
 
@@ -18,6 +17,27 @@ def draw_wrapped(layout, text, width=34, icon="NONE"):
         layout.label(text=line, icon=icon if first else "NONE")
 
 
+class NAVGUIDE_MT_lessons(bpy.types.Menu):
+    """Dropdown listing the lessons. Lessons unlock one at a time, so only
+    the current one can be started (with the Start tutorial button)."""
+    bl_label = "Lessons"
+    bl_idname = "NAVGUIDE_MT_lessons"
+
+    def draw(self, context):
+        layout = self.layout
+        for item in lesson.load_lessons():
+            text = f"Lesson {item['number']}: {item['title']}"
+            status = lesson.lesson_status(item)
+            if status == "done":
+                layout.label(text=text, icon="CHECKMARK")
+            elif status == "current":
+                layout.label(text=f"{text}  (up next)", icon="PLAY")
+            else:
+                row = layout.row()
+                row.enabled = False
+                row.label(text=text, icon="LOCKED")
+
+
 class NAVGUIDE_PT_main(bpy.types.Panel):
     bl_label = "Navigation Guide"
     bl_idname = "NAVGUIDE_PT_main"
@@ -27,51 +47,40 @@ class NAVGUIDE_PT_main(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        state = ctx.get_state(context)
-
-        # --- lessons -----------------------------------------------------
         box = layout.box()
         box.label(text="Lessons", icon="HELP")
+
         if lesson.is_active():
             cur = lesson.current()
             done, total = lesson.progress()
             box.label(text=f"Lesson {cur['number']}: {cur['title']}")
             box.label(text=f"{done} of {total} tasks done", icon="CHECKMARK")
-            full = getattr(context.screen, "show_fullscreen", False)
-            box.operator(
-                "navguide.toggle_maximize",
-                text="Normal layout" if full else "Bigger workspace",
-                icon="FULLSCREEN_EXIT" if full else "FULLSCREEN_ENTER",
-            )
+            if lesson.phase() == "armed":
+                draw_wrapped(box, "Press M over the 3D viewport to start.",
+                             icon="INFO")
             box.operator("navguide.exit_lesson", text="Exit lesson", icon="X")
+            return
+
+        nxt = lesson.current_lesson()
+        if nxt is None:
+            box.menu("NAVGUIDE_MT_lessons", text="All lessons done", icon="CHECKMARK")
+            box.label(text="Well done - you finished every lesson!")
         else:
-            for item in lesson.load_lessons():
-                op = box.operator(
-                    "navguide.start_lesson",
-                    text=f"Lesson {item['number']}: {item['title']}",
-                    icon="PLAY",
-                )
-                op.lesson_id = item["id"]
-
-        # --- live context ------------------------------------------------
-        box = layout.box()
-        box.label(text="Where you are", icon="INFO")
-        box.label(text=f"Mode: {state['mode']}")
-        box.label(text=f"Active: {state['active_object'] or 'None'}")
-        box.label(text=f"Selected: {state['selected_count']}")
-
-        hint, shortcut = ctx.get_hint(state)
-        box = layout.box()
-        box.label(text="What you can do next", icon="LIGHT")
-        draw_wrapped(box, hint)
-        box.label(text=f"Shortcut: {shortcut}", icon="EVENT_RETURN")
-
-        layout.separator()
-        layout.label(text="Tip: keep your mouse over the", icon="QUESTION")
-        layout.label(text="3D viewport when using shortcuts.")
+            box.menu("NAVGUIDE_MT_lessons",
+                     text=f"Lesson {nxt['number']}: {nxt['title']}",
+                     icon="DOWNARROW_HLT")
+            saved = lesson.saved_step(nxt["id"])
+            box.operator(
+                "navguide.start_tutorial",
+                text="Continue tutorial" if saved else "Start tutorial",
+                icon="PLAY",
+            )
+            if saved:
+                box.label(text=f"Saved: {saved} of {len(nxt['steps'])} tasks done")
+        layout.operator("navguide.reset_progress", text="Reset progress", icon="LOOP_BACK")
 
 
-classes = (NAVGUIDE_PT_main,)
+classes = (NAVGUIDE_MT_lessons, NAVGUIDE_PT_main)
 
 
 def register():
