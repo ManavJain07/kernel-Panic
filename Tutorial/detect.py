@@ -191,15 +191,33 @@ def _move_check(env):
 
 
 def _move_axis_check(env):
+    """Judge each separate move (grab) on its own, not the total since the
+    task started. A free move first no longer blocks the task: the user can
+    just try again with G, then X / Y / Z."""
     o, start, now = _tf_state(env)
     if o is None:
+        env.base.pop("gstart", None)
         return False, now
-    changed = [abs(a - b) > EPS for a, b in zip(start[0], now[0])]
-    if sum(changed) == 1:
-        return True, None
-    if sum(changed) > 1:
-        return False, "That moved it in several directions. Press Ctrl + Z to undo, then G, then X, Y or Z."
-    return False, "Press G, then X, Y or Z, move the mouse and click."
+    b = env.base
+    loc = now[0]
+    last = b.get("last", loc)
+    b["last"] = loc
+    if _differs(last, loc):                 # the object is moving right now
+        b.setdefault("gstart", last)
+        b["still"] = 0
+        return False, b.get("axis_msg")
+    if "gstart" in b:                       # it stopped: was that one move?
+        b["still"] = b.get("still", 0) + 1
+        if b["still"] >= 2:                 # still for ~0.2 s = move finished
+            first = b.pop("gstart")
+            b["still"] = 0
+            changed = sum(abs(a - c) > EPS for a, c in zip(first, loc))
+            if changed == 1:
+                return True, None
+            if changed > 1:
+                b["axis_msg"] = ("That moved it in several directions. "
+                                 "No need to undo - just try again: G, then X, Y or Z.")
+    return False, b.get("axis_msg") or "Press G, then X, Y or Z, move the mouse and click."
 
 
 def _rotate_check(env):

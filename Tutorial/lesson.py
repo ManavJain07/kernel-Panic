@@ -6,10 +6,11 @@ How a session works
   2. Pressing M (mouse over the 3D viewport) opens the bigger workspace and
      begins the lesson. (Lessons with "needs_panels": true keep the normal
      layout because they use the Properties editor.)
-  3. The task checklist shows the tasks in order. Only the current task can be
-     worked on; later tasks stay locked. Every task is checked automatically
-     (see detect.py) and the current task shows a hint plus a live "not yet"
-     message. A finished task is crossed out and the next one unlocks.
+  3. A small card shows ONE task at a time with a counter (2/6), a progress
+     bar, the hint text and an animation that plays automatically. Every task
+     is checked automatically (see detect.py) and the card shows a live
+     "not yet" message. When a task is finished the card briefly shows
+     "1/6 - Task completed", then moves on to the next task.
   4. Progress is saved to disk after every task. Lessons unlock one by one, so
      the user cannot jump ahead; the sidebar dropdown shows done / current /
      locked lessons.
@@ -55,9 +56,11 @@ _S = {
     "acc": {"orbit": 0.0, "pan": 0.0, "zoom": 0.0},
     "we_maxed": False,    # we opened the bigger workspace
     "nav_ui": None,       # the user's "navigation buttons" preference, to restore
+    "gizmo_prev": {},     # fallback: viewport -> its navigate-gizmo setting, to restore
     "handles": [],        # (space class, region type, handle)
     "view_handle": None,
-    "hint": None,         # id of the task whose animation is open
+    "gif_on": True,       # show the hint animation inside the task card
+    "flash": None,        # (tasks done, until time) while "Task completed" shows
     "hint_t0": 0.0,
     "hits": {},           # area pointer -> [(x, y, w, h, kind, arg)]
     "hover": None,        # (kind, arg) under the mouse
@@ -331,11 +334,11 @@ def _draw_dim():
 def _draw_title(region, s, lesson):
     x0 = 80 * s
     title = f"Lesson {lesson['number']}: {lesson['title']}"
-    tsize = 30 * s
+    tsize = 22 * s
     blf.size(0, tsize)
     tw, th = blf.dimensions(0, title)
-    ty = region.height - 100 * s
-    _rect(x0 - 14 * s, ty - 12 * s, tw + 28 * s, th + 24 * s, (0, 0, 0, 0.65))
+    ty = region.height - 80 * s
+    _rect(x0 - 12 * s, ty - 10 * s, tw + 24 * s, th + 20 * s, (0, 0, 0, 0.65))
     _text(x0, ty, title, tsize, (1, 1, 1, 1))
 
 
@@ -373,6 +376,165 @@ def _draw_armed(region, area, s, lesson):
         _text(x + pad * 2 + iw, ty + size * 0.3 * s, text, size * s, col)
 
 
+GREEN = (0.30, 0.80, 0.40, 1)
+AMBER = (1.0, 0.72, 0.30, 1)
+BLUE = (0.28, 0.52, 1.0, 1)
+WHITE = (1, 1, 1, 1)
+LIGHT = (0.82, 0.82, 0.82, 1)
+GREY = (0.62, 0.62, 0.62, 1)
+GIF_SCALE = 0.6        # hint animation size relative to its original size
+
+
+def _draw_progress(x, y, w, s, total, done, current):
+    """Row of small bars, one per task: green = done, blue = current."""
+    gap = 4 * s
+    seg = (w - gap * (total - 1)) / max(total, 1)
+    for i in range(total):
+        col = GREEN if i < done else (BLUE if i == current else (0.30, 0.30, 0.34, 1))
+        _rect(x + i * (seg + gap), y, seg, 6 * s, col)
+
+
+def _draw_check(x, y, size, col):
+    edge = max(1.5, size * 0.11)
+    _rect(x, y, size, edge, col)
+    _rect(x, y + size - edge, size, edge, col)
+    _rect(x, y, edge, size, col)
+    _rect(x + size - edge, y, edge, size, col)
+    _rect(x + size * 0.22, y + size * 0.22, size * 0.56, size * 0.56, col)
+
+
+def _card_geometry(region, area, s):
+    x0 = 80 * s
+    width = min(600 * s, max(region.width - _ui_width(area) - x0 - 24 * s, 300 * s))
+    return x0, width, 30 * s, 14 * s       # x, width, bottom, pad
+
+
+def _draw_card_header(x0, top, width, pad, s, counter, color, total, done, current):
+    _text(x0 + pad, top - pad - 18 * s, counter, 22 * s, color)
+    _draw_progress(x0 + pad, top - pad - 24 * s - 10 * s, width - 2 * pad, s,
+                   total, done, current)
+    return pad + 24 * s + 18 * s          # height used by the header
+
+
+def _draw_task_card(region, area, s, lesson, hits):
+    """One card, one task: counter (2/6), progress bar, task, hint, buttons and
+    the hint animation. Replaces the old long checklist."""
+    steps = lesson["steps"]
+    total, idx = len(steps), _S["idx"]
+    step = steps[idx]
+    x0, width, bottom, pad = _card_geometry(region, area, s)
+    tx = x0 + pad
+
+    # hint animation (shown automatically; the user can hide it)
+    name = _gif_for(step) if _S["gif_on"] else None
+    meta = _meta().get(name) if name else None
+    if not (name and _S["tex"].get(name)):
+        meta = None
+    gw = gh = 0.0
+    side = False
+    if meta:
+        gw, gh = meta["w"] * s * GIF_SCALE, meta["h"] * s * GIF_SCALE
+        side = width >= 480 * s
+        if not side and gw > width - 2 * pad:
+            gw = width - 2 * pad
+            gh = gw * meta["h"] / meta["w"]
+    text_w = width - 2 * pad - ((gw + pad) if (meta and side) else 0)
+
+    buttons = []
+    if step.get("action"):
+        buttons.append((step.get("action_label", "Do it for me"), "do"))
+    if _gif_for(step):
+        buttons.append(("Hide animation" if _S["gif_on"] else "Show animation", "toggle_gif"))
+    bsize = 13 * s
+    blf.size(0, bsize)
+    btn_w = [blf.dimensions(0, b[0])[0] + 22 * s for b in buttons]
+
+    title_lines = _wrap(step["title"], 17 * s, text_w)
+    hint_lines = _wrap(step["hint"], 13 * s, text_w) if step["hint"] else []
+    msg_lines = _wrap(_S["msg"], 13 * s, text_w) if _S["msg"] else []
+    left_h = (len(title_lines) * 24 * s + (4 * s + len(hint_lines) * 18 * s if hint_lines else 0)
+              + len(msg_lines) * 18 * s + (8 * s + 26 * s if buttons else 0))
+    if meta and side:
+        body_h = max(left_h, gh)
+    elif meta:
+        body_h = left_h + pad + gh
+    else:
+        body_h = left_h
+    head_h = pad + 24 * s + 18 * s
+    H = head_h + body_h + pad
+    top = bottom + H
+
+    _rect(x0, bottom, width, H, (0, 0, 0, 0.78))
+    _draw_card_header(x0, top, width, pad, s, f"{idx + 1}/{total}", WHITE, total, idx, idx)
+
+    cur = top - head_h
+    gif_top = cur
+    for i, line in enumerate(title_lines):
+        _text(tx, cur - 17 * s - i * 24 * s, line, 17 * s, WHITE)
+    cur -= len(title_lines) * 24 * s
+    if hint_lines:
+        cur -= 4 * s
+        for i, line in enumerate(hint_lines):
+            _text(tx, cur - 13 * s - i * 18 * s, line, 13 * s, LIGHT)
+        cur -= len(hint_lines) * 18 * s
+    for i, line in enumerate(msg_lines):
+        _text(tx, cur - 13 * s - i * 18 * s, line, 13 * s, AMBER)
+    cur -= len(msg_lines) * 18 * s
+    if buttons:
+        cur -= 8 * s
+        bx = tx
+        for (label, kind), bw in zip(buttons, btn_w):
+            _button(bx, cur - 26 * s, bw, 26 * s, label, bsize, kind, step["id"], hits)
+            bx += bw + 8 * s
+        cur -= 26 * s
+
+    if meta:
+        if side:
+            gx, gy = x0 + width - pad - gw, gif_top - gh
+        else:
+            gx, gy = tx, cur - pad - gh
+        _rect(gx - 2 * s, gy - 2 * s, gw + 4 * s, gh + 4 * s, (0.35, 0.35, 0.42, 1))
+        _draw_sprite(name, gx, gy, gw, gh)
+
+
+def _draw_flash_card(region, area, s, lesson):
+    """Shown for a moment after a task is finished: '1/6  Task completed'."""
+    total = len(lesson["steps"])
+    done = _S["flash"][0]
+    x0, width, bottom, pad = _card_geometry(region, area, s)
+    head_h = pad + 24 * s + 18 * s
+    H = head_h + 28 * s + pad
+    top = bottom + H
+    _rect(x0, bottom, width, H, (0, 0, 0, 0.78))
+    _draw_card_header(x0, top, width, pad, s, f"{done}/{total}", GREEN, total, done, -1)
+    _draw_check(x0 + pad, top - head_h - 22 * s, 18 * s, GREEN)
+    _text(x0 + pad + 30 * s, top - head_h - 18 * s,
+          f"Task {done} completed! Next task coming up...", 17 * s, GREEN)
+
+
+def _draw_done_card(region, area, s, lesson, hits):
+    total = len(lesson["steps"])
+    x0, width, bottom, pad = _card_geometry(region, area, s)
+    head_h = pad + 24 * s + 18 * s
+    H = head_h + 40 * s + pad
+    top = bottom + H
+    _rect(x0, bottom, width, H, (0, 0, 0, 0.78))
+    _draw_card_header(x0, top, width, pad, s, f"{total}/{total}", GREEN, total, total, -1)
+    _draw_check(x0 + pad, top - head_h - 26 * s, 18 * s, GREEN)
+    _text(x0 + pad + 30 * s, top - head_h - 22 * s, "Lesson complete!", 17 * s, GREEN)
+    labels = []
+    if _next_lesson_after(lesson) is not None:
+        labels.append(("Next lesson", "next"))
+    labels.append(("Finish", "finish"))
+    bsize = 13 * s
+    blf.size(0, bsize)
+    widths = [blf.dimensions(0, text)[0] + 24 * s for text, _k in labels]
+    bx = x0 + width - pad - sum(widths) - 8 * s * (len(widths) - 1)
+    for (label, kind), bw in zip(labels, widths):
+        _button(bx, bottom + pad, bw, 26 * s, label, bsize, kind, "", hits)
+        bx += bw + 8 * s
+
+
 def _draw_viewport():
     lesson = _S["lesson"]
     region = bpy.context.region
@@ -380,10 +542,6 @@ def _draw_viewport():
     if lesson is None or region is None or area is None:
         return
     s = bpy.context.preferences.system.ui_scale
-    x0 = 80 * s
-    steps = lesson["steps"]
-    idx = _S["idx"]
-    finished = _S["finished"]
     hits = []
 
     gpu.state.blend_set("ALPHA")
@@ -391,109 +549,12 @@ def _draw_viewport():
 
     if _S["phase"] != "running":
         _draw_armed(region, area, s, lesson)
-        gpu.state.blend_set("NONE")
-        _S["hits"][area.as_pointer()] = hits
-        return
-
-    # ---- task checklist, bottom-left ------------------------------------
-    pad = 14 * s
-    box = 18 * s
-    width = min(720 * s, max(region.width - _ui_width(area) - x0 - 24 * s, 240 * s))
-    text_x = x0 + pad + box + 12 * s
-    avail_w = x0 + width - pad - text_x
-    bsize = 13 * s
-
-    rows = []
-    total_h = pad * 2 + 26 * s
-    for i, step in enumerate(steps):
-        state = "done" if (finished or i < idx) else ("current" if i == idx else "locked")
-        buttons = []
-        if state == "current":
-            if _gif_for(step):
-                buttons.append(("Hint", "hint", step["id"]))
-            if step.get("action"):
-                buttons.append((step.get("action_label", "Do it for me"), "do", step["id"]))
-        blf.size(0, bsize)
-        btn_w = [blf.dimensions(0, b[0])[0] + 22 * s for b in buttons]
-        gap = 8 * s
-        btn_total = sum(btn_w) + gap * max(len(btn_w) - 1, 0)
-        title_lines = _wrap(step["title"], 17 * s, avail_w - btn_total - 12 * s)
-        hint_lines = []
-        msg_lines = []
-        if state != "locked" and step["hint"]:
-            hint_lines = _wrap(step["hint"], 14 * s, avail_w)
-        if state == "current" and _S["msg"]:
-            msg_lines = _wrap(_S["msg"], 14 * s, avail_w)
-        h = (10 * s + len(title_lines) * 24 * s + len(hint_lines) * 19 * s
-             + len(msg_lines) * 19 * s + 8 * s)
-        rows.append((step, state, buttons, btn_w, btn_total, gap, title_lines,
-                     hint_lines, msg_lines, h))
-        total_h += h
-    if finished:
-        total_h += 44 * s
-
-    bottom = 30 * s
-    _rect(x0, bottom, width, total_h, (0, 0, 0, 0.7))
-
-    y = bottom + total_h - pad
-    _text(x0 + pad, y - 16 * s, "Do these in order:", 15 * s, (0.75, 0.75, 0.75, 1))
-    y -= 26 * s
-
-    grey = (0.55, 0.55, 0.55, 1)
-    locked = (0.40, 0.40, 0.40, 1)
-    strike = (0.75, 0.75, 0.75, 1)
-    green = (0.30, 0.80, 0.40, 1)
-    amber = (1.0, 0.72, 0.30, 1)
-    blue = (0.28, 0.52, 1.0, 1)
-    for step, state, buttons, btn_w, btn_total, gap, t_lines, h_lines, m_lines, h in rows:
-        if state == "current":
-            _rect(x0, y - h, width, h, (0.17, 0.19, 0.27, 0.95))
-            _rect(x0, y - h, 4 * s, h, blue)
-        # checkbox
-        bx, by = x0 + pad, y - 26 * s
-        edge = max(1.5, 2 * s)
-        col = green if state == "done" else (locked if state == "locked" else (0.95, 0.95, 0.95, 1))
-        _rect(bx, by, box, edge, col)
-        _rect(bx, by + box - edge, box, edge, col)
-        _rect(bx, by, edge, box, col)
-        _rect(bx + box - edge, by, edge, box, col)
-        if state == "done":
-            _rect(bx + 4 * s, by + 4 * s, box - 8 * s, box - 8 * s, green)
-        # title + hint + live message
-        ty0 = y - 10 * s - 17 * s
-        tcol = {"done": grey, "locked": locked, "current": (1, 1, 1, 1)}[state]
-        for i, line in enumerate(t_lines):
-            _text(text_x, ty0 - i * 24 * s, line, 17 * s, tcol, strike if state == "done" else None)
-        hy0 = ty0 - (len(t_lines) - 1) * 24 * s
-        for i, line in enumerate(h_lines):
-            _text(text_x, hy0 - (i + 1) * 19 * s - 2 * s, line, 14 * s,
-                  grey if state == "done" else (0.82, 0.82, 0.82, 1),
-                  strike if state == "done" else None)
-        for i, line in enumerate(m_lines):
-            _text(text_x, hy0 - (len(h_lines) + i + 1) * 19 * s - 2 * s, line, 14 * s, amber)
-        # buttons, right-aligned on the first title line (current task only)
-        bxr = x0 + width - pad - btn_total
-        for (label, kind, arg), bw in zip(buttons, btn_w):
-            _button(bxr, ty0 - 6 * s, bw, 24 * s, label, bsize, kind, arg, hits)
-            bxr += bw + gap
-        y -= h
-
-    if finished:
-        _text(x0 + pad, y - 22 * s, "Lesson complete!", 17 * s, green)
-        labels = []
-        if _next_lesson_after(lesson) is not None:
-            labels.append(("Next lesson", "next"))
-        labels.append(("Finish", "finish"))
-        blf.size(0, bsize)
-        widths = [blf.dimensions(0, t)[0] + 24 * s for t, _k in labels]
-        bxr = x0 + width - pad - sum(widths) - 8 * s * (len(widths) - 1)
-        for (label, kind), bw in zip(labels, widths):
-            _button(bxr, y - 30 * s, bw, 26 * s, label, bsize, kind, "", hits)
-            bxr += bw + 8 * s
-
-    # ---- hint animation, right-hand side ---------------------------------
-    if not finished:
-        _draw_hint(region, area, s, hits)
+    elif _S["finished"]:
+        _draw_done_card(region, area, s, lesson, hits)
+    elif _S["flash"]:
+        _draw_flash_card(region, area, s, lesson)
+    else:
+        _draw_task_card(region, area, s, lesson, hits)
 
     gpu.state.blend_set("NONE")
     _S["hits"][area.as_pointer()] = hits
@@ -517,36 +578,6 @@ def _draw_sprite(name, x, y, w, h):
     return True
 
 
-def _draw_hint(region, area, s, hits):
-    sid = _S["hint"]
-    lesson = _S["lesson"]
-    step = _find_step(lesson, sid) if sid else None
-    name = _gif_for(step) if step else None
-    if not name:
-        return
-    meta = _meta()[name]
-
-    ui_w = sum(r.width for r in area.regions if r.type == "UI" and r.width > 1)
-    pad = 12 * s
-    head = 34 * s
-    max_h = max(region.height - 260 * s, 120 * s)
-    scale = min(1.0, (max_h - head - 2 * pad) / (meta["h"] * s))
-    iw, ih = meta["w"] * s * scale, meta["h"] * s * scale
-    cw, ch = iw + 2 * pad, ih + 2 * pad + head
-    cx = max(region.width - ui_w - 24 * s - cw, 100 * s)
-    cy = max((region.height - ch) / 2, 20 * s)
-
-    _rect(cx, cy, cw, ch, (0.07, 0.07, 0.09, 0.96))
-    _text(cx + pad, cy + ch - pad - 16 * s, "Hint", 16 * s, (1, 1, 1, 1))
-    blf.size(0, 13 * s)
-    close_w = blf.dimensions(0, "Close")[0] + 22 * s
-    _button(cx + cw - pad - close_w, cy + ch - pad - 24 * s, close_w, 24 * s, "Close",
-            13 * s, "close_hint", "", hits)
-
-    if not _draw_sprite(name, cx + pad, cy + pad, iw, ih):
-        _text(cx + pad, cy + ch / 2, "Animation not available", 14 * s, (0.8, 0.8, 0.8, 1))
-
-
 def _load_texture(name):
     """Load a hint animation's sprite sheet (must run outside a draw callback)."""
     if name in _S["tex"]:
@@ -562,14 +593,17 @@ def _load_texture(name):
     return ent
 
 
-def _free_textures():
-    for ent in _S["tex"].values():
+def _free_textures(keep=()):
+    """Free sprite sheets that are no longer needed (each is ~10 MB in memory)."""
+    for name, ent in list(_S["tex"].items()):
+        if name in keep:
+            continue
         if ent:
             try:
                 bpy.data.images.remove(ent[0])
             except Exception:
                 pass
-    _S["tex"] = {}
+        del _S["tex"][name]
 
 
 # ---------------------------------------------------------------------------
@@ -633,9 +667,14 @@ def _track_camera(windows):
 def _activate(idx):
     """Make task `idx` the current one and let its detector take a baseline."""
     lesson = _S["lesson"]
-    _S.update(idx=idx, msg=None, flags=set(), base={}, last={}, hint=None,
+    _S.update(idx=idx, msg=None, flags=set(), base={}, last={},
               acc={"orbit": 0.0, "pan": 0.0, "zoom": 0.0}, finished=False)
     step = lesson["steps"][idx]
+    name = _gif_for(step)
+    _free_textures(keep=(name,) if name else ())
+    if name:
+        _load_texture(name)
+    _S["hint_t0"] = time.time()
     entry = detect.DETECTORS.get(step.get("detect"))
     if entry and entry[0]:
         try:
@@ -651,11 +690,13 @@ def _advance():
     prog = _load_progress()
     prog["steps"][lesson["id"]] = idx
     if idx >= len(lesson["steps"]):
-        _S.update(idx=idx, finished=True, msg=None, hint=None)
+        _S.update(idx=idx, finished=True, msg=None, flash=None)
+        _free_textures()
         if lesson["id"] not in prog["completed"]:
             prog["completed"].append(lesson["id"])
     else:
         _activate(idx)
+        _S["flash"] = (idx, time.time() + 1.3)
     _save_progress()
     _redraw_all()
 
@@ -675,6 +716,11 @@ def _tick():
         return 0.2
     _track_camera(windows)
 
+    fl = _S["flash"]
+    if fl and time.time() >= fl[1]:
+        _S["flash"] = None
+        _redraw_all()
+
     step = lesson["steps"][_S["idx"]]
     entry = detect.DETECTORS.get(step.get("detect"))
     done, msg = False, None
@@ -684,14 +730,15 @@ def _tick():
         except Exception:
             done, msg = False, None
 
+    animating = bool(_S["gif_on"] and _gif_for(step) and not _S["flash"])
     if done:
         _advance()
     elif msg != _S["msg"]:
         _S["msg"] = msg
         _redraw_all()
-    elif _S["hint"]:
+    elif animating:
         _redraw_view3d()        # keep the hint animation playing
-    return 0.05 if _S["hint"] else 0.1
+    return 0.05 if animating else 0.1
 
 
 @persistent
@@ -766,19 +813,45 @@ def _restore_layout():
 # ---------------------------------------------------------------------------
 
 def _set_nav_buttons(show):
-    """Hide the zoom / pan / camera / ortho buttons next to the axis gizmo while a
-    lesson runs (the axis gizmo itself stays, lesson 1 uses it). Restored on exit."""
+    """Hide the zoom / pan / camera / grid buttons next to the axis gizmo while a
+    lesson runs (the axis gizmo itself stays, lesson 1 uses it). Restored on exit.
+
+    The preference is the normal way. If this Blender has no such preference, or
+    refuses it, the whole navigate gizmo is hidden per viewport instead."""
+    view = bpy.context.preferences.view
+    pref_ok = hasattr(view, "show_navigate_ui")
     try:
-        view = bpy.context.preferences.view
         if not show:
-            if _S["nav_ui"] is None:
-                _S["nav_ui"] = view.show_navigate_ui
-            view.show_navigate_ui = False
-        elif _S["nav_ui"] is not None:
-            view.show_navigate_ui = _S["nav_ui"]
+            if pref_ok:
+                if _S["nav_ui"] is None:
+                    _S["nav_ui"] = view.show_navigate_ui
+                view.show_navigate_ui = False
+                pref_ok = view.show_navigate_ui is False
+            if not pref_ok:
+                for win in bpy.context.window_manager.windows:
+                    for area in win.screen.areas:
+                        if area.type == "VIEW_3D":
+                            sp = area.spaces.active
+                            if hasattr(sp, "show_gizmo_navigate"):
+                                _S["gizmo_prev"].setdefault(area.as_pointer(), sp.show_gizmo_navigate)
+                                sp.show_gizmo_navigate = False
+        else:
+            if pref_ok and _S["nav_ui"] is not None:
+                view.show_navigate_ui = _S["nav_ui"]
             _S["nav_ui"] = None
+            for win in bpy.context.window_manager.windows:
+                for area in win.screen.areas:
+                    if area.type == "VIEW_3D":
+                        prev = _S["gizmo_prev"].get(area.as_pointer())
+                        if prev is not None:
+                            area.spaces.active.show_gizmo_navigate = prev
+            _S["gizmo_prev"] = {}
     except (AttributeError, RuntimeError):
         pass
+    for win in bpy.context.window_manager.windows:
+        for area in win.screen.areas:
+            for region in area.regions:
+                region.tag_redraw()
 
 
 def start():
@@ -788,7 +861,7 @@ def start():
         return False
     stop()
     _S.update(lesson=lesson, phase="armed", idx=0, finished=False, base={}, flags=set(),
-              msg=None, last={}, hint=None, hover=None, eat_release=False, hits={})
+              msg=None, last={}, hover=None, eat_release=False, hits={}, flash=None)
     _S["gen"] += 1
     _S["acc"] = {"orbit": 0.0, "pan": 0.0, "zoom": 0.0}
 
@@ -820,6 +893,7 @@ def begin(win, area):
     if lesson is None or _S["phase"] != "armed":
         return
     _apply_layout(win, area)
+    _set_nav_buttons(False)         # the maximised view is a new screen: hide again
     _S["phase"] = "running"
     _activate(min(saved_step(lesson["id"]), len(lesson["steps"]) - 1))
     _redraw_all()
@@ -831,7 +905,7 @@ def next_lesson():
     if nxt is None:
         stop()
         return
-    _S.update(lesson=nxt, hits={}, hint=None)
+    _S.update(lesson=nxt, hits={}, flash=None)
     _apply_layout()
     _activate(min(saved_step(nxt["id"]), len(nxt["steps"]) - 1))
     _redraw_all()
@@ -852,7 +926,7 @@ def stop():
         except (ValueError, RuntimeError):
             pass
         _S["view_handle"] = None
-    _S.update(lesson=None, phase=None, hint=None, hits={}, finished=False, msg=None)
+    _S.update(lesson=None, phase=None, hits={}, finished=False, msg=None, flash=None)
     if bpy.app.timers.is_registered(_tick):
         bpy.app.timers.unregister(_tick)
     _free_textures()
@@ -962,15 +1036,12 @@ class NAVGUIDE_OT_start_tutorial(bpy.types.Operator):
         lesson = _S["lesson"]
         step = _find_step(lesson, arg) if arg else None
         current_id = None if _S["finished"] else lesson["steps"][_S["idx"]]["id"]
-        if kind == "hint" and step and arg == current_id:
-            if _S["hint"] == arg:
-                _S["hint"] = None
-            else:
-                _load_texture(_gif_for(step))
-                _S["hint"] = arg
+        if kind == "toggle_gif" and step and arg == current_id:
+            _S["gif_on"] = not _S["gif_on"]
+            name = _gif_for(step)
+            if _S["gif_on"] and name:
+                _load_texture(name)
                 _S["hint_t0"] = time.time()
-        elif kind == "close_hint":
-            _S["hint"] = None
         elif kind == "do" and step and arg == current_id:
             # The button only performs the action. The task is ticked off by
             # the detector, exactly as if the user had done it by hand.
