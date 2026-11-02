@@ -32,3 +32,21 @@ python scripts/validate_tasks.py
 ## Adding a new helper action
 Write a function in `operators.py`, add it to the `ACTIONS` dict, and use its
 name in `tasks.json`.
+
+## Who edits what
+Two sub-teams work on the same add-on, so keep to your own files.
+
+| Area | Navigation team | Tutorial team |
+|---|---|---|
+| Panel | `panel_nav.py` | `panel_tutorial.py` |
+| Logic | `finder.py`, `context.py` | `tasks.py` |
+| Data | `tools/tools.json` | `tasks/tasks.json` |
+| Validator | `scripts/validate_tools.py` | `scripts/validate_tasks.py` |
+
+Shared files (`__init__.py`, `props.py`, `operators.py`, `utils.py`): make
+small edits, one block per feature, and tell the other team in your pull request.
+
+## Verifying tools
+Every entry in `tools/tools.json` has `"verified": false` until someone has
+tested the menu path and shortcut in Blender 4.2. After testing, change it to
+`true`. `python scripts/validate_tools.py` lists what is still unverified.

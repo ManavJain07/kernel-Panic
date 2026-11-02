@@ -1,10 +1,14 @@
-"""Properties that remember the chosen task and the current step."""
+"""Properties used by the panels.
+
+Shared file: keep edits small, one block per feature, to avoid merge conflicts.
+"""
 import bpy
 from . import tasks
 
 _enum_items = []  # Blender needs these strings to stay alive
 
 
+# --- tutorial side --------------------------------------------------------
 def task_items(self, context):
     global _enum_items
     _enum_items = [
@@ -18,12 +22,18 @@ def on_task_change(self, context):
 
 
 def register():
-    bpy.types.WindowManager.navguide_task = bpy.props.EnumProperty(
-        name="Task", items=task_items, update=on_task_change
+    wm = bpy.types.WindowManager
+    # tutorial
+    wm.navguide_task = bpy.props.EnumProperty(name="Task", items=task_items, update=on_task_change)
+    wm.navguide_step = bpy.props.IntProperty(default=0, min=0)
+    # navigation
+    wm.navguide_query = bpy.props.StringProperty(
+        name="Find a tool", description="Describe what you want to do", options={"TEXTEDIT_UPDATE"}
     )
-    bpy.types.WindowManager.navguide_step = bpy.props.IntProperty(default=0, min=0)
 
 
 def unregister():
-    del bpy.types.WindowManager.navguide_task
-    del bpy.types.WindowManager.navguide_step
+    wm = bpy.types.WindowManager
+    del wm.navguide_task
+    del wm.navguide_step
+    del wm.navguide_query

@@ -1,0 +1,442 @@
+{
+  "tools": [
+    {
+      "id": "add_object",
+      "name": "Add an object",
+      "mode": "OBJECT",
+      "where": "Add menu in the viewport header > Mesh",
+      "shortcut": "Shift + A",
+      "what": "Adds shapes such as a cube, sphere, plane or cylinder to the scene.",
+      "keywords": [
+        "add",
+        "new",
+        "insert",
+        "shape",
+        "cube",
+        "sphere",
+        "plane",
+        "cylinder",
+        "object",
+        "mesh",
+        "create"
+      ],
+      "verified": false
+    },
+    {
+      "id": "delete_object",
+      "name": "Delete an object",
+      "mode": "OBJECT",
+      "where": "Object menu > Delete",
+      "shortcut": "Delete (or X)",
+      "what": "Removes the selected object from the scene.",
+      "keywords": [
+        "delete",
+        "remove",
+        "erase",
+        "get rid",
+        "trash"
+      ],
+      "verified": false
+    },
+    {
+      "id": "move",
+      "name": "Move (grab)",
+      "mode": "ANY",
+      "where": "Object menu > Transform > Move, or the Move tool in the left toolbar",
+      "shortcut": "G",
+      "what": "Moves the selected object or mesh part. Add X, Y or Z to move along one direction.",
+      "keywords": [
+        "move",
+        "grab",
+        "translate",
+        "position",
+        "drag",
+        "shift",
+        "slide"
+      ],
+      "verified": false
+    },
+    {
+      "id": "rotate",
+      "name": "Rotate",
+      "mode": "ANY",
+      "where": "Object menu > Transform > Rotate, or the Rotate tool in the left toolbar",
+      "shortcut": "R",
+      "what": "Turns the selected object or mesh part.",
+      "keywords": [
+        "rotate",
+        "turn",
+        "spin",
+        "twist",
+        "angle"
+      ],
+      "verified": false
+    },
+    {
+      "id": "scale",
+      "name": "Scale",
+      "mode": "ANY",
+      "where": "Object menu > Transform > Scale, or the Scale tool in the left toolbar",
+      "shortcut": "S",
+      "what": "Makes the selection bigger or smaller. Add X, Y or Z to stretch in one direction.",
+      "keywords": [
+        "scale",
+        "resize",
+        "bigger",
+        "smaller",
+        "size",
+        "stretch",
+        "enlarge",
+        "shrink"
+      ],
+      "verified": false
+    },
+    {
+      "id": "extrude",
+      "name": "Extrude",
+      "mode": "EDIT_MESH",
+      "where": "Mesh menu > Extrude",
+      "shortcut": "E",
+      "what": "Pulls a selected face, edge or point outward to create new shape.",
+      "keywords": [
+        "extrude",
+        "pull",
+        "push",
+        "outward",
+        "grow",
+        "build",
+        "wall",
+        "raise"
+      ],
+      "verified": false
+    },
+    {
+      "id": "inset",
+      "name": "Inset faces",
+      "mode": "EDIT_MESH",
+      "where": "Face menu > Inset Faces",
+      "shortcut": "I",
+      "what": "Creates a smaller face inside a selected face. Useful for windows and panels.",
+      "keywords": [
+        "inset",
+        "window",
+        "frame",
+        "border",
+        "panel",
+        "inside"
+      ],
+      "verified": false
+    },
+    {
+      "id": "bevel",
+      "name": "Bevel edges",
+      "mode": "EDIT_MESH",
+      "where": "Edge menu > Bevel Edges",
+      "shortcut": "Ctrl + B",
+      "what": "Rounds off or chamfers sharp edges.",
+      "keywords": [
+        "bevel",
+        "round",
+        "corner",
+        "chamfer",
+        "edge",
+        "soften",
+        "smooth edges"
+      ],
+      "verified": false
+    },
+    {
+      "id": "loop_cut",
+      "name": "Loop cut",
+      "mode": "EDIT_MESH",
+      "where": "Left toolbar > Loop Cut tool",
+      "shortcut": "Ctrl + R",
+      "what": "Adds a ring of new edges around a mesh so you have more to edit.",
+      "keywords": [
+        "loop",
+        "cut",
+        "divide",
+        "split",
+        "add edges",
+        "more detail",
+        "ring"
+      ],
+      "verified": false
+    },
+    {
+      "id": "knife",
+      "name": "Knife",
+      "mode": "EDIT_MESH",
+      "where": "Left toolbar > Knife tool",
+      "shortcut": "K",
+      "what": "Cuts new edges across faces wherever you draw.",
+      "keywords": [
+        "knife",
+        "cut",
+        "slice",
+        "split",
+        "draw cut"
+      ],
+      "verified": false
+    },
+    {
+      "id": "merge",
+      "name": "Merge points",
+      "mode": "EDIT_MESH",
+      "where": "Mesh menu > Merge",
+      "shortcut": "M",
+      "what": "Joins selected points (vertices) into one.",
+      "keywords": [
+        "merge",
+        "weld",
+        "combine points",
+        "vertices",
+        "join points",
+        "collapse"
+      ],
+      "verified": false
+    },
+    {
+      "id": "boolean",
+      "name": "Cut a hole (Boolean)",
+      "mode": "OBJECT",
+      "where": "Properties editor > Modifiers tab (wrench icon) > Add Modifier > Generate > Boolean",
+      "shortcut": "",
+      "what": "Subtracts one object's shape from another, for example cutting a window or door hole through a wall.",
+      "keywords": [
+        "hole",
+        "cut",
+        "subtract",
+        "boolean",
+        "window",
+        "door",
+        "carve",
+        "difference",
+        "opening"
+      ],
+      "verified": false
+    },
+    {
+      "id": "subsurf",
+      "name": "Smooth an object (Subdivision Surface)",
+      "mode": "OBJECT",
+      "where": "Properties editor > Modifiers tab > Add Modifier > Generate > Subdivision Surface",
+      "shortcut": "Ctrl + 1",
+      "what": "Smooths and rounds a blocky object by adding more detail.",
+      "keywords": [
+        "smooth",
+        "subdivide",
+        "subsurf",
+        "round",
+        "soft",
+        "organic",
+        "blocky"
+      ],
+      "verified": false
+    },
+    {
+      "id": "duplicate",
+      "name": "Duplicate",
+      "mode": "OBJECT",
+      "where": "Object menu > Duplicate Objects",
+      "shortcut": "Shift + D",
+      "what": "Makes a copy of the selected object. Move the mouse and click to place it.",
+      "keywords": [
+        "duplicate",
+        "copy",
+        "clone",
+        "repeat",
+        "another"
+      ],
+      "verified": false
+    },
+    {
+      "id": "join",
+      "name": "Join objects",
+      "mode": "OBJECT",
+      "where": "Object menu > Join",
+      "shortcut": "Ctrl + J",
+      "what": "Combines several selected objects into one.",
+      "keywords": [
+        "join",
+        "combine",
+        "merge objects",
+        "together",
+        "one object"
+      ],
+      "verified": false
+    },
+    {
+      "id": "material",
+      "name": "Add colour (material)",
+      "mode": "ANY",
+      "where": "Properties editor > Material tab > New",
+      "shortcut": "",
+      "what": "Gives the selected object a colour or surface look.",
+      "keywords": [
+        "colour",
+        "color",
+        "paint",
+        "material",
+        "texture",
+        "shade",
+        "tint"
+      ],
+      "verified": false
+    },
+    {
+      "id": "shading",
+      "name": "See colours in the viewport",
+      "mode": "ANY",
+      "where": "Shading buttons at the top-right of the viewport (third sphere)",
+      "shortcut": "Z, then Material Preview",
+      "what": "Switches the viewport so colours and lighting are shown.",
+      "keywords": [
+        "shading",
+        "preview",
+        "view colours",
+        "display",
+        "look",
+        "solid",
+        "wireframe",
+        "rendered"
+      ],
+      "verified": false
+    },
+    {
+      "id": "frame_selected",
+      "name": "Zoom to selected",
+      "mode": "ANY",
+      "where": "View menu > Frame Selected",
+      "shortcut": "Numpad .",
+      "what": "Zooms the view so the selected object fills the screen.",
+      "keywords": [
+        "zoom",
+        "frame",
+        "focus",
+        "find object",
+        "centre",
+        "center",
+        "lost"
+      ],
+      "verified": false
+    },
+    {
+      "id": "frame_all",
+      "name": "Show everything",
+      "mode": "ANY",
+      "where": "View menu > Frame All",
+      "shortcut": "Home",
+      "what": "Zooms out so every object in the scene is visible.",
+      "keywords": [
+        "all",
+        "everything",
+        "lost",
+        "zoom out",
+        "reset view",
+        "see scene"
+      ],
+      "verified": false
+    },
+    {
+      "id": "undo",
+      "name": "Undo",
+      "mode": "ANY",
+      "where": "Edit menu > Undo",
+      "shortcut": "Ctrl + Z",
+      "what": "Reverses your last action.",
+      "keywords": [
+        "undo",
+        "mistake",
+        "revert",
+        "go back",
+        "oops",
+        "wrong"
+      ],
+      "verified": false
+    },
+    {
+      "id": "select_all",
+      "name": "Select all / none",
+      "mode": "ANY",
+      "where": "Select menu > All",
+      "shortcut": "A (Alt + A to deselect)",
+      "what": "Selects everything, or clears the selection.",
+      "keywords": [
+        "select",
+        "all",
+        "deselect",
+        "everything",
+        "none",
+        "clear selection"
+      ],
+      "verified": false
+    },
+    {
+      "id": "mode_switch",
+      "name": "Switch Edit / Object mode",
+      "mode": "ANY",
+      "where": "Mode dropdown at the top-left of the viewport",
+      "shortcut": "Tab",
+      "what": "Switches between moving whole objects and editing their shape.",
+      "keywords": [
+        "mode",
+        "edit",
+        "object",
+        "tab",
+        "switch",
+        "change mode",
+        "stuck"
+      ],
+      "verified": false
+    },
+    {
+      "id": "camera_view",
+      "name": "Look through the camera",
+      "mode": "ANY",
+      "where": "View menu > Cameras > Active Camera",
+      "shortcut": "Numpad 0",
+      "what": "Shows the scene the way the camera sees it.",
+      "keywords": [
+        "camera",
+        "view",
+        "through camera",
+        "frame shot"
+      ],
+      "verified": false
+    },
+    {
+      "id": "render",
+      "name": "Render an image",
+      "mode": "ANY",
+      "where": "Render menu > Render Image",
+      "shortcut": "F12",
+      "what": "Creates a finished picture of your scene.",
+      "keywords": [
+        "render",
+        "image",
+        "picture",
+        "output",
+        "final",
+        "export image"
+      ],
+      "verified": false
+    },
+    {
+      "id": "save",
+      "name": "Save your work",
+      "mode": "ANY",
+      "where": "File menu > Save",
+      "shortcut": "Ctrl + S",
+      "what": "Saves the Blender file so you do not lose your work.",
+      "keywords": [
+        "save",
+        "store",
+        "file",
+        "keep",
+        "backup"
+      ],
+      "verified": false
+    }
+  ]
+}
