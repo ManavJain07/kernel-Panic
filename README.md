@@ -6,14 +6,26 @@ A Blender add-on that tells beginners **where they are** in Blender and
 > Built for the DevLups Labs hackathon. Problem statement: make digital
 > experiences more accessible for people with limited technical literacy.
 
+**Current version: v0.6.0** by team Kernel-Panic.
+
 ## Who it is for
 First-time Blender users who feel lost in the interface.
 
-## Features (v0.2)
-- Shows current mode, active object and selection count
-- Gives a plain-language hint and shortcut for the current situation
-- Guided tasks with a step-by-step checklist (viewport navigation, add/delete, transform, edit mode, extrude, materials, a simple wall)
-- "Do it for me" buttons on steps, so beginners see what a step does
+## What's new in v0.6
+- New **task card**: one task at a time with a counter (2/6), a progress bar, the hint text and an auto-playing animation the learner can hide
+- Card briefly shows "Task completed" before moving on
+- Smarter **move along one axis** detection: each grab is judged on its own, so a free move first no longer blocks the task and the learner can just try again
+
+## Lessons (7 lessons, 33 tasks)
+| # | Lesson | Tasks | Notes |
+|---|---|---|---|
+| 1 | Mouse controls | 4 |  |
+| 2 | Add and delete objects | 4 |  |
+| 3 | Move, rotate and scale | 6 |  |
+| 4 | Edit an object's shape | 5 |  |
+| 5 | Extrude a face | 4 |  |
+| 6 | Add colour to an object | 4 | keeps normal layout (uses Properties editor) |
+| 7 | Build a simple wall | 6 |  |
 
 ## Install
 1. Install **Blender 4.2 LTS or newer**.
@@ -34,28 +46,36 @@ zip -r ../navigation_guide.zip .
 navigation_guide/
   blender_manifest.toml   extension metadata
   __init__.py             register / unregister
+  lesson.py               lesson mode: overlay drawing, task flow, progress, start/exit operators
+  panel.py                Nav Guide sidebar tab
+  actions.py              "Do it for me" helper actions
+  detect.py               task detectors that decide when a task is done
   context.py              reads Blender state, produces hints
-  tasks.py / tasks/       task loader and tasks.json library
-  props.py                remembers chosen task and step
-  operators.py            helper actions and step navigation
-  panel.py                sidebar UI
-scripts/validate_tasks.py checks tasks.json
+  lessons/lessons.json    the lesson library
+  media/                  how-to animations (sprite sheets) + meta.json
+scripts/validate_lessons.py, validate_media.py check the lesson and animation data
+```
+
+`context.py` is not imported by any other file in this version. It is a leftover from v0.4 and can be removed or reused.
+
+## Check your changes
+```
+python scripts/validate_lessons.py
+python scripts/validate_media.py
 ```
 
 ## Roadmap
 - [x] Skeleton panel and context detection
-- [x] Task library (JSON) with step-by-step guides
-- [x] Step checklist UI
-- [x] Helper operators
-- [ ] Auto-detect step completion
-- [ ] More tasks (Boolean, modifiers, cameras)
+- [x] Lesson mode with dimmed UI
+- [x] Auto-detect step completion (all 33 tasks)
+- [x] Saved progress and locked lessons
+- [x] Hint animations for every task
+- [x] One-task-at-a-time card with progress bar
+- [ ] More lessons (Boolean, modifiers, cameras)
 - [ ] User testing with beginners
 
 ## Team
-- Manav Kumar - Team lead - Contributer (tutorials) <br>
-- Raghya -Contributer (nav guide) <br>
-- Avadhoot
-- Shashank
+Kernel-Panic. Add names and roles here.
 
 ## License
 MIT
