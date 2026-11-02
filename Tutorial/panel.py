@@ -1,5 +1,5 @@
 import bpy
-from . import lesson
+from . import keys, lesson
 
 
 def draw_wrapped(layout, text, width=34, icon="NONE"):
@@ -80,7 +80,42 @@ class NAVGUIDE_PT_main(bpy.types.Panel):
         layout.operator("navguide.reset_progress", text="Reset progress", icon="LOOP_BACK")
 
 
-classes = (NAVGUIDE_MT_lessons, NAVGUIDE_PT_main)
+class NAVGUIDE_PT_keys(bpy.types.Panel):
+    """Let each learner pick their own keys (for people who cannot press the
+    default ones). Blender's normal keys keep working."""
+    bl_label = "My keys (accessibility)"
+    bl_idname = "NAVGUIDE_PT_keys"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "Nav Guide"
+    bl_parent_id = "NAVGUIDE_PT_main"
+    bl_options = {"DEFAULT_CLOSED"}
+
+    def draw(self, context):
+        layout = self.layout
+        draw_wrapped(layout, "Can't press a shortcut? Click a box, then press the "
+                             "key you want to use instead. The tutorial will accept "
+                             "it and show it to you.", width=34, icon="INFO")
+        layout.separator()
+        for action, label, _short in keys.KEY_ACTIONS:
+            found = keys.user_item(action)
+            row = layout.row(align=True)
+            if found is None:
+                row.label(text=label)
+                row.label(text="not ready", icon="ERROR")
+                continue
+            split = row.split(factor=0.45, align=True)
+            split.label(text=label)
+            sub = split.row(align=True)
+            sub.prop(found[1], "type", text="", full_event=True)
+            clear = sub.operator("navguide.clear_key", text="", icon="X")
+            clear.action = action
+        layout.separator()
+        layout.operator("navguide.clear_key", text="Clear all my keys",
+                        icon="LOOP_BACK").action = ""
+
+
+classes = (NAVGUIDE_MT_lessons, NAVGUIDE_PT_main, NAVGUIDE_PT_keys)
 
 
 def register():

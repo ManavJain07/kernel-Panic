@@ -42,7 +42,10 @@
           "title": "Move your mouse over the viewport and open the Add menu",
           "hint": "Shortcut: Shift + A",
           "detect": "add_menu",
-          "gif": "shift_a"
+          "gif": "shift_a",
+          "keys": [
+            "add_menu"
+          ]
         },
         {
           "title": "Choose Mesh, then Cube",
@@ -50,7 +53,10 @@
           "action": "add_cube",
           "action_label": "Add a cube",
           "detect": "add_cube",
-          "gif": "add_cube"
+          "gif": "add_cube",
+          "keys": [
+            "add_menu"
+          ]
         },
         {
           "title": "Click empty space to deselect, then click the cube to select it",
@@ -64,7 +70,10 @@
           "action": "delete_selected",
           "action_label": "Delete selected",
           "detect": "delete",
-          "gif": "delete"
+          "gif": "delete",
+          "keys": [
+            "delete"
+          ]
         }
       ]
     },
@@ -84,32 +93,47 @@
           "title": "Press G to grab (move) the object",
           "hint": "Move the mouse, then left-click to confirm, or press Esc to cancel. Shortcut: G",
           "detect": "move",
-          "gif": "g"
+          "gif": "g",
+          "keys": [
+            "move"
+          ]
         },
         {
           "title": "To move along one direction only, press G, then X, Y or Z",
           "hint": "Type a number such as 2 and press Enter for an exact distance. Shortcut: G, then X / Y / Z",
           "detect": "move_axis",
-          "gif": "g_axis"
+          "gif": "g_axis",
+          "keys": [
+            "move"
+          ]
         },
         {
           "title": "Press R to rotate",
           "hint": "Move the mouse and click to confirm. Type a number to rotate by exact degrees. Shortcut: R",
           "detect": "rotate",
-          "gif": "r"
+          "gif": "r",
+          "keys": [
+            "rotate"
+          ]
         },
         {
           "title": "Press S to scale",
           "hint": "Move the mouse and click to confirm. Type a number such as 2 to double the size. Shortcut: S",
           "detect": "scale",
-          "gif": "s"
+          "gif": "s",
+          "keys": [
+            "scale"
+          ]
         },
         {
           "title": "Made a mistake? Undo it",
           "hint": "Shortcut: Ctrl + Z",
           "detect": "undo",
           "gif": "undo",
-          "gif_mac": "undo_mac"
+          "gif_mac": "undo_mac",
+          "keys": [
+            "undo"
+          ]
         }
       ]
     },
@@ -131,19 +155,31 @@
           "action": "toggle_edit_mode",
           "action_label": "Switch mode",
           "detect": "edit_mode",
-          "gif": "tab"
+          "gif": "tab",
+          "keys": [
+            "edit_mode"
+          ]
         },
         {
           "title": "Choose what to select: press 1 (vertices), 2 (edges), then 3 (faces)",
           "hint": "The icons at the top of the viewport do the same. Shortcut: 1 / 2 / 3",
           "detect": "select_modes",
-          "gif": "keys_123"
+          "gif": "keys_123",
+          "keys": [
+            "sel_vert",
+            "sel_edge",
+            "sel_face"
+          ]
         },
         {
           "title": "Press 3, click one face of the cube, then press G and move the mouse",
           "hint": "Click to confirm. Shortcut: 3, click, G",
           "detect": "face_move",
-          "gif": "face_move"
+          "gif": "face_move",
+          "keys": [
+            "sel_face",
+            "move"
+          ]
         },
         {
           "title": "Return to Object Mode when you are done",
@@ -151,7 +187,10 @@
           "action": "toggle_edit_mode",
           "action_label": "Switch mode",
           "detect": "object_mode",
-          "gif": "tab"
+          "gif": "tab",
+          "keys": [
+            "edit_mode"
+          ]
         }
       ]
     },
@@ -165,19 +204,28 @@
           "action": "toggle_edit_mode",
           "action_label": "Switch mode",
           "detect": "edit_mode",
-          "gif": "tab"
+          "gif": "tab",
+          "keys": [
+            "edit_mode"
+          ]
         },
         {
           "title": "Press 3 for face selection, then click one face of the cube",
           "hint": "Shortcut: 3, then click",
           "detect": "one_face",
-          "gif": "one_face"
+          "gif": "one_face",
+          "keys": [
+            "sel_face"
+          ]
         },
         {
           "title": "Press E to extrude",
           "hint": "Move the mouse to pull the face outward, then left-click to confirm. Shortcut: E",
           "detect": "extrude",
-          "gif": "e"
+          "gif": "e",
+          "keys": [
+            "extrude"
+          ]
         },
         {
           "title": "Leave Edit Mode to see the result",
@@ -185,7 +233,10 @@
           "action": "toggle_edit_mode",
           "action_label": "Switch mode",
           "detect": "object_mode",
-          "gif": "tab"
+          "gif": "tab",
+          "keys": [
+            "edit_mode"
+          ]
         }
       ]
     },
@@ -229,7 +280,10 @@
           "action": "delete_selected",
           "action_label": "Delete selected",
           "detect": "delete_cube",
-          "gif": "delete"
+          "gif": "delete",
+          "keys": [
+            "delete"
+          ]
         },
         {
           "title": "Add a new cube",
@@ -237,31 +291,46 @@
           "action": "add_cube",
           "action_label": "Add a cube",
           "detect": "add_cube",
-          "gif": "add_cube"
+          "gif": "add_cube",
+          "keys": [
+            "add_menu"
+          ]
         },
         {
           "title": "With the cube selected, press S, then X, type 4 and press Enter",
           "hint": "This stretches it into a wall about 8 metres long. Shortcut: S, X, 4, Enter",
           "detect": "wall_length",
-          "gif": "wall_len"
+          "gif": "wall_len",
+          "keys": [
+            "scale"
+          ]
         },
         {
           "title": "Press S, then Y, type 0.2 and press Enter to make the wall thin",
           "hint": "Shortcut: S, Y, 0.2, Enter",
           "detect": "wall_thin",
-          "gif": "wall_thin"
+          "gif": "wall_thin",
+          "keys": [
+            "scale"
+          ]
         },
         {
           "title": "Press S, then Z, type 1.5 and press Enter to make the wall taller",
           "hint": "Shortcut: S, Z, 1.5, Enter",
           "detect": "wall_tall",
-          "gif": "wall_tall"
+          "gif": "wall_tall",
+          "keys": [
+            "scale"
+          ]
         },
         {
           "title": "Lift the wall so it sits on the ground: press G, then Z, type 1.5 and press Enter",
           "hint": "The wall sinks below the ground grid after scaling. Shortcut: G, Z, 1.5, Enter",
           "detect": "wall_ground",
-          "gif": "wall_lift"
+          "gif": "wall_lift",
+          "keys": [
+            "move"
+          ]
         }
       ]
     }

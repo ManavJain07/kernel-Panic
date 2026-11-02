@@ -1,6 +1,6 @@
-from . import lesson, panel
+from . import lesson, keys, panel
 
-modules = (lesson, panel)
+modules = (lesson, keys, panel)
 
 
 def register():

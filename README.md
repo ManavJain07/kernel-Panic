@@ -6,15 +6,17 @@ A Blender add-on that tells beginners **where they are** in Blender and
 > Built for the DevLups Labs hackathon. Problem statement: make digital
 > experiences more accessible for people with limited technical literacy.
 
-**Current version: v0.6.0** by team Kernel-Panic.
+**Current version: v0.7.0** by team Kernel-Panic.
 
 ## Who it is for
 First-time Blender users who feel lost in the interface.
 
-## What's new in v0.6
-- New **task card**: one task at a time with a counter (2/6), a progress bar, the hint text and an auto-playing animation the learner can hide
-- Card briefly shows "Task completed" before moving on
-- Smarter **move along one axis** detection: each grab is judged on its own, so a free move first no longer blocks the task and the learner can just try again
+## What's new in v0.7
+- New **My keys (accessibility)** panel (`keys.py`): learners can choose their own key for 12 actions (start, add menu, move, rotate, scale, edit mode, delete, undo, extrude, select vertices / edges / faces) if they cannot press the default ones
+- The tutorial accepts the learner's key, shows "Your keys" on the task card, and lets them start a lesson with their own key; Blender's normal keys keep working
+- Custom keys are normal Blender keymap items, so they also appear in Preferences > Keymap and are saved with the user's preferences
+- Tasks now list which key actions apply (`keys` field in `lessons.json`)
+- Animations for move, move-on-axis, rotate and scale were changed in this version
 
 ## Lessons (7 lessons, 33 tasks)
 | # | Lesson | Tasks | Notes |
@@ -50,6 +52,7 @@ navigation_guide/
   panel.py                Nav Guide sidebar tab
   actions.py              "Do it for me" helper actions
   detect.py               task detectors that decide when a task is done
+  keys.py                 My keys: learner-chosen keys (accessibility)
   context.py              reads Blender state, produces hints
   lessons/lessons.json    the lesson library
   media/                  how-to animations (sprite sheets) + meta.json
@@ -71,11 +74,17 @@ python scripts/validate_media.py
 - [x] Saved progress and locked lessons
 - [x] Hint animations for every task
 - [x] One-task-at-a-time card with progress bar
+- [x] Accessibility: learner-chosen keys
 - [ ] More lessons (Boolean, modifiers, cameras)
 - [ ] User testing with beginners
 
 ## Team
-Kernel-Panic. Add names and roles here.
+Kernel-Panic. 
+Manav
+Raghya
+avadhoot 
+Shashank
+
 
 ## License
 MIT

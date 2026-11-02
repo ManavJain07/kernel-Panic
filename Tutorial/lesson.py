@@ -28,7 +28,7 @@ import gpu
 from bpy.app.handlers import persistent
 from gpu_extras.batch import batch_for_shader
 
-from . import actions, detect
+from . import actions, detect, keys
 
 _DIR = os.path.dirname(__file__)
 _LESSONS_PATH = os.path.join(_DIR, "lessons", "lessons.json")
@@ -223,6 +223,20 @@ def current():
     return _S["lesson"]
 
 
+def note_key(flag):
+    """A learner's own key was pressed: remember it like the default key."""
+    if flag and _S["lesson"] is not None and _S["phase"] == "running":
+        _S["flags"].add(flag)
+
+
+def begin_from_key(context):
+    """The learner's own 'Start' key. Returns None or a message."""
+    if _S["lesson"] is None or _S["phase"] != "armed":
+        return "Click Start tutorial in the Nav Guide tab first."
+    begin(context.window, context.area)
+    return None
+
+
 def progress():
     """(tasks done, tasks total) for the running lesson."""
     lesson = _S["lesson"]
@@ -355,8 +369,11 @@ def _draw_armed(region, area, s, lesson):
     iw = meta["w"] * s * 0.7 if meta else 0
     ih = meta["h"] * s * 0.7 if meta else 0
 
+    mine = keys.start_label()
     lines = [("Press M to start", 22, (1, 1, 1, 1)),
              ("with the mouse over the 3D viewport", 13, (0.75, 0.75, 0.75, 1))]
+    if mine:
+        lines.append((f"Your start key: {mine}", 13, (0.30, 0.80, 0.40, 1)))
     if saved:
         lines.append((f"Continuing at task {saved + 1} of {total}", 13, (0.30, 0.80, 0.40, 1)))
     text_w = 0
@@ -452,7 +469,10 @@ def _draw_task_card(region, area, s, lesson, hits):
     title_lines = _wrap(step["title"], 17 * s, text_w)
     hint_lines = _wrap(step["hint"], 13 * s, text_w) if step["hint"] else []
     msg_lines = _wrap(_S["msg"], 13 * s, text_w) if _S["msg"] else []
+    mine_text = keys.step_line(step)
+    key_lines = _wrap(mine_text, 13 * s, text_w) if mine_text else []
     left_h = (len(title_lines) * 24 * s + (4 * s + len(hint_lines) * 18 * s if hint_lines else 0)
+              + len(key_lines) * 18 * s
               + len(msg_lines) * 18 * s + (8 * s + 26 * s if buttons else 0))
     if meta and side:
         body_h = max(left_h, gh)
@@ -477,6 +497,9 @@ def _draw_task_card(region, area, s, lesson, hits):
         for i, line in enumerate(hint_lines):
             _text(tx, cur - 13 * s - i * 18 * s, line, 13 * s, LIGHT)
         cur -= len(hint_lines) * 18 * s
+    for i, line in enumerate(key_lines):
+        _text(tx, cur - 13 * s - i * 18 * s, line, 13 * s, GREEN)
+    cur -= len(key_lines) * 18 * s
     for i, line in enumerate(msg_lines):
         _text(tx, cur - 13 * s - i * 18 * s, line, 13 * s, AMBER)
     cur -= len(msg_lines) * 18 * s
