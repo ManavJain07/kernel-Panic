@@ -65,6 +65,18 @@ def register():
         name="Animated guidance", description="Animated keys, mouse, ring and axis lines", default=True
     )
     wm.navguide_goal_pick = bpy.props.EnumProperty(name="Goal", items=goal_items)
+    # navigation: compact layout
+    wm.navguide_page = bpy.props.EnumProperty(
+        name="Page",
+        items=[
+            ("GUIDE", "Guide", "Guided goals", "BOOKMARKS", 0),
+            ("HELP", "Help", "I'm stuck", "QUESTION", 1),
+            ("TOOLS", "Tools", "Find a tool", "VIEWZOOM", 2),
+        ],
+        default="GUIDE",
+    )
+    wm.navguide_show_steps = bpy.props.BoolProperty(name="All steps", default=False)
+    wm.navguide_show_all = bpy.props.BoolProperty(name="Show all tips", default=False)
     # navigation: troubleshooter
     wm.navguide_problem_query = bpy.props.StringProperty(
         name="Problem", description="Describe what is going wrong", options={"TEXTEDIT_UPDATE"}
@@ -78,6 +90,7 @@ def unregister():
         "navguide_task", "navguide_step", "navguide_query", "navguide_goal_query",
         "navguide_goal_id", "navguide_goal_step", "navguide_goal_baseline", "navguide_overlay",
         "navguide_animate", "navguide_goal_pick", "navguide_problem_query", "navguide_problem_pick",
+        "navguide_page", "navguide_show_steps", "navguide_show_all",
     ):
         if hasattr(wm, name):
             delattr(wm, name)

@@ -1,19 +1,43 @@
-"""Navigation side of the sidebar. Owner: navigation team.
+"""Navigation sidebar: ONE compact panel with three pages (Guide / Help / Tools).
 
-Main panel  = guided goal ("What do you want to make?")
-Sub panels  = where you are, "I'm stuck", and quick tool lookup.
+Only the active page is drawn, so the tab stays short. Owner: navigation team.
 """
 import bpy
 
 from . import context as ctx
 from . import finder, navigator, troubleshoot
-from .utils import draw_wrapped
+
+
+def _text(layout, text, icon="NONE", width=36, alert=False):
+    """Tight, wrapped text (small line spacing keeps the sidebar short)."""
+    col = layout.column(align=True)
+    col.scale_y = 0.8
+    col.alert = alert
+    line, first = "", True
+    for word in text.split():
+        if line and len(line) + len(word) + 1 > width:
+            col.label(text=line, icon=icon if first else "NONE")
+            first, line = False, word
+        else:
+            line = f"{line} {word}".strip()
+    if line:
+        col.label(text=line, icon=icon if first else "NONE")
+
+
+def _progress(layout, factor, text):
+    try:
+        layout.progress(factor=factor, text=text)
+    except Exception:
+        layout.label(text=text)
 
 
 def _fix_button(layout, cause):
     if cause.get("fix"):
-        op = layout.operator("navguide.fix", text=cause.get("fix_label", "Fix it"), icon="PLAY")
-        op.fix = cause["fix"]
+        layout.operator("navguide.fix", text=cause.get("fix_label", "Fix it"), icon="PLAY").fix = cause["fix"]
+
+
+def _short_mode(state):
+    return state["mode"].replace(" Mode", "").replace(" (Mesh)", "")
 
 
 class NAVGUIDE_PT_main(bpy.types.Panel):
@@ -27,128 +51,113 @@ class NAVGUIDE_PT_main(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         wm = context.window_manager
-        recipe = navigator.get_recipe(wm.navguide_goal_id) if wm.navguide_goal_id else None
-
-        if recipe is None:
-            self._draw_picker(layout, wm)
-        else:
-            self._draw_guide(layout, context, wm, recipe)
-
-        layout.separator()
-        layout.prop(wm, "navguide_overlay")
-        row = layout.row()
-        row.enabled = wm.navguide_overlay
-        row.prop(wm, "navguide_animate")
-
-    # ---- no goal yet ----
-    def _draw_picker(self, layout, wm):
-        layout.label(text="What do you want to make?", icon="QUESTION")
-        layout.prop(wm, "navguide_goal_query", text="")
-        layout.operator("navguide.start_goal", text="Guide me", icon="PLAY").recipe_id = ""
-        layout.separator()
-        layout.label(text="Or choose a goal:")
-        layout.prop(wm, "navguide_goal_pick", text="")
-        op = layout.operator("navguide.start_goal", text="Start this goal", icon="PLAY")
-        op.recipe_id = wm.navguide_goal_pick
-
-    # ---- guiding ----
-    def _draw_guide(self, layout, context, wm, recipe):
-        steps = recipe["steps"]
-        index = wm.navguide_goal_step
         state = ctx.get_state(context)
-        baseline = {"object_count": wm.navguide_goal_baseline}
 
-        layout.label(text=recipe["title"], icon="BOOKMARKS")
+        # status line + display toggles
+        row = layout.row(align=True)
+        name = (state["active_object"] or "nothing")[:12]
+        row.label(text=f"{_short_mode(state)} | {name} | {state['selected_count']} sel")
+        sub = row.row(align=True)
+        sub.alignment = "RIGHT"
+        sub.prop(wm, "navguide_overlay", text="", icon="OVERLAY", toggle=True)
+        anim = sub.row(align=True)
+        anim.enabled = wm.navguide_overlay
+        anim.prop(wm, "navguide_animate", text="", icon="PLAY", toggle=True)
 
-        # mini checklist of every step
-        col = layout.column(align=True)
-        for i, step in enumerate(steps):
-            icon = "CHECKMARK" if i < index else ("RIGHTARROW" if i == index else "DOT")
-            col.label(text=step.get("short", step["text"][:30]), icon=icon)
+        layout.prop(wm, "navguide_page", expand=True)
 
-        if index >= len(steps):
-            box = layout.box()
-            box.label(text="All done. Nice work!", icon="CHECKMARK")
-            box.operator("navguide.goal_nav", text="Start another goal", icon="LOOP_BACK").direction = 0
-            return
-
-        step = steps[index]
-        box = layout.box()
-        box.label(text=f"Now: step {index + 1} of {len(steps)}", icon="TRACKING_FORWARDS")
-
-        message, action = navigator.problem(step, state)
-        if message:
-            draw_wrapped(box, message, icon="ERROR")
-            if action:
-                box.operator("navguide.run_action", text="Switch mode for me", icon="EDITMODE_HLT").action = action
-
-        draw_wrapped(box, step["text"])
-        if step.get("shortcut"):
-            box.label(text=f"Shortcut: {step['shortcut']}", icon="EVENT_RETURN")
-        if step.get("action"):
-            box.operator(
-                "navguide.run_action",
-                text=step.get("action_label", "Do it for me"),
-                icon="PLAY",
-            ).action = step["action"]
-
-        row = box.row(align=True)
-        if navigator.is_done(step, state, baseline) is None:
-            row.operator("navguide.goal_nav", text="I did this", icon="CHECKMARK").direction = 1
+        if wm.navguide_page == "HELP":
+            self._page_help(layout, wm, state)
+        elif wm.navguide_page == "TOOLS":
+            self._page_tools(layout, wm, state)
         else:
-            box.label(text="Waiting for you... (moves on by itself)", icon="TIME")
-            row.operator("navguide.goal_nav", text="Skip step", icon="FORWARD").direction = 1
-        row.operator("navguide.goal_nav", text="Stop", icon="X").direction = 0
+            recipe = navigator.get_recipe(wm.navguide_goal_id) if wm.navguide_goal_id else None
+            if recipe is None:
+                self._page_picker(layout, wm, state)
+            else:
+                self._page_guide(layout, wm, state, recipe)
 
+    # ---- GUIDE: choose a goal ----
+    def _page_picker(self, layout, wm, state):
+        layout.label(text="What do you want to make?")
+        row = layout.row(align=True)
+        row.prop(wm, "navguide_goal_query", text="", icon="VIEWZOOM")
+        row.operator("navguide.start_goal", text="Go").recipe_id = ""
+        row = layout.row(align=True)
+        row.prop(wm, "navguide_goal_pick", text="")
+        row.operator("navguide.start_goal", text="", icon="PLAY").recipe_id = wm.navguide_goal_pick
 
-class NAVGUIDE_PT_state(bpy.types.Panel):
-    bl_label = "Where you are"
-    bl_idname = "NAVGUIDE_PT_state"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "Nav Guide"
-    bl_parent_id = "NAVGUIDE_PT_main"
-
-    def draw(self, context):
-        layout = self.layout
-        state = ctx.get_state(context)
-        layout.label(text=f"Mode: {state['mode']}")
-        layout.label(text=f"Active: {state['active_object'] or 'None'}")
-        layout.label(text=f"Selected: {state['selected_count']}")
         hint, shortcut = ctx.get_hint(state)
         box = layout.box()
-        draw_wrapped(box, hint, icon="LIGHTBULB")
-        box.label(text=f"Shortcut: {shortcut}", icon="EVENT_RETURN")
+        _text(box, f"{hint} ({shortcut})", icon="LIGHTBULB")
 
+    # ---- GUIDE: following a goal ----
+    def _page_guide(self, layout, wm, state, recipe):
+        steps = recipe["steps"]
+        index = wm.navguide_goal_step
+        baseline = {"object_count": wm.navguide_goal_baseline}
 
-class NAVGUIDE_PT_stuck(bpy.types.Panel):
-    bl_label = "I'm stuck, what's wrong?"
-    bl_idname = "NAVGUIDE_PT_stuck"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "Nav Guide"
-    bl_parent_id = "NAVGUIDE_PT_main"
-    bl_options = {"DEFAULT_CLOSED"}
+        row = layout.row(align=True)
+        row.label(text=recipe["title"], icon="BOOKMARKS")
+        row.operator("navguide.goal_nav", text="", icon="X").direction = 0
 
-    def draw(self, context):
-        layout = self.layout
-        wm = context.window_manager
-        state = ctx.get_state(context)
+        if index >= len(steps):
+            _progress(layout, 1.0, "Goal complete!")
+            layout.operator("navguide.goal_nav", text="Start another goal", icon="LOOP_BACK").direction = 0
+        else:
+            _progress(layout, index / len(steps), f"Step {index + 1} of {len(steps)}")
+            step = steps[index]
+            box = layout.box()
 
-        # 1. automatic check of the live scene
+            message, action = navigator.problem(step, state)
+            if message:
+                _text(box, message, icon="ERROR", alert=True)
+                if action:
+                    box.operator("navguide.run_action", text="Switch mode for me", icon="EDITMODE_HLT").action = action
+
+            _text(box, step["text"])
+            if step.get("shortcut"):
+                box.label(text=step["shortcut"], icon="EVENT_RETURN")
+
+            live = navigator.progress(step, state)
+            if live:
+                _progress(box, live[0], live[1])
+
+            row = box.row(align=True)
+            if step.get("action"):
+                row.operator(
+                    "navguide.run_action", text=step.get("action_label", "Do it for me"), icon="PLAY"
+                ).action = step["action"]
+            manual = navigator.is_done(step, state, baseline) is None
+            row.operator(
+                "navguide.goal_nav", text="I did this" if manual else "Skip", icon="CHECKMARK" if manual else "FORWARD"
+            ).direction = 1
+            if not manual:
+                box.label(text="Moves on by itself when done", icon="TIME")
+
+        # all steps (collapsed by default)
+        layout.prop(
+            wm, "navguide_show_steps", text="All steps", emboss=False,
+            icon="TRIA_DOWN" if wm.navguide_show_steps else "TRIA_RIGHT",
+        )
+        if wm.navguide_show_steps:
+            col = layout.column(align=True)
+            col.scale_y = 0.8
+            for i, st in enumerate(steps):
+                icon = "CHECKMARK" if i < index else ("RIGHTARROW" if i == index else "DOT")
+                col.label(text=st.get("short", st["text"][:30]), icon=icon)
+
+    # ---- HELP ----
+    def _page_help(self, layout, wm, state):
         findings = troubleshoot.quick_check(state)
         box = layout.box()
         if findings:
-            box.label(text="Right now I notice:", icon="ERROR")
             for c in findings:
-                draw_wrapped(box, c["text"])
+                _text(box, c["text"], icon="ERROR", alert=True)
                 _fix_button(box, c)
         else:
-            box.label(text="Nothing looks wrong right now.", icon="CHECKMARK")
+            box.label(text="Nothing looks wrong right now", icon="CHECKMARK")
 
-        # 2. describe a problem
-        layout.separator()
-        layout.label(text="Describe the problem")
         layout.prop(wm, "navguide_problem_query", text="", icon="VIEWZOOM")
         layout.prop(wm, "navguide_problem_pick", text="")
 
@@ -159,58 +168,51 @@ class NAVGUIDE_PT_stuck(bpy.types.Panel):
             picked = troubleshoot.get_problem(wm.navguide_problem_pick)
             problems = [picked] if picked else []
         else:
-            draw_wrapped(layout, "Try: can't see my object, shortcut does nothing, undo, laptop.")
+            _text(layout, "Describe it or pick one, e.g. can't see my object.")
             return
-
         if not problems:
-            draw_wrapped(layout, "No match. Try other words.", icon="ERROR")
+            _text(layout, "No match. Try other words.", icon="ERROR")
             return
 
         for p in problems:
             box = layout.box()
             box.label(text=p["title"], icon="QUESTION")
-            for cause, likely in troubleshoot.causes_for(p, state):
-                draw_wrapped(box, cause["text"], icon="ERROR" if likely else "DOT")
+            causes = troubleshoot.causes_for(p, state)
+            shown = causes if wm.navguide_show_all else causes[:3]
+            for cause, likely in shown:
+                _text(box, cause["text"], icon="ERROR" if likely else "DOT")
                 _fix_button(box, cause)
+            if len(causes) > 3:
+                box.prop(
+                    wm, "navguide_show_all", text="Fewer tips" if wm.navguide_show_all else f"+{len(causes) - 3} more tips",
+                    emboss=False, icon="TRIA_UP" if wm.navguide_show_all else "TRIA_DOWN",
+                )
 
-
-class NAVGUIDE_PT_find(bpy.types.Panel):
-    bl_label = "Find a tool"
-    bl_idname = "NAVGUIDE_PT_find"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "Nav Guide"
-    bl_parent_id = "NAVGUIDE_PT_main"
-    bl_options = {"DEFAULT_CLOSED"}
-
-    def draw(self, context):
-        layout = self.layout
-        wm = context.window_manager
-        state = ctx.get_state(context)
+    # ---- TOOLS ----
+    def _page_tools(self, layout, wm, state):
         layout.prop(wm, "navguide_query", text="", icon="VIEWZOOM")
-
         query = wm.navguide_query.strip()
         if not query:
-            draw_wrapped(layout, "Type a tool or idea, e.g. extrude, copy, smooth.")
+            _text(layout, "Type a tool or idea, e.g. extrude, copy, smooth.")
             return
-        results = finder.search(query)
+        results = finder.search(query, limit=2)
         if not results:
-            draw_wrapped(layout, "No match. Try another word.", icon="ERROR")
+            _text(layout, "No match. Try another word.", icon="ERROR")
             return
         for tool in results:
             box = layout.box()
             box.label(text=tool["name"], icon="RIGHTARROW")
-            draw_wrapped(box, f"Where: {tool['where']}")
+            _text(box, tool["where"])
             if tool.get("shortcut"):
-                box.label(text=f"Shortcut: {tool['shortcut']}", icon="EVENT_RETURN")
+                box.label(text=tool["shortcut"], icon="EVENT_RETURN")
             message, action = finder.mode_advice(tool, state)
             if message:
-                draw_wrapped(box, message, icon="ERROR")
+                _text(box, message, icon="ERROR", alert=True)
                 if action:
                     box.operator("navguide.run_action", text="Switch mode for me", icon="EDITMODE_HLT").action = action
 
 
-classes = (NAVGUIDE_PT_main, NAVGUIDE_PT_state, NAVGUIDE_PT_stuck, NAVGUIDE_PT_find)
+classes = (NAVGUIDE_PT_main,)
 
 
 def register():

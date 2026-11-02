@@ -37,6 +37,7 @@ class NAVGUIDE_OT_start_goal(bpy.types.Operator):
         if index > 0:
             self.report({"INFO"}, f"Skipped {index} step(s) you have already done.")
         session.refresh(context)
+        session.mark_change("done" if index >= len(recipe["steps"]) else "start")
         session.redraw_all()
         return {"FINISHED"}
 
@@ -56,6 +57,8 @@ class NAVGUIDE_OT_goal_nav(bpy.types.Operator):
             wm.navguide_goal_step = 0
         else:
             wm.navguide_goal_step = min(wm.navguide_goal_step + 1, len(recipe["steps"]))
+            done = wm.navguide_goal_step >= len(recipe["steps"])
+            session.mark_change("done" if done else "step")
         session.refresh(context)
         session.redraw_all()
         return {"FINISHED"}

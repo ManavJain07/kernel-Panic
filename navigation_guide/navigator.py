@@ -170,8 +170,42 @@ def overlay_lines(recipe, index, state):
         lines.append((message, "warn"))
     lines.append((step["text"], "step"))
     if step.get("shortcut"):
-        lines.append((f"Shortcut: {step['shortcut']}", "step"))
+        lines.append((f"Shortcut: {step['shortcut']}", "shortcut"))
     return lines
+
+
+def _clamp(v):
+    return max(0.0, min(1.0, v))
+
+
+def progress(step, state):
+    """Live progress toward the step's goal: (fraction 0..1, label) or None.
+
+    Only for steps whose condition is a measurable value (size, height, rotation),
+    so the user sees a bar fill as they scale, move or rotate.
+    """
+    cond = step.get("done")
+    if not cond:
+        return None
+    dims = state.get("dims")
+    if "dim_min" in cond and dims:
+        axis, target = next(iter(cond["dim_min"].items()))
+        cur = dims[axis]
+        return _clamp(cur / target), f"{axis.upper()} size {cur:.1f} m (need {target:g}+)"
+    if "dim_max" in cond and dims:
+        axis, target = next(iter(cond["dim_max"].items()))
+        cur = dims[axis]
+        frac = 1.0 if cur <= target else _clamp(target / cur)
+        return frac, f"{axis.upper()} size {cur:.2f} m (need under {target:g})"
+    if "bottom_z_min" in cond and state.get("bottom_z") is not None:
+        target, cur = cond["bottom_z_min"], state["bottom_z"]
+        frac = 1.0 / (1.0 + max(0.0, target - cur))
+        return frac, (f"Sunk {abs(cur):.1f} m below ground" if cur < target else "Standing on the ground")
+    if "rot_min" in cond and state.get("rot_deg"):
+        axis, target = next(iter(cond["rot_min"].items()))
+        cur = abs(state["rot_deg"][axis])
+        return _clamp(cur / target), f"Turned {cur:.0f} of {target:g} degrees"
+    return None
 
 
 # ---- shortcut parsing for the animated key display ------------------------
