@@ -1,0 +1,212 @@
+{
+  "lessons": [
+    {
+      "id": "mouse",
+      "title": "Mouse controls",
+      "steps": [
+        {
+          "id": "orbit",
+          "title": "Orbit (rotate your view)",
+          "detect": "orbit",
+          "gif": "orbit",
+          "hint": "Hold the middle mouse button and drag. Trackpad: swipe with two fingers, or drag the axis gizmo at the top-right of the viewport."
+        },
+        {
+          "id": "pan",
+          "title": "Pan (slide your view)",
+          "detect": "pan",
+          "gif": "pan",
+          "hint": "Hold Shift + middle mouse button and drag. Trackpad: hold Shift and swipe with two fingers."
+        },
+        {
+          "id": "zoom",
+          "title": "Zoom in and out",
+          "detect": "zoom",
+          "gif": "zoom",
+          "hint": "Scroll the mouse wheel. Trackpad: pinch."
+        },
+        {
+          "id": "select",
+          "title": "Select an object",
+          "detect": "select",
+          "gif": "select",
+          "hint": "Left-click empty space to deselect, then left-click the cube."
+        }
+      ]
+    },
+    {
+      "id": "add_delete",
+      "title": "Add and delete objects",
+      "steps": [
+        {
+          "title": "Move your mouse over the viewport and open the Add menu",
+          "hint": "Shortcut: Shift + A"
+        },
+        {
+          "title": "Choose Mesh, then Cube",
+          "hint": "Or use the button on the right. Shortcut: Shift + A > Mesh > Cube",
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "title": "Click an object in the viewport to select it",
+          "hint": "A selected object has an orange outline. Shortcut: Left click"
+        },
+        {
+          "title": "Remove the selected object",
+          "hint": "(X also works, but asks you to confirm.) Shortcut: Delete",
+          "action": "delete_selected",
+          "action_label": "Delete selected"
+        }
+      ]
+    },
+    {
+      "id": "move_rotate_scale",
+      "title": "Move, rotate and scale",
+      "steps": [
+        {
+          "title": "Click an object to select it",
+          "hint": "If the scene is empty, add a cube first. Shortcut: Left click",
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "title": "Press G to grab (move) the object",
+          "hint": "Move the mouse, then left-click to confirm, or press Esc to cancel. Shortcut: G"
+        },
+        {
+          "title": "To move along one direction only, press G, then X, Y or Z",
+          "hint": "Type a number such as 2 and press Enter for an exact distance. Shortcut: G, then X / Y / Z"
+        },
+        {
+          "title": "Press R to rotate",
+          "hint": "Move the mouse and click to confirm. Type a number to rotate by exact degrees. Shortcut: R"
+        },
+        {
+          "title": "Press S to scale",
+          "hint": "Move the mouse and click to confirm. Type a number such as 2 to double the size. Shortcut: S"
+        },
+        {
+          "title": "Made a mistake? Undo it",
+          "hint": "Shortcut: Ctrl + Z"
+        }
+      ]
+    },
+    {
+      "id": "edit_mode",
+      "title": "Edit an object's shape",
+      "steps": [
+        {
+          "title": "Select a mesh object such as a cube",
+          "hint": "Add one if the scene is empty. Shortcut: Left click",
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "title": "Switch to Edit Mode",
+          "hint": "You will see dots (vertices), lines (edges) and faces that you can change. Shortcut: Tab",
+          "action": "toggle_edit_mode",
+          "action_label": "Switch mode"
+        },
+        {
+          "title": "Choose what to select: 1 for vertices, 2 for edges, 3 for faces",
+          "hint": "The icons at the top of the viewport do the same. Shortcut: 1 / 2 / 3"
+        },
+        {
+          "title": "Press 3, click one face of the cube, then press G and move the mouse",
+          "hint": "Click to confirm. Shortcut: 3, click, G"
+        },
+        {
+          "title": "Return to Object Mode when you are done",
+          "hint": "Shortcut: Tab",
+          "action": "toggle_edit_mode",
+          "action_label": "Switch mode"
+        }
+      ]
+    },
+    {
+      "id": "extrude",
+      "title": "Extrude a face",
+      "steps": [
+        {
+          "title": "Select a cube and enter Edit Mode",
+          "hint": "Shortcut: Tab",
+          "action": "toggle_edit_mode",
+          "action_label": "Switch mode"
+        },
+        {
+          "title": "Press 3 for face selection, then click one face of the cube",
+          "hint": "Shortcut: 3, then click"
+        },
+        {
+          "title": "Press E to extrude",
+          "hint": "Move the mouse to pull the face outward, then left-click to confirm. Shortcut: E"
+        },
+        {
+          "title": "Leave Edit Mode to see the result",
+          "hint": "Shortcut: Tab",
+          "action": "toggle_edit_mode",
+          "action_label": "Switch mode"
+        }
+      ]
+    },
+    {
+      "id": "add_colour",
+      "title": "Add colour to an object",
+      "steps": [
+        {
+          "title": "Click the object you want to colour",
+          "hint": "Shortcut: Left click"
+        },
+        {
+          "title": "In the Properties editor on the right, open the Material tab (a round sphere icon near the bottom of the tab column)",
+          "hint": "Shortcut: Properties > Material tab"
+        },
+        {
+          "title": "Click New, then click the Base Color box and pick a colour",
+          "hint": "Shortcut: New > Base Color"
+        },
+        {
+          "title": "To see the colour in the viewport, switch to Material Preview (the third sphere icon at the top-right of the viewport)",
+          "hint": "Shortcut: Viewport shading buttons",
+          "action": "material_preview",
+          "action_label": "Material Preview"
+        }
+      ]
+    },
+    {
+      "id": "simple_wall",
+      "title": "Build a simple wall",
+      "steps": [
+        {
+          "title": "If the default cube is in the scene, select it and delete it",
+          "hint": "Shortcut: Delete",
+          "action": "delete_selected",
+          "action_label": "Delete selected"
+        },
+        {
+          "title": "Add a new cube",
+          "hint": "Shortcut: Shift + A > Mesh > Cube",
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "title": "With the cube selected, press S, then X, type 4 and press Enter",
+          "hint": "This stretches it into a wall about 8 metres long. Shortcut: S, X, 4, Enter"
+        },
+        {
+          "title": "Press S, then Y, type 0.2 and press Enter to make the wall thin",
+          "hint": "Shortcut: S, Y, 0.2, Enter"
+        },
+        {
+          "title": "Press S, then Z, type 1.5 and press Enter to make the wall taller",
+          "hint": "Shortcut: S, Z, 1.5, Enter"
+        },
+        {
+          "title": "The wall now sinks below the ground grid",
+          "hint": "Press G, then Z, type 1.5 and press Enter to lift it so it sits on the ground. Shortcut: G, Z, 1.5, Enter"
+        }
+      ]
+    }
+  ]
+}

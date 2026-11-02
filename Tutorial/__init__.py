@@ -1,6 +1,6 @@
-from . import operators, panel, props
+from . import lesson, panel
 
-modules = (props, operators, panel)
+modules = (lesson, panel)
 
 
 def register():

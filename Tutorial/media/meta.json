@@ -1,0 +1,34 @@
+{
+  "orbit": {
+    "frames": 30,
+    "cols": 6,
+    "rows": 5,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "pan": {
+    "frames": 30,
+    "cols": 6,
+    "rows": 5,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "zoom": {
+    "frames": 30,
+    "cols": 6,
+    "rows": 5,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  },
+  "select": {
+    "frames": 30,
+    "cols": 6,
+    "rows": 5,
+    "w": 360,
+    "h": 270,
+    "fps": 20
+  }
+}
