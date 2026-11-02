@@ -56,17 +56,14 @@ scripts/validate_lessons.py checks lessons.json
 scripts/make_hint_gifs.py builds docs/gifs/*.gif and media/*.png
 ```
 
-## Roadmap
-- [x] Skeleton panel and context detection
-- [x] Lesson library (JSON) with task checklists and hint animations
-- [x] Step checklist UI
-- [x] Helper operators
-- [ ] Auto-detect step completion
-- [ ] More tasks (Boolean, modifiers, cameras)
-- [ ] User testing with beginners
+
+
 
 ## Team
-Add names and roles here.
+Manav
+Raghya
+avadhoot
+shashank
 
 ## License
 MIT
