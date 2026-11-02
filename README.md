@@ -1,16 +1,7 @@
 #PPT File :
 https://docs.google.com/presentation/d/1K0-MgpuVs3k3h-1ZuE2rKO6g0d0ip4Cf/edit?usp=sharing&ouid=101484331737775157483&rtpof=true&sd=true
 
-## Team
 
-**Kernel-Panic**, built for the Devlup Labs hackathon.
-
-| Name | Role |
-|---|---|
-|Manav | Team Lead - Contributer (tutorials) |
-|Raghya | Contributer (nav guide) |
-|Avadhoot |
-|Shashank | 
 
 # Blender Navigation Guide
 
@@ -385,6 +376,16 @@ Most of the teaching content lives in JSON files, so you can extend the add-on *
 - [x] More lessons and goals (sculpting, UV unwrapping, geometry nodes)
 - [x] Review every Find-a-tool entry against the latest Blender release
 
+## Team
+
+**Kernel-Panic**, built for the Devlup Labs hackathon.
+
+| Name | Role |
+|---|---|
+|Manav | Team Lead - Contributer (tutorials) |
+|Raghya | Contributer (nav guide) |
+|Avadhoot |
+|Shashank | 
 
 
 ## License
