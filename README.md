@@ -367,9 +367,9 @@ Most of the teaching content lives in JSON files, so you can extend the add-on *
 - [x] Goal-based guidance with in-viewport animated hints
 - [x] "I'm stuck" troubleshooter with one-click fixes
 - [x] Find-a-tool search
-- [ ] User testing with beginners and users of assistive devices
-- [ ] More lessons and goals (sculpting, UV unwrapping, geometry nodes)
-- [ ] Review every Find-a-tool entry against the latest Blender release
+- [x] User testing with beginners and users of assistive devices
+- [x] More lessons and goals (sculpting, UV unwrapping, geometry nodes)
+- [x] Review every Find-a-tool entry against the latest Blender release
 
 ## Team
 
