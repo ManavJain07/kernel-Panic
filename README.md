@@ -1,3 +1,5 @@
+#PPT File :
+https://docs.google.com/presentation/d/1K0-MgpuVs3k3h-1ZuE2rKO6g0d0ip4Cf/edit?usp=sharing&ouid=101484331737775157483&rtpof=true&sd=true
 # Blender Navigation Guide
 
 > A Blender add-on that makes Blender easier to learn, easier to find your way around, and easier to **operate for people who cannot use the standard keyboard-and-mouse workflow**.
