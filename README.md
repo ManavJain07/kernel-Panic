@@ -52,7 +52,10 @@ scripts/validate_tasks.py checks tasks.json
 - [ ] User testing with beginners
 
 ## Team
-Add names and roles here.
+- Manav Kumar - Team lead - Contributer (tutorials) <br>
+- Raghya -Contributer (nav guide) <br>
+- Avadhoot
+- Shashank
 
 ## License
 MIT
