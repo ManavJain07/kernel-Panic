@@ -1,13 +1,19 @@
 """Navigation side of the sidebar. Owner: navigation team.
 
 Main panel  = guided goal ("What do you want to make?")
-Sub panels  = where you are, and quick tool lookup.
+Sub panels  = where you are, "I'm stuck", and quick tool lookup.
 """
 import bpy
 
 from . import context as ctx
-from . import finder, navigator
+from . import finder, navigator, troubleshoot
 from .utils import draw_wrapped
+
+
+def _fix_button(layout, cause):
+    if cause.get("fix"):
+        op = layout.operator("navguide.fix", text=cause.get("fix_label", "Fix it"), icon="PLAY")
+        op.fix = cause["fix"]
 
 
 class NAVGUIDE_PT_main(bpy.types.Panel):
@@ -30,6 +36,9 @@ class NAVGUIDE_PT_main(bpy.types.Panel):
 
         layout.separator()
         layout.prop(wm, "navguide_overlay")
+        row = layout.row()
+        row.enabled = wm.navguide_overlay
+        row.prop(wm, "navguide_animate")
 
     # ---- no goal yet ----
     def _draw_picker(self, layout, wm):
@@ -37,10 +46,10 @@ class NAVGUIDE_PT_main(bpy.types.Panel):
         layout.prop(wm, "navguide_goal_query", text="")
         layout.operator("navguide.start_goal", text="Guide me", icon="PLAY").recipe_id = ""
         layout.separator()
-        layout.label(text="Or pick one:")
-        col = layout.column(align=True)
-        for r in navigator.load_recipes():
-            col.operator("navguide.start_goal", text=r["title"]).recipe_id = r["id"]
+        layout.label(text="Or choose a goal:")
+        layout.prop(wm, "navguide_goal_pick", text="")
+        op = layout.operator("navguide.start_goal", text="Start this goal", icon="PLAY")
+        op.recipe_id = wm.navguide_goal_pick
 
     # ---- guiding ----
     def _draw_guide(self, layout, context, wm, recipe):
@@ -112,6 +121,59 @@ class NAVGUIDE_PT_state(bpy.types.Panel):
         box.label(text=f"Shortcut: {shortcut}", icon="EVENT_RETURN")
 
 
+class NAVGUIDE_PT_stuck(bpy.types.Panel):
+    bl_label = "I'm stuck, what's wrong?"
+    bl_idname = "NAVGUIDE_PT_stuck"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "Nav Guide"
+    bl_parent_id = "NAVGUIDE_PT_main"
+    bl_options = {"DEFAULT_CLOSED"}
+
+    def draw(self, context):
+        layout = self.layout
+        wm = context.window_manager
+        state = ctx.get_state(context)
+
+        # 1. automatic check of the live scene
+        findings = troubleshoot.quick_check(state)
+        box = layout.box()
+        if findings:
+            box.label(text="Right now I notice:", icon="ERROR")
+            for c in findings:
+                draw_wrapped(box, c["text"])
+                _fix_button(box, c)
+        else:
+            box.label(text="Nothing looks wrong right now.", icon="CHECKMARK")
+
+        # 2. describe a problem
+        layout.separator()
+        layout.label(text="Describe the problem")
+        layout.prop(wm, "navguide_problem_query", text="", icon="VIEWZOOM")
+        layout.prop(wm, "navguide_problem_pick", text="")
+
+        query = wm.navguide_problem_query.strip()
+        if query:
+            problems = troubleshoot.search(query)
+        elif wm.navguide_problem_pick != "NONE":
+            picked = troubleshoot.get_problem(wm.navguide_problem_pick)
+            problems = [picked] if picked else []
+        else:
+            draw_wrapped(layout, "Try: can't see my object, shortcut does nothing, undo, laptop.")
+            return
+
+        if not problems:
+            draw_wrapped(layout, "No match. Try other words.", icon="ERROR")
+            return
+
+        for p in problems:
+            box = layout.box()
+            box.label(text=p["title"], icon="QUESTION")
+            for cause, likely in troubleshoot.causes_for(p, state):
+                draw_wrapped(box, cause["text"], icon="ERROR" if likely else "DOT")
+                _fix_button(box, cause)
+
+
 class NAVGUIDE_PT_find(bpy.types.Panel):
     bl_label = "Find a tool"
     bl_idname = "NAVGUIDE_PT_find"
@@ -148,7 +210,7 @@ class NAVGUIDE_PT_find(bpy.types.Panel):
                     box.operator("navguide.run_action", text="Switch mode for me", icon="EDITMODE_HLT").action = action
 
 
-classes = (NAVGUIDE_PT_main, NAVGUIDE_PT_state, NAVGUIDE_PT_find)
+classes = (NAVGUIDE_PT_main, NAVGUIDE_PT_state, NAVGUIDE_PT_stuck, NAVGUIDE_PT_find)
 
 
 def register():

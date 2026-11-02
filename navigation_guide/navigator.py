@@ -8,6 +8,7 @@ wrong mode for the step. Owner: navigation team.
 """
 import json
 import os
+import re
 
 try:
     from . import finder
@@ -17,11 +18,12 @@ except ImportError:  # running outside the package (tests / validator)
 _PATH = os.path.join(os.path.dirname(__file__), "recipes", "recipes.json")
 _cache = None
 
-# Every key allowed inside a step's "done" condition (validator uses this).
+# Every key allowed inside a "done" / "when" condition (validators use this).
 KNOWN_KEYS = {
-    "mode", "active_type", "min_selected", "min_mesh_objects", "new_object",
-    "dim_min", "dim_max", "bottom_z_min", "has_modifier", "modifier_ready",
-    "has_material", "shading",
+    "mode", "mode_not", "active_type", "min_selected", "max_selected",
+    "min_mesh_objects", "min_objects", "max_objects", "new_object", "fewer_objects",
+    "dim_min", "dim_max", "bottom_z_min", "rot_min", "has_modifier", "modifier_ready",
+    "has_material", "shading", "active_hidden", "saved",
 }
 
 
@@ -71,14 +73,24 @@ def check_condition(cond, state, baseline):
     for key, want in cond.items():
         if key == "mode":
             ok = state["mode_id"] == want
+        elif key == "mode_not":
+            ok = state["mode_id"] != want
         elif key == "active_type":
             ok = state["active_type"] == want
         elif key == "min_selected":
             ok = state["selected_count"] >= want
+        elif key == "max_selected":
+            ok = state["selected_count"] <= want
         elif key == "min_mesh_objects":
             ok = state["mesh_object_count"] >= want
+        elif key == "min_objects":
+            ok = state["object_count"] >= want
+        elif key == "max_objects":
+            ok = state["object_count"] <= want
         elif key == "new_object":
             ok = state["object_count"] > baseline.get("object_count", 0)
+        elif key == "fewer_objects":
+            ok = state["object_count"] < baseline.get("object_count", 0)
         elif key in ("dim_min", "dim_max"):
             dims = state["dims"]
             if dims is None:
@@ -89,6 +101,11 @@ def check_condition(cond, state, baseline):
                 ok = all(dims[axis] <= v for axis, v in want.items())
         elif key == "bottom_z_min":
             ok = state["bottom_z"] is not None and state["bottom_z"] >= want
+        elif key == "rot_min":
+            rot = state.get("rot_deg")
+            if rot is None:
+                return False
+            ok = all(abs(rot[axis]) >= v for axis, v in want.items())
         elif key == "has_modifier":
             ok = want in state["modifier_types"]
         elif key == "modifier_ready":
@@ -97,6 +114,10 @@ def check_condition(cond, state, baseline):
             ok = state["has_material"] == want
         elif key == "shading":
             ok = state["shading"] == want
+        elif key == "active_hidden":
+            ok = state.get("active_hidden", False) == want
+        elif key == "saved":
+            ok = state.get("saved", False) == want
         else:
             return False  # unknown condition: never auto-complete
         if not ok:
@@ -151,3 +172,44 @@ def overlay_lines(recipe, index, state):
     if step.get("shortcut"):
         lines.append((f"Shortcut: {step['shortcut']}", "step"))
     return lines
+
+
+# ---- shortcut parsing for the animated key display ------------------------
+_KEY_NAMES = {
+    "shift", "ctrl", "alt", "tab", "enter", "esc", "delete", "home", "space",
+    "backspace", "numpad .", "numpad 0",
+}
+
+
+def _is_key(part):
+    p = part.strip().lower()
+    return (
+        p in _KEY_NAMES
+        or bool(re.fullmatch(r"[a-z0-9.]", p))
+        or bool(re.fullmatch(r"f\d{1,2}", p))
+        or bool(re.fullmatch(r"\d+(\.\d+)?", p))
+    )
+
+
+def parse_shortcut(text):
+    """Turn a shortcut string into something the overlay can animate.
+
+    Returns None if there is nothing to animate, else a dict:
+      {"keys": [[key, ...], ...], "path": str|None, "mouse": str|None}
+    keys is a sequence; each item is keys pressed together.
+    """
+    if not text:
+        return None
+    keys_part, _, path = text.partition(">")
+    low = keys_part.lower()
+    if any(w in low for w in ("mouse", "click", "wheel", "drag")):
+        return {"keys": [], "path": path.strip() or None, "mouse": keys_part.strip()}
+    groups = []
+    for item in keys_part.split(","):
+        parts = [p.strip() for p in item.split("+") if p.strip()]
+        if not parts or not all(_is_key(p) for p in parts):
+            return None
+        groups.append(parts)
+    if not groups:
+        return None
+    return {"keys": groups, "path": path.strip() or None, "mouse": None}

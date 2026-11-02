@@ -3,7 +3,7 @@
 Shared file: keep edits small, one block per feature, to avoid merge conflicts.
 """
 import bpy
-from . import tasks
+from . import navigator, tasks, troubleshoot
 
 _enum_items = []  # Blender needs these strings to stay alive
 
@@ -19,6 +19,27 @@ def task_items(self, context):
 
 def on_task_change(self, context):
     self.navguide_step = 0
+
+
+# --- navigation side: goal and problem dropdowns ---------------------------
+_goal_items = []
+_problem_items = []
+
+
+def goal_items(self, context):
+    global _goal_items
+    _goal_items = [
+        (r["id"], r["title"], r.get("summary", "")) for r in navigator.load_recipes()
+    ] or [("NONE", "No goals found", "")]
+    return _goal_items
+
+
+def problem_items(self, context):
+    global _problem_items
+    _problem_items = [("NONE", "Choose a problem...", "")] + [
+        (p["id"], p["title"], p.get("summary", "")) for p in troubleshoot.load_problems()
+    ]
+    return _problem_items
 
 
 def register():
@@ -40,6 +61,15 @@ def register():
     wm.navguide_overlay = bpy.props.BoolProperty(
         name="Show hints in the viewport", default=True
     )
+    wm.navguide_animate = bpy.props.BoolProperty(
+        name="Animated guidance", description="Animated keys, mouse, ring and axis lines", default=True
+    )
+    wm.navguide_goal_pick = bpy.props.EnumProperty(name="Goal", items=goal_items)
+    # navigation: troubleshooter
+    wm.navguide_problem_query = bpy.props.StringProperty(
+        name="Problem", description="Describe what is going wrong", options={"TEXTEDIT_UPDATE"}
+    )
+    wm.navguide_problem_pick = bpy.props.EnumProperty(name="Problem", items=problem_items)
 
 
 def unregister():
@@ -47,6 +77,7 @@ def unregister():
     for name in (
         "navguide_task", "navguide_step", "navguide_query", "navguide_goal_query",
         "navguide_goal_id", "navguide_goal_step", "navguide_goal_baseline", "navguide_overlay",
+        "navguide_animate", "navguide_goal_pick", "navguide_problem_query", "navguide_problem_pick",
     ):
         if hasattr(wm, name):
             delattr(wm, name)

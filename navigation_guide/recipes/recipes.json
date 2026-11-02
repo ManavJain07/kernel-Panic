@@ -1,6 +1,54 @@
 {
   "recipes": [
     {
+      "id": "view_around",
+      "title": "Move around the 3D view",
+      "summary": "Orbit, pan, zoom and get unlost.",
+      "keywords": [
+        "navigate",
+        "look",
+        "orbit",
+        "pan",
+        "zoom",
+        "view",
+        "rotate view",
+        "around",
+        "camera view",
+        "lost"
+      ],
+      "steps": [
+        {
+          "short": "Orbit",
+          "text": "Hold the middle mouse button and drag over the viewport to rotate your view. No middle button? Drag the small axis gizmo at the top-right of the viewport. Press 'I did this' when done.",
+          "shortcut": "Middle mouse drag"
+        },
+        {
+          "short": "Pan",
+          "text": "Hold Shift and drag with the middle mouse button to slide the view sideways. Press 'I did this' when done.",
+          "shortcut": "Shift + Middle mouse drag"
+        },
+        {
+          "short": "Zoom",
+          "text": "Scroll the mouse wheel to zoom in and out. Press 'I did this' when done.",
+          "shortcut": "Scroll wheel"
+        },
+        {
+          "short": "Zoom to object",
+          "text": "Select an object, then zoom to it. On a laptop use View > Frame Selected.",
+          "shortcut": "Numpad .",
+          "action": "frame_selected",
+          "action_label": "Frame selected"
+        },
+        {
+          "short": "Show everything",
+          "text": "Lost? Show the whole scene.",
+          "shortcut": "Home",
+          "action": "view_all",
+          "action_label": "Show everything"
+        }
+      ]
+    },
+    {
       "id": "wall",
       "title": "Build a wall",
       "summary": "Turn a cube into a long, thin, tall wall that stands on the ground.",
@@ -32,7 +80,8 @@
           "done": {
             "min_selected": 1,
             "active_type": "MESH"
-          }
+          },
+          "highlight": true
         },
         {
           "short": "Make it long",
@@ -43,7 +92,9 @@
             "dim_min": {
               "x": 6
             }
-          }
+          },
+          "axis": "X",
+          "highlight": true
         },
         {
           "short": "Make it thin",
@@ -54,7 +105,9 @@
             "dim_max": {
               "y": 1
             }
-          }
+          },
+          "axis": "Y",
+          "highlight": true
         },
         {
           "short": "Make it tall",
@@ -65,7 +118,9 @@
             "dim_min": {
               "z": 2.5
             }
-          }
+          },
+          "axis": "Z",
+          "highlight": true
         },
         {
           "short": "Lift onto ground",
@@ -74,7 +129,277 @@
           "mode": "OBJECT",
           "done": {
             "bottom_z_min": -0.05
+          },
+          "axis": "Z",
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "slab",
+      "title": "Build a floor slab",
+      "summary": "Flatten a cube into a wide, thin slab that sits on the ground.",
+      "keywords": [
+        "slab",
+        "floor",
+        "foundation",
+        "base",
+        "deck",
+        "platform",
+        "plinth"
+      ],
+      "steps": [
+        {
+          "short": "Add a cube",
+          "text": "Add a new cube.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true,
+            "active_type": "MESH"
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube",
+          "highlight": true
+        },
+        {
+          "short": "Make it wide",
+          "text": "Press S, then X, type 5 and press Enter to stretch it along X.",
+          "shortcut": "S, X, 5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "x": 8
+            }
+          },
+          "axis": "X",
+          "highlight": true
+        },
+        {
+          "short": "Make it deep",
+          "text": "Press S, then Y, type 5 and press Enter to stretch it along Y.",
+          "shortcut": "S, Y, 5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "y": 8
+            }
+          },
+          "axis": "Y",
+          "highlight": true
+        },
+        {
+          "short": "Make it thin",
+          "text": "Press S, then Z, type 0.1 and press Enter to flatten it into a slab.",
+          "shortcut": "S, Z, 0.1, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_max": {
+              "z": 0.5
+            }
+          },
+          "axis": "Z",
+          "highlight": true
+        },
+        {
+          "short": "Lift onto ground",
+          "text": "Press G, then Z, type 0.1 and press Enter so the slab sits on the ground.",
+          "shortcut": "G, Z, 0.1, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "bottom_z_min": -0.05
+          },
+          "axis": "Z",
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "column",
+      "title": "Build a column",
+      "summary": "Turn a cylinder into a tall, narrow column on the ground.",
+      "keywords": [
+        "column",
+        "pillar",
+        "pole",
+        "post",
+        "tower",
+        "cylinder",
+        "pier",
+        "pipe"
+      ],
+      "steps": [
+        {
+          "short": "Add a cylinder",
+          "text": "Add a cylinder to the scene.",
+          "shortcut": "Shift + A > Mesh > Cylinder",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Make it tall",
+          "text": "Press S, then Z, type 3 and press Enter to stretch it upward.",
+          "shortcut": "S, Z, 3, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "z": 4
+            }
+          },
+          "axis": "Z",
+          "highlight": true
+        },
+        {
+          "short": "Make it narrow",
+          "text": "Press S, then Shift + Z, type 0.5 and press Enter. Shift + Z scales everything except the height.",
+          "shortcut": "S, Shift + Z, 0.5, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_max": {
+              "x": 1.5
+            }
+          },
+          "highlight": true
+        },
+        {
+          "short": "Lift onto ground",
+          "text": "Press G, then Z, type 3 and press Enter to stand the column on the ground.",
+          "shortcut": "G, Z, 3, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "bottom_z_min": -0.05
+          },
+          "axis": "Z",
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "ground",
+      "title": "Add a large ground plane",
+      "summary": "A big flat plane to stand your model on.",
+      "keywords": [
+        "ground",
+        "floor",
+        "plane",
+        "terrain",
+        "land",
+        "soil",
+        "base",
+        "site"
+      ],
+      "steps": [
+        {
+          "short": "Add a plane",
+          "text": "Add a plane to the scene.",
+          "shortcut": "Shift + A > Mesh > Plane",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Make it big",
+          "text": "Press S, type 10 and press Enter. The plane becomes about 20 metres wide.",
+          "shortcut": "S, 10, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_min": {
+              "x": 15
+            }
+          },
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "duplicate",
+      "title": "Copy an object",
+      "summary": "Make a second copy of something.",
+      "keywords": [
+        "duplicate",
+        "copy",
+        "clone",
+        "another",
+        "second",
+        "twin",
+        "replicate"
+      ],
+      "steps": [
+        {
+          "short": "Select the object",
+          "text": "Click the object you want to copy.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1
+          },
+          "highlight": true
+        },
+        {
+          "short": "Duplicate it",
+          "text": "Press Shift + D, move the mouse and click to place the copy. (Press Esc or right-click to leave the copy where it is.)",
+          "shortcut": "Shift + D",
+          "mode": "OBJECT",
+          "done": {
+            "new_object": true
+          },
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "repeat",
+      "title": "Repeat an object in a row",
+      "summary": "Use an Array modifier for fences, columns and railings.",
+      "keywords": [
+        "repeat",
+        "array",
+        "row",
+        "fence",
+        "columns",
+        "line of",
+        "copies",
+        "pattern",
+        "multiple",
+        "railing"
+      ],
+      "steps": [
+        {
+          "short": "Select the object",
+          "text": "Click the object you want to repeat.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Add Array modifier",
+          "text": "In the Properties editor on the right, open the Modifiers tab (wrench icon). Click Add Modifier > Generate > Array.",
+          "shortcut": "Wrench tab > Add Modifier",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "ARRAY"
           }
+        },
+        {
+          "short": "Set the count",
+          "text": "Change Count to how many copies you want, for example 5. By default the copies sit side by side along X. Press 'I did this' when done.",
+          "shortcut": "Array > Count"
+        },
+        {
+          "short": "Set the spacing",
+          "text": "Change Factor X under Relative Offset to adjust gaps: 1 means touching, 1.5 leaves a gap. Press 'I did this' when done.",
+          "shortcut": "Array > Relative Offset"
         }
       ]
     },
@@ -101,7 +426,8 @@
           "done": {
             "min_selected": 1,
             "active_type": "MESH"
-          }
+          },
+          "highlight": true
         },
         {
           "short": "Add a cutter cube",
@@ -112,19 +438,22 @@
             "new_object": true
           },
           "action": "add_cube",
-          "action_label": "Add a cube"
+          "action_label": "Add a cube",
+          "highlight": true
         },
         {
           "short": "Place the cutter",
           "text": "Move (G) and scale (S) the new cube so it overlaps the wall where the window or door should be. Click when it looks right, then press 'I did this'.",
-          "shortcut": "G / S",
-          "mode": "OBJECT"
+          "shortcut": "G",
+          "mode": "OBJECT",
+          "highlight": true
         },
         {
           "short": "Select the wall again",
           "text": "Click the wall (not the cutter) to select it. Then press 'I did this'.",
           "shortcut": "Left click",
-          "mode": "OBJECT"
+          "mode": "OBJECT",
+          "highlight": true
         },
         {
           "short": "Add Boolean modifier",
@@ -153,6 +482,99 @@
       ]
     },
     {
+      "id": "extrude_face",
+      "title": "Pull a shape out of a face",
+      "summary": "Extrude a face of a cube to add volume, like a porch or balcony.",
+      "keywords": [
+        "extrude",
+        "pull",
+        "bump",
+        "push out",
+        "protrusion",
+        "add volume",
+        "balcony",
+        "porch",
+        "extension"
+      ],
+      "steps": [
+        {
+          "short": "Enter Edit Mode",
+          "text": "Select a cube and press Tab to enter Edit Mode.",
+          "shortcut": "Tab",
+          "done": {
+            "mode": "EDIT_MESH"
+          },
+          "action": "toggle_edit_mode",
+          "action_label": "Switch mode",
+          "highlight": true
+        },
+        {
+          "short": "Pick a face",
+          "text": "Press 3 for face selection, then click one face of the cube. Press 'I did this' when a face is selected.",
+          "shortcut": "3",
+          "mode": "EDIT_MESH"
+        },
+        {
+          "short": "Extrude",
+          "text": "Press E, move the mouse to pull the face outward, then left-click to confirm. Press 'I did this' when done.",
+          "shortcut": "E",
+          "mode": "EDIT_MESH"
+        },
+        {
+          "short": "Back to Object Mode",
+          "text": "Press Tab to leave Edit Mode and see the result.",
+          "shortcut": "Tab",
+          "done": {
+            "mode": "OBJECT"
+          },
+          "action": "toggle_edit_mode",
+          "action_label": "Switch mode"
+        }
+      ]
+    },
+    {
+      "id": "round_edges",
+      "title": "Round off sharp edges",
+      "summary": "Add a Bevel modifier so corners look softer.",
+      "keywords": [
+        "round",
+        "rounded",
+        "edges",
+        "corners",
+        "bevel",
+        "soft",
+        "smooth",
+        "sharp"
+      ],
+      "steps": [
+        {
+          "short": "Select the object",
+          "text": "Click the object whose corners you want to round.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Add Bevel modifier",
+          "text": "In the Properties editor, open the Modifiers tab (wrench icon). Click Add Modifier > Generate > Bevel.",
+          "shortcut": "Wrench tab > Add Modifier",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "BEVEL"
+          }
+        },
+        {
+          "short": "Adjust the width",
+          "text": "Change Width in the Bevel modifier until the corners look right. Press 'I did this' when finished.",
+          "shortcut": "Bevel > Width"
+        }
+      ]
+    },
+    {
       "id": "colour",
       "title": "Add colour to an object",
       "summary": "Create a material and see it in the viewport.",
@@ -176,7 +598,8 @@
           "done": {
             "min_selected": 1,
             "active_type": "MESH"
-          }
+          },
+          "highlight": true
         },
         {
           "short": "Create a material",
@@ -204,101 +627,134 @@
       ]
     },
     {
-      "id": "column",
-      "title": "Build a column",
-      "summary": "Turn a cylinder into a tall, narrow column on the ground.",
+      "id": "turn",
+      "title": "Turn an object 90 degrees",
+      "summary": "Rotate an object a quarter-turn around the vertical axis.",
       "keywords": [
-        "column",
-        "pillar",
-        "pole",
-        "post",
-        "tower",
-        "cylinder",
-        "pier",
-        "pipe"
+        "turn",
+        "rotate",
+        "spin",
+        "90",
+        "angle",
+        "orientation",
+        "quarter",
+        "rotation"
       ],
       "steps": [
         {
-          "short": "Add a cylinder",
-          "text": "Add a cylinder to the scene.",
-          "shortcut": "Shift + A > Mesh > Cylinder",
+          "short": "Select the object",
+          "text": "Click the object you want to turn.",
+          "shortcut": "Left click",
           "mode": "OBJECT",
           "done": {
-            "new_object": true,
-            "active_type": "MESH"
-          }
+            "min_selected": 1
+          },
+          "highlight": true
         },
         {
-          "short": "Make it tall",
-          "text": "Press S, then Z, type 3 and press Enter to stretch it upward.",
-          "shortcut": "S, Z, 3, Enter",
+          "short": "Rotate it",
+          "text": "Press R, then Z, type 90 and press Enter.",
+          "shortcut": "R, Z, 90, Enter",
           "mode": "OBJECT",
           "done": {
-            "dim_min": {
-              "z": 4
+            "rot_min": {
+              "z": 80
             }
+          },
+          "axis": "Z",
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "id": "join",
+      "title": "Join objects into one",
+      "summary": "Combine several objects into a single object.",
+      "keywords": [
+        "join",
+        "combine",
+        "merge",
+        "together",
+        "one object",
+        "attach",
+        "unite"
+      ],
+      "steps": [
+        {
+          "short": "Select the objects",
+          "text": "Click the first object, then hold Shift and click the others.",
+          "shortcut": "Shift + Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 2
           }
         },
         {
-          "short": "Make it narrow",
-          "text": "Press S, then Shift + Z, type 0.5 and press Enter. Shift + Z scales everything except the height.",
-          "shortcut": "S, Shift + Z, 0.5, Enter",
+          "short": "Join them",
+          "text": "With the mouse over the viewport, press Ctrl + J.",
+          "shortcut": "Ctrl + J",
           "mode": "OBJECT",
           "done": {
-            "dim_max": {
-              "x": 1.5
-            }
-          }
-        },
-        {
-          "short": "Lift onto ground",
-          "text": "Press G, then Z, type 3 and press Enter to stand the column on the ground.",
-          "shortcut": "G, Z, 3, Enter",
-          "mode": "OBJECT",
-          "done": {
-            "bottom_z_min": -0.05
+            "fewer_objects": true
           }
         }
       ]
     },
     {
-      "id": "round_edges",
-      "title": "Round off sharp edges",
-      "summary": "Add a Bevel modifier so corners look softer.",
+      "id": "clear",
+      "title": "Clear the scene",
+      "summary": "Delete everything and start fresh.",
       "keywords": [
-        "round",
-        "rounded",
-        "edges",
-        "corners",
-        "bevel",
-        "soft",
-        "smooth",
-        "sharp"
+        "clear",
+        "empty",
+        "reset",
+        "delete all",
+        "start fresh",
+        "clean",
+        "remove everything",
+        "wipe"
       ],
       "steps": [
         {
-          "short": "Select the object",
-          "text": "Click the object whose corners you want to round.",
-          "shortcut": "Left click",
-          "mode": "OBJECT",
-          "done": {
-            "min_selected": 1,
-            "active_type": "MESH"
-          }
+          "short": "Select everything",
+          "text": "Move the mouse over the viewport and press A to select everything. Press 'I did this' when done.",
+          "shortcut": "A",
+          "mode": "OBJECT"
         },
         {
-          "short": "Add Bevel modifier",
-          "text": "In the Properties editor, open the Modifiers tab (wrench icon). Click Add Modifier > Generate > Bevel.",
-          "shortcut": "Wrench tab > Add Modifier",
+          "short": "Delete it",
+          "text": "Press Delete to remove the selected objects.",
+          "shortcut": "Delete",
           "mode": "OBJECT",
           "done": {
-            "has_modifier": "BEVEL"
-          }
-        },
+            "max_objects": 0
+          },
+          "action": "delete_selected",
+          "action_label": "Delete selected"
+        }
+      ]
+    },
+    {
+      "id": "save",
+      "title": "Save your project",
+      "summary": "Save the file so you do not lose your work.",
+      "keywords": [
+        "save",
+        "store",
+        "keep",
+        "file",
+        "backup",
+        "write",
+        "lose work"
+      ],
+      "steps": [
         {
-          "short": "Adjust the width",
-          "text": "Change Width in the Bevel modifier until the corners look right. Press 'I did this' when finished.",
-          "shortcut": "Bevel > Width"
+          "short": "Save",
+          "text": "Move the mouse over the viewport and press Ctrl + S. For a new file, type a name, choose a folder and click Save.",
+          "shortcut": "Ctrl + S",
+          "done": {
+            "saved": true
+          }
         }
       ]
     }

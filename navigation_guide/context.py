@@ -56,13 +56,32 @@ def get_state(context):
         "ready_modifiers": [],
         "has_material": False,
         "shading": _shading(context),
+        "rot_deg": None,
+        "active_hidden": False,
+        "saved": False,
     }
+
+    try:
+        import bpy  # only available inside Blender
+        state["saved"] = bool(bpy.data.is_saved and not bpy.data.is_dirty)
+    except Exception:
+        pass
 
     if obj is not None:
         try:
             d = tuple(obj.dimensions)
             state["dims"] = {"x": d[0], "y": d[1], "z": d[2]}
             state["bottom_z"] = obj.location.z - d[2] / 2  # assumes origin at centre
+        except Exception:
+            pass
+        try:
+            import math
+            r = obj.rotation_euler
+            state["rot_deg"] = {"x": math.degrees(r.x), "y": math.degrees(r.y), "z": math.degrees(r.z)}
+        except Exception:
+            pass
+        try:
+            state["active_hidden"] = bool(obj.hide_get() or obj.hide_viewport)
         except Exception:
             pass
         try:

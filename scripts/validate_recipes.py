@@ -12,6 +12,7 @@ recipes = json.loads((PKG / "recipes" / "recipes.json").read_text(encoding="utf-
 ops_src = (PKG / "operators.py").read_text(encoding="utf-8")
 actions = set(re.findall(r'^\s+"(\w+)":\s+_\w+,', ops_src, re.M))
 MODES = {"OBJECT", "EDIT_MESH", "ANY"}
+AXES = {"X", "Y", "Z"}
 
 errors, seen = [], set()
 for r in recipes:
@@ -31,6 +32,8 @@ for r in recipes:
             errors.append(f"{where}: bad mode '{s['mode']}'")
         if s.get("action") and s["action"] not in actions:
             errors.append(f"{where}: unknown action '{s['action']}'")
+        if s.get("axis") and s["axis"] not in AXES:
+            errors.append(f"{where}: axis must be X, Y or Z")
         for k in s.get("done", {}):
             if k not in navigator.KNOWN_KEYS:
                 errors.append(f"{where}: unknown condition '{k}'")
