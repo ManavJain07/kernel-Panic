@@ -27,6 +27,15 @@ def load_tools(force=False):
     return _cache
 
 
+_POPULAR = ("add_object", "move", "rotate", "scale", "extrude", "undo", "search_menu", "frame_selected")
+
+
+def popular():
+    """A short list of the commands beginners use most (shown before they type anything)."""
+    by_id = {t.get("id"): t for t in load_tools()}
+    return [by_id[i] for i in _POPULAR if i in by_id]
+
+
 def _words(text):
     return re.findall(r"[a-z0-9]+", text.lower())
 

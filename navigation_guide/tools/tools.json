@@ -437,6 +437,796 @@
         "backup"
       ],
       "verified": false
+    },
+    {
+      "id": "search_menu",
+      "name": "Search for any command",
+      "mode": "ANY",
+      "where": "Edit menu > Menu Search",
+      "shortcut": "F3",
+      "what": "Type a command's name and Blender finds it in the menus. The fastest way to find something you have forgotten.",
+      "keywords": [
+        "search",
+        "find command",
+        "menu",
+        "forgot",
+        "where is",
+        "lost",
+        "command"
+      ],
+      "verified": false
+    },
+    {
+      "id": "repeat_last",
+      "name": "Repeat last action",
+      "mode": "ANY",
+      "where": "Edit menu > Repeat Last",
+      "shortcut": "Shift + R",
+      "what": "Does the last thing you did again, such as another extrude or another move.",
+      "keywords": [
+        "repeat",
+        "again",
+        "redo",
+        "same",
+        "last"
+      ],
+      "verified": false
+    },
+    {
+      "id": "adjust_last",
+      "name": "Adjust the last action",
+      "mode": "ANY",
+      "where": "Small panel at the bottom-left of the viewport after you do something",
+      "shortcut": "F9",
+      "what": "Opens the settings of what you just did so you can change numbers like size, count or segments.",
+      "keywords": [
+        "adjust",
+        "tweak",
+        "settings",
+        "last operation",
+        "change number",
+        "options",
+        "redo panel"
+      ],
+      "verified": false
+    },
+    {
+      "id": "box_select",
+      "name": "Box select",
+      "mode": "ANY",
+      "where": "Select Box tool at the top of the left toolbar",
+      "shortcut": "B, then drag",
+      "what": "Selects everything inside a rectangle you drag.",
+      "keywords": [
+        "box select",
+        "drag select",
+        "marquee",
+        "select many",
+        "rectangle",
+        "select multiple"
+      ],
+      "verified": false
+    },
+    {
+      "id": "select_mode",
+      "name": "Vertex, edge or face select",
+      "mode": "EDIT_MESH",
+      "where": "Three small buttons at the top-left of the viewport in Edit Mode",
+      "shortcut": "1, 2, 3",
+      "what": "Chooses whether you pick points, lines or flat faces.",
+      "keywords": [
+        "vertex",
+        "edge",
+        "face",
+        "select mode",
+        "points",
+        "lines",
+        "pick"
+      ],
+      "verified": false
+    },
+    {
+      "id": "select_linked",
+      "name": "Select connected parts",
+      "mode": "EDIT_MESH",
+      "where": "Select menu > Select Linked",
+      "shortcut": "L (hover) or Ctrl + L",
+      "what": "Selects a whole connected piece of the mesh in one go.",
+      "keywords": [
+        "linked",
+        "connected",
+        "island",
+        "whole piece",
+        "select all part"
+      ],
+      "verified": false
+    },
+    {
+      "id": "invert_select",
+      "name": "Invert selection",
+      "mode": "ANY",
+      "where": "Select menu > Invert",
+      "shortcut": "Ctrl + I",
+      "what": "Selects everything that was not selected, and deselects what was.",
+      "keywords": [
+        "invert",
+        "opposite",
+        "everything else",
+        "swap selection"
+      ],
+      "verified": false
+    },
+    {
+      "id": "fill_face",
+      "name": "Fill a face",
+      "mode": "EDIT_MESH",
+      "where": "Select points or edges, then Face menu > Make Edge/Face",
+      "shortcut": "F",
+      "what": "Creates a flat face between the selected points. Use it to close a hole.",
+      "keywords": [
+        "fill",
+        "face",
+        "close hole",
+        "make face",
+        "cap",
+        "patch"
+      ],
+      "verified": false
+    },
+    {
+      "id": "delete_mesh",
+      "name": "Delete mesh parts",
+      "mode": "EDIT_MESH",
+      "where": "Mesh menu > Delete",
+      "shortcut": "X",
+      "what": "Deletes selected points, edges or faces. Pick what to delete from the little menu.",
+      "keywords": [
+        "delete",
+        "remove",
+        "erase",
+        "vertices",
+        "faces",
+        "edges",
+        "cut away"
+      ],
+      "verified": false
+    },
+    {
+      "id": "dissolve",
+      "name": "Dissolve (delete without a hole)",
+      "mode": "EDIT_MESH",
+      "where": "Mesh menu > Delete > Dissolve",
+      "shortcut": "Ctrl + X",
+      "what": "Removes points or edges but keeps the surface closed. Good for cleaning up.",
+      "keywords": [
+        "dissolve",
+        "clean",
+        "simplify",
+        "remove edge",
+        "tidy",
+        "without hole"
+      ],
+      "verified": false
+    },
+    {
+      "id": "separate",
+      "name": "Separate into its own object",
+      "mode": "EDIT_MESH",
+      "where": "Mesh menu > Separate",
+      "shortcut": "P",
+      "what": "Splits the selected part of a mesh off as a new object.",
+      "keywords": [
+        "separate",
+        "split",
+        "break off",
+        "detach",
+        "cut out part"
+      ],
+      "verified": false
+    },
+    {
+      "id": "subdivide",
+      "name": "Subdivide (add more cuts)",
+      "mode": "EDIT_MESH",
+      "where": "Right click in Edit Mode > Subdivide",
+      "shortcut": "Right click > Subdivide",
+      "what": "Splits selected edges or faces into smaller pieces so you have more points to shape.",
+      "keywords": [
+        "subdivide",
+        "more detail",
+        "split faces",
+        "divide",
+        "add points",
+        "more geometry"
+      ],
+      "verified": false
+    },
+    {
+      "id": "edge_slide",
+      "name": "Slide an edge",
+      "mode": "EDIT_MESH",
+      "where": "Edge menu > Slide Edge",
+      "shortcut": "G, G",
+      "what": "Slides an edge loop along the surface without leaving the shape.",
+      "keywords": [
+        "slide",
+        "edge slide",
+        "shift loop",
+        "adjust loop"
+      ],
+      "verified": false
+    },
+    {
+      "id": "bridge",
+      "name": "Bridge two edge loops",
+      "mode": "EDIT_MESH",
+      "where": "Edge menu > Bridge Edge Loops",
+      "shortcut": "",
+      "what": "Joins two openings or loops with new faces, like a tunnel between them.",
+      "keywords": [
+        "bridge",
+        "connect",
+        "join holes",
+        "tunnel",
+        "link loops"
+      ],
+      "verified": false
+    },
+    {
+      "id": "proportional",
+      "name": "Soft move (proportional editing)",
+      "mode": "ANY",
+      "where": "Circle icon in the viewport header",
+      "shortcut": "O",
+      "what": "Moves nearby points along with a smooth falloff, so shapes bend instead of poking out. Scroll the wheel while moving to change the range.",
+      "keywords": [
+        "proportional",
+        "soft",
+        "falloff",
+        "smooth move",
+        "organic",
+        "bend",
+        "hill"
+      ],
+      "verified": false
+    },
+    {
+      "id": "normals",
+      "name": "Fix inside-out faces (normals)",
+      "mode": "EDIT_MESH",
+      "where": "Mesh menu > Normals > Recalculate Outside",
+      "shortcut": "Shift + N",
+      "what": "Turns faces the right way round so they stop looking dark or black.",
+      "keywords": [
+        "normals",
+        "flip",
+        "inside out",
+        "dark faces",
+        "black faces",
+        "recalculate",
+        "backface"
+      ],
+      "verified": false
+    },
+    {
+      "id": "unwrap",
+      "name": "UV unwrap",
+      "mode": "EDIT_MESH",
+      "where": "Select everything, then UV menu > Unwrap",
+      "shortcut": "U > Unwrap",
+      "what": "Flattens the surface so an image texture can be placed on it.",
+      "keywords": [
+        "uv",
+        "unwrap",
+        "texture",
+        "image",
+        "flatten",
+        "seam"
+      ],
+      "verified": false
+    },
+    {
+      "id": "shade_smooth",
+      "name": "Shade smooth",
+      "mode": "OBJECT",
+      "where": "Object menu > Shade Smooth",
+      "shortcut": "",
+      "what": "Makes the surface look smooth instead of faceted without changing the shape.",
+      "keywords": [
+        "smooth",
+        "shade",
+        "faceted",
+        "blocky",
+        "flat shading",
+        "polish"
+      ],
+      "verified": false
+    },
+    {
+      "id": "apply_transforms",
+      "name": "Apply scale and rotation",
+      "mode": "OBJECT",
+      "where": "Object menu > Apply > Scale (or All Transforms)",
+      "shortcut": "Ctrl + A",
+      "what": "Makes the current size and rotation the new normal. Fixes modifiers and bevels that look stretched.",
+      "keywords": [
+        "apply",
+        "freeze",
+        "reset scale",
+        "stretched",
+        "fix scale",
+        "transform",
+        "uneven"
+      ],
+      "verified": false
+    },
+    {
+      "id": "set_origin",
+      "name": "Set the origin point",
+      "mode": "OBJECT",
+      "where": "Object menu > Set Origin",
+      "shortcut": "",
+      "what": "Moves the dot an object rotates and scales around. Choose Origin to Geometry to centre it.",
+      "keywords": [
+        "origin",
+        "pivot",
+        "centre",
+        "center",
+        "rotate around",
+        "dot",
+        "anchor"
+      ],
+      "verified": false
+    },
+    {
+      "id": "parent",
+      "name": "Parent objects (make a group that moves together)",
+      "mode": "OBJECT",
+      "where": "Select the child, then the parent last, then Object menu > Parent > Object",
+      "shortcut": "Ctrl + P",
+      "what": "Links objects so moving the parent moves the children too.",
+      "keywords": [
+        "parent",
+        "child",
+        "attach",
+        "link",
+        "group",
+        "hierarchy",
+        "glue",
+        "follow"
+      ],
+      "verified": false
+    },
+    {
+      "id": "link_duplicate",
+      "name": "Linked duplicate",
+      "mode": "OBJECT",
+      "where": "Object menu > Duplicate Linked",
+      "shortcut": "Alt + D",
+      "what": "Makes a copy that shares its shape with the original, so editing one updates all.",
+      "keywords": [
+        "linked",
+        "instance",
+        "copy",
+        "share",
+        "same shape",
+        "alt d"
+      ],
+      "verified": false
+    },
+    {
+      "id": "hide_show",
+      "name": "Hide and show objects",
+      "mode": "OBJECT",
+      "where": "Object menu > Show/Hide",
+      "shortcut": "H hides, Alt + H shows all",
+      "what": "Hides the selected objects to clear the view, or brings every hidden object back.",
+      "keywords": [
+        "hide",
+        "show",
+        "reveal",
+        "unhide",
+        "clear view",
+        "invisible",
+        "declutter"
+      ],
+      "verified": false
+    },
+    {
+      "id": "rename",
+      "name": "Rename an object",
+      "mode": "OBJECT",
+      "where": "Double click its name in the Outliner",
+      "shortcut": "F2",
+      "what": "Gives the active object a clear name.",
+      "keywords": [
+        "rename",
+        "name",
+        "label",
+        "title"
+      ],
+      "verified": false
+    },
+    {
+      "id": "collection",
+      "name": "Move to a collection (folder)",
+      "mode": "OBJECT",
+      "where": "Object menu > Collection > Move to Collection",
+      "shortcut": "M",
+      "what": "Sorts objects into groups in the Outliner so a big scene stays tidy.",
+      "keywords": [
+        "collection",
+        "folder",
+        "organise",
+        "organize",
+        "group",
+        "sort",
+        "outliner"
+      ],
+      "verified": false
+    },
+    {
+      "id": "local_view",
+      "name": "Isolate with Local View",
+      "mode": "ANY",
+      "where": "View menu > Local View > Toggle Local View",
+      "shortcut": "Numpad /",
+      "what": "Shows only the selected objects so you can work without distractions. Press again to come back.",
+      "keywords": [
+        "local view",
+        "isolate",
+        "focus",
+        "only this",
+        "solo",
+        "alone"
+      ],
+      "verified": false
+    },
+    {
+      "id": "ortho",
+      "name": "Orthographic or perspective",
+      "mode": "ANY",
+      "where": "View menu > Perspective/Orthographic",
+      "shortcut": "Numpad 5",
+      "what": "Switches between a realistic view and a flat technical view with no depth distortion.",
+      "keywords": [
+        "ortho",
+        "orthographic",
+        "perspective",
+        "flat view",
+        "technical",
+        "distortion",
+        "drawing"
+      ],
+      "verified": false
+    },
+    {
+      "id": "standard_views",
+      "name": "Front, side and top views",
+      "mode": "ANY",
+      "where": "View menu > Viewpoint",
+      "shortcut": "Numpad 1, 3, 7",
+      "what": "Jumps to straight-on views. Ctrl plus the key shows the opposite side. No numpad: use the View menu.",
+      "keywords": [
+        "front",
+        "side",
+        "top",
+        "back",
+        "left",
+        "right",
+        "bottom",
+        "view angle",
+        "viewpoint",
+        "elevation",
+        "plan"
+      ],
+      "verified": false
+    },
+    {
+      "id": "snap",
+      "name": "Snapping",
+      "mode": "ANY",
+      "where": "Magnet icon in the viewport header",
+      "shortcut": "Shift + Tab",
+      "what": "Makes moved things click onto the grid, points or edges so everything lines up.",
+      "keywords": [
+        "snap",
+        "magnet",
+        "align",
+        "grid",
+        "lock to",
+        "stick",
+        "precise",
+        "line up"
+      ],
+      "verified": false
+    },
+    {
+      "id": "cursor",
+      "name": "3D cursor",
+      "mode": "ANY",
+      "where": "Shift + Right click in the viewport, or View menu > Snap Cursor",
+      "shortcut": "Shift + C",
+      "what": "The red-and-white target where new objects appear. Shift + C puts it back at the centre.",
+      "keywords": [
+        "cursor",
+        "3d cursor",
+        "target",
+        "where new",
+        "spawn",
+        "centre",
+        "reset"
+      ],
+      "verified": false
+    },
+    {
+      "id": "pivot",
+      "name": "Pivot point",
+      "mode": "ANY",
+      "where": "Pivot dropdown in the viewport header",
+      "shortcut": "Period (.)",
+      "what": "Chooses what rotates and scales happen around: the object, the 3D cursor or the middle of a selection.",
+      "keywords": [
+        "pivot",
+        "rotate around",
+        "scale from",
+        "median",
+        "origin",
+        "centre of rotation"
+      ],
+      "verified": false
+    },
+    {
+      "id": "numeric",
+      "name": "Type exact numbers",
+      "mode": "ANY",
+      "where": "While moving, rotating or scaling, just type; or use the Item tab in the sidebar",
+      "shortcut": "G, X, 2, Enter",
+      "what": "Type a number right after G, R or S to be precise. Example: S, 2, Enter doubles the size.",
+      "keywords": [
+        "exact",
+        "precise",
+        "number",
+        "measurement",
+        "metres",
+        "meters",
+        "degrees",
+        "type value",
+        "accurate",
+        "size"
+      ],
+      "verified": false
+    },
+    {
+      "id": "sidebar",
+      "name": "Show or hide the side panels",
+      "mode": "ANY",
+      "where": "View menu > Sidebar / Toolbar",
+      "shortcut": "N sidebar, T toolbar",
+      "what": "N opens the sidebar with exact position, rotation and size. T shows the toolbar.",
+      "keywords": [
+        "sidebar",
+        "panel",
+        "toolbar",
+        "hide panel",
+        "item tab",
+        "dimensions",
+        "properties",
+        "menu missing"
+      ],
+      "verified": false
+    },
+    {
+      "id": "wireframe",
+      "name": "Wireframe and X-ray",
+      "mode": "ANY",
+      "where": "Shading buttons at the top-right of the viewport",
+      "shortcut": "Z (pie menu), Alt + Z X-ray",
+      "what": "See through objects to select hidden points, or view only the edges.",
+      "keywords": [
+        "wireframe",
+        "x-ray",
+        "xray",
+        "see through",
+        "transparent",
+        "hidden",
+        "behind"
+      ],
+      "verified": false
+    },
+    {
+      "id": "mirror_mod",
+      "name": "Mirror (symmetry)",
+      "mode": "OBJECT",
+      "where": "Properties editor > wrench tab > Add Modifier > Generate > Mirror",
+      "shortcut": "",
+      "what": "Builds the other half of a shape automatically, so you only model one side.",
+      "keywords": [
+        "mirror",
+        "symmetry",
+        "symmetric",
+        "other half",
+        "reflect",
+        "both sides"
+      ],
+      "verified": false
+    },
+    {
+      "id": "array_mod",
+      "name": "Array (repeat copies)",
+      "mode": "OBJECT",
+      "where": "Properties editor > wrench tab > Add Modifier > Generate > Array",
+      "shortcut": "",
+      "what": "Repeats an object in a row or a staircase with a few settings. Great for fences, stairs and windows.",
+      "keywords": [
+        "array",
+        "repeat",
+        "row",
+        "copies",
+        "stairs",
+        "fence",
+        "pattern",
+        "many",
+        "line of"
+      ],
+      "verified": false
+    },
+    {
+      "id": "solidify_mod",
+      "name": "Solidify (give thickness)",
+      "mode": "OBJECT",
+      "where": "Properties editor > wrench tab > Add Modifier > Generate > Solidify",
+      "shortcut": "",
+      "what": "Turns a flat surface into something with real thickness, like a wall or a sheet.",
+      "keywords": [
+        "solidify",
+        "thickness",
+        "thick",
+        "thin",
+        "shell",
+        "wall thickness",
+        "sheet"
+      ],
+      "verified": false
+    },
+    {
+      "id": "bevel_mod",
+      "name": "Bevel modifier (round all edges)",
+      "mode": "OBJECT",
+      "where": "Properties editor > wrench tab > Add Modifier > Generate > Bevel",
+      "shortcut": "",
+      "what": "Rounds every edge at once, so objects catch light like real ones.",
+      "keywords": [
+        "bevel",
+        "round",
+        "chamfer",
+        "soften edges",
+        "corner",
+        "edges all"
+      ],
+      "verified": false
+    },
+    {
+      "id": "apply_modifier",
+      "name": "Apply a modifier",
+      "mode": "OBJECT",
+      "where": "Arrow next to the modifier name in the wrench tab > Apply",
+      "shortcut": "Ctrl + A (mouse over the modifier)",
+      "what": "Bakes the modifier into the actual mesh so you can edit the result.",
+      "keywords": [
+        "apply modifier",
+        "bake",
+        "finalize",
+        "commit",
+        "make real",
+        "permanent"
+      ],
+      "verified": false
+    },
+    {
+      "id": "add_light",
+      "name": "Add a light",
+      "mode": "OBJECT",
+      "where": "Add menu > Light",
+      "shortcut": "Shift + A > Light",
+      "what": "Adds a Point, Sun, Spot or Area light so your scene is lit when rendered.",
+      "keywords": [
+        "light",
+        "lamp",
+        "sun",
+        "spot",
+        "bulb",
+        "lighting",
+        "illuminate",
+        "dark render"
+      ],
+      "verified": false
+    },
+    {
+      "id": "add_camera",
+      "name": "Add a camera",
+      "mode": "OBJECT",
+      "where": "Add menu > Camera. Ctrl + Alt + Numpad 0 snaps it to your current view",
+      "shortcut": "Shift + A > Camera",
+      "what": "Adds the camera that decides what the final picture shows.",
+      "keywords": [
+        "camera",
+        "add camera",
+        "shot",
+        "frame the picture",
+        "viewpoint",
+        "render camera"
+      ],
+      "verified": false
+    },
+    {
+      "id": "keyframe",
+      "name": "Insert a keyframe (animate)",
+      "mode": "ANY",
+      "where": "Hover the viewport, press I; or right click a value > Insert Keyframe",
+      "shortcut": "I",
+      "what": "Records the position, rotation or size at the current frame so it can animate over time.",
+      "keywords": [
+        "keyframe",
+        "animate",
+        "animation",
+        "record",
+        "timeline",
+        "movement over time",
+        "frame"
+      ],
+      "verified": false
+    },
+    {
+      "id": "play",
+      "name": "Play or pause animation",
+      "mode": "ANY",
+      "where": "Play button in the Timeline at the bottom",
+      "shortcut": "Space",
+      "what": "Plays the animation from the current frame. Press again to stop.",
+      "keywords": [
+        "play",
+        "pause",
+        "animation",
+        "timeline",
+        "preview",
+        "run"
+      ],
+      "verified": false
+    },
+    {
+      "id": "open_file",
+      "name": "Open a file",
+      "mode": "ANY",
+      "where": "File menu > Open",
+      "shortcut": "Ctrl + O",
+      "what": "Opens a saved .blend file. Open Recent is the quickest way back to your last project.",
+      "keywords": [
+        "open",
+        "load",
+        "recent",
+        "previous project",
+        "file",
+        "reopen"
+      ],
+      "verified": false
+    },
+    {
+      "id": "save_as",
+      "name": "Save as a new file",
+      "mode": "ANY",
+      "where": "File menu > Save As",
+      "shortcut": "Ctrl + Shift + S",
+      "what": "Saves a copy under a new name, which is handy for versions and backups.",
+      "keywords": [
+        "save as",
+        "copy file",
+        "version",
+        "backup",
+        "new name",
+        "rename file"
+      ],
+      "verified": false
     }
   ]
 }

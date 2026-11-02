@@ -64,8 +64,19 @@ def _col(c):
 
 
 # ---- drawing helpers ------------------------------------------------------
+_shaders = {}
+
+
+def _shader(name="UNIFORM_COLOR"):
+    """Built-in shaders are created once and reused (creating them every frame caused lag)."""
+    sh = _shaders.get(name)
+    if sh is None:
+        sh = _shaders[name] = gpu.shader.from_builtin(name)
+    return sh
+
+
 def _fill(pts, color, mode="TRI_FAN"):
-    shader = gpu.shader.from_builtin("UNIFORM_COLOR")
+    shader = _shader()
     batch = batch_for_shader(shader, mode, {"pos": pts})
     gpu.state.blend_set("ALPHA")
     shader.uniform_float("color", _col(color))
@@ -74,7 +85,7 @@ def _fill(pts, color, mode="TRI_FAN"):
 
 
 def _line(pts, color, width=2.0, mode="LINE_LOOP"):
-    shader = gpu.shader.from_builtin("UNIFORM_COLOR")
+    shader = _shader()
     batch = batch_for_shader(shader, mode, {"pos": pts})
     gpu.state.blend_set("ALPHA")
     gpu.state.line_width_set(width)
@@ -270,6 +281,26 @@ def _draw_axis_letter(context, axis, now):
 
 
 # ---- celebration ----------------------------------------------------------
+def _draw_confetti(age, x0, top, width):
+    """All confetti pieces go out in a single batch (one draw call, not 40)."""
+    pos, col = [], []
+    fade = 1.0 - _clamp((age - 1.8) / 0.8)
+    for i in range(48):
+        px = x0 + _hash(i, 1) * width + 18 * math.sin(age * 5 + i)
+        vy = 200 + 260 * _hash(i, 2)
+        py = top + 40 + 60 * _hash(i, 3) + vy * age - 140 * age * age
+        r, g, b = CONFETTI[i % len(CONFETTI)]
+        s = 4 + 3 * _hash(i, 4)
+        for dx, dy in ((0, 0), (2 * s, 0), (2 * s, 2 * s), (0, 0), (2 * s, 2 * s), (0, 2 * s)):
+            pos.append((px + dx, py + dy))
+            col.append((r, g, b, fade))
+    shader = _shader("SMOOTH_COLOR")
+    batch = batch_for_shader(shader, "TRIS", {"pos": pos, "color": col})
+    gpu.state.blend_set("ALPHA")
+    batch.draw(shader)
+    gpu.state.blend_set("NONE")
+
+
 def _draw_flash(context, kind, age, x0, top, width):
     saved = _A[0]
     _A[0] = 1.0
@@ -281,16 +312,10 @@ def _draw_flash(context, kind, age, x0, top, width):
         rise = 26 * _ease_out(age / 0.9)
         fade = 1 - _clamp((age - 0.7) / 0.6)
         _text(x0 + 4, top + 16 + rise, "Step done!", (*GREEN[:3], fade), 20)
-    elif kind == "done" and age < 2.4:
-        for i in range(40):  # confetti
-            px = x0 + _hash(i, 1) * width
-            vy = 160 + 220 * _hash(i, 2)
-            sway = 18 * math.sin(age * 5 + i)
-            py = top + 60 + 90 * _hash(i, 3) + vy * age * 0.5 - 330 * age * age * 0.5
-            c = CONFETTI[i % len(CONFETTI)]
-            _rect(px + sway, py, 7, 7, (*c, 1.0 - _clamp((age - 1.6) / 0.8)))
+    elif kind == "done" and age < 2.6:
+        _draw_confetti(age, x0, top, width)
         pop = 1 + 0.25 * math.sin(_clamp(age / 0.5) * math.pi)
-        _text(x0 + 4, top + 22, "Goal complete!", (*GREEN[:3], 1.0 - _clamp((age - 1.8) / 0.6)), int(24 * pop))
+        _text(x0 + 4, top + 22, "Goal complete!", (*GREEN[:3], 1.0 - _clamp((age - 2.0) / 0.6)), int(24 * pop))
     _A[0] = saved
 
 
@@ -314,24 +339,26 @@ def _draw_pixel_impl(context):
     _A[0] = intro
     try:
         top, width = _draw_banner(context, 20, 30 - slide, now, skip_shortcut=bool(animate and parsed))
-        if not animate or step is None:
+        if not animate:
             return
 
-        nudge = now - c["since"] > STUCK_SECONDS
-        if parsed:
-            y = top + 12
-            x = 20
-            if parsed["mouse"]:
-                x += _draw_mouse(parsed["mouse"], x, y, now) + 16
-            if parsed["keys"]:
-                x += _draw_keys(parsed["keys"], x, y + 6, now, age, nudge) + 12
-            if parsed["path"]:
-                _text(x, y + 15, parsed["path"].replace(">", " > "), (0.8, 0.9, 1.0, 1.0))
+        if step is not None:  # (when the goal is finished there is no step, but we still celebrate)
+            nudge = now - c["since"] > STUCK_SECONDS
+            if parsed:
+                y = top + 12
+                x = 20
+                if parsed["mouse"]:
+                    x += _draw_mouse(parsed["mouse"], x, y, now) + 16
+                if parsed["keys"]:
+                    x += _draw_keys(parsed["keys"], x, y + 6, now, age, nudge) + 12
+                if parsed["path"]:
+                    _text(x, y + 15, parsed["path"].replace(">", " > "), (0.8, 0.9, 1.0, 1.0))
 
-        if step.get("highlight") or step.get("axis"):
-            _draw_ring(context, now)
-        if step.get("axis") in AXES:
-            _draw_axis_letter(context, step["axis"], now)
+            if step.get("highlight") or step.get("axis"):
+                _draw_ring(context, now)
+            if step.get("axis") in AXES:
+                _draw_axis_letter(context, step["axis"], now)
+
         if c["kind"] in ("step", "done"):
             _draw_flash(context, c["kind"], age, 20, top, width)
     finally:
@@ -364,7 +391,7 @@ def _draw_view_impl(context):
     t = time.time()
     pulse = 0.5 + 0.5 * math.sin(t * 2 * math.pi)
 
-    shader = gpu.shader.from_builtin("UNIFORM_COLOR")
+    shader = _shader()
     gpu.state.depth_test_set("NONE")
     gpu.state.blend_set("ALPHA")
 
@@ -398,14 +425,28 @@ def _draw_view():
 
 
 # ---- fast redraw timer (drives the animation) ------------------------------
+def _needs_animation(wm):
+    """Only redraw fast while something on screen is actually moving."""
+    c = session.info()
+    if not c["lines"]:
+        return False
+    age = time.time() - c["changed_at"]
+    step = c["step"]
+    if step is None:                      # goal finished: only the confetti moves
+        return c["kind"] == "done" and age < 2.7
+    if age < 2.0 or c["progress"]:        # entrance / success animation, progress bar
+        return True
+    return bool(step.get("shortcut") or step.get("highlight") or step.get("axis"))
+
+
 def _anim_tick():
     try:
         wm = bpy.context.window_manager
-        if wm.navguide_goal_id and wm.navguide_overlay and wm.navguide_animate:
-            session.redraw_all()
+        if wm.navguide_goal_id and wm.navguide_overlay and wm.navguide_animate and _needs_animation(wm):
+            session.redraw_view()  # only the 3D view itself, not the sidebar panels
     except Exception:
         pass
-    return 0.04  # about 25 frames per second while guiding
+    return 0.04  # about 25 frames per second while something is animating
 
 
 def register():

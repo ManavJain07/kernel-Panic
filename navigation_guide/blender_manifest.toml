@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "navigation_guide"
-version = "0.4.0"
+version = "0.7.0"
 name = "Blender Navigation Guide"
 tagline = "Context-aware guidance for Blender beginners"
 maintainer = "Your Team <you@example.com>"

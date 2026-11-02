@@ -433,6 +433,178 @@
           "text": "Use File > Save As with a new name before big experiments."
         }
       ]
+    },
+    {
+      "id": "wrong_direction",
+      "title": "Moving or scaling goes the wrong way",
+      "summary": "Object jumps, slides sideways or snaps to odd places.",
+      "keywords": [
+        "wrong direction",
+        "jumps",
+        "snaps",
+        "sideways",
+        "slides",
+        "weird move",
+        "skips",
+        "jumpy",
+        "stuck to grid",
+        "axis"
+      ],
+      "causes": [
+        {
+          "text": "Snapping may be on (the magnet icon in the header is lit). Click the magnet to turn it off, or press Shift + Tab."
+        },
+        {
+          "text": "An axis lock may be active. While moving, press the same axis key (X, Y or Z) twice, or press the middle mouse button, to clear it."
+        },
+        {
+          "text": "Numbers you typed during the move count. Right click or Esc cancels the move and you can try again."
+        },
+        {
+          "text": "The pivot point may be set to something unusual. Check the Pivot dropdown in the header and choose Median Point."
+        },
+        {
+          "text": "Press Ctrl + Z to undo the odd move.",
+          "fix": "undo",
+          "fix_label": "Undo"
+        }
+      ]
+    },
+    {
+      "id": "odd_origin",
+      "title": "It rotates or scales around a strange point",
+      "summary": "Object swings around the wrong spot.",
+      "keywords": [
+        "origin",
+        "rotate around",
+        "swings",
+        "orbit",
+        "pivot",
+        "off centre",
+        "off center",
+        "scales from corner",
+        "wrong centre"
+      ],
+      "causes": [
+        {
+          "text": "The object's origin dot is not in the middle. Object menu > Set Origin > Origin to Geometry."
+        },
+        {
+          "text": "The Pivot Point may be set to 3D Cursor. Open the Pivot dropdown in the header and pick Median Point."
+        },
+        {
+          "text": "The 3D cursor may be far away. Press Shift + C to bring it back to the centre."
+        }
+      ]
+    },
+    {
+      "id": "modifier_nothing",
+      "title": "My modifier does nothing",
+      "summary": "Added Mirror, Array or another modifier and nothing changes.",
+      "keywords": [
+        "modifier",
+        "nothing happens",
+        "no effect",
+        "array",
+        "mirror",
+        "subdivision",
+        "bevel",
+        "solidify",
+        "not working"
+      ],
+      "causes": [
+        {
+          "text": "No modifier is on the active object. Select the object first, then open the wrench tab.",
+          "when": {
+            "max_selected": 0
+          },
+          "quick": true
+        },
+        {
+          "text": "The modifier may be switched off. In the wrench tab, make sure the monitor and camera icons on the modifier are lit."
+        },
+        {
+          "text": "Settings may be zero. Array needs Count above 1 and an offset. Solidify needs a Thickness other than 0."
+        },
+        {
+          "text": "The object's scale may not be applied. Press Ctrl + A > Scale in Object Mode."
+        },
+        {
+          "text": "You may be looking at the wrong object. Click the object with the modifier and look at the wrench tab."
+        }
+      ]
+    },
+    {
+      "id": "tool_edit_only",
+      "title": "Extrude, loop cut or bevel does nothing",
+      "summary": "A modelling tool refuses to work or does something strange.",
+      "keywords": [
+        "extrude",
+        "loop cut",
+        "bevel",
+        "inset",
+        "knife",
+        "does nothing",
+        "not working",
+        "greyed out",
+        "grayed out",
+        "edit mode"
+      ],
+      "causes": [
+        {
+          "text": "These tools only work in Edit Mode. Select your mesh and press Tab.",
+          "when": {
+            "mode": "OBJECT",
+            "active_type": "MESH"
+          },
+          "quick": true,
+          "fix": "toggle_edit_mode",
+          "fix_label": "Enter Edit Mode"
+        },
+        {
+          "text": "Nothing is selected. In Edit Mode select points, edges or faces first (keys 1, 2, 3 choose which).",
+          "when": {
+            "mode": "EDIT_MESH"
+          }
+        },
+        {
+          "text": "The mouse must be over the 3D viewport, not a side panel."
+        },
+        {
+          "text": "Press F9 or open the small panel at the bottom-left to adjust the settings."
+        }
+      ]
+    },
+    {
+      "id": "render_empty",
+      "title": "My render is black or empty",
+      "summary": "Pressing F12 gives a dark, blank or wrong picture.",
+      "keywords": [
+        "render",
+        "black",
+        "empty",
+        "dark",
+        "blank",
+        "f12",
+        "image",
+        "nothing",
+        "camera",
+        "light"
+      ],
+      "causes": [
+        {
+          "text": "There may be no camera. Add one with Shift + A > Camera, then press Ctrl + Alt + Numpad 0 to aim it."
+        },
+        {
+          "text": "The scene may have no light. Add one with Shift + A > Light > Sun."
+        },
+        {
+          "text": "The camera may be pointing away from your object. Press Numpad 0 to look through it and move it until you see the object."
+        },
+        {
+          "text": "Objects may be hidden in the render. In the Outliner check the camera icon next to the object."
+        }
+      ]
     }
   ]
 }

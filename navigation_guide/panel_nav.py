@@ -53,16 +53,15 @@ class NAVGUIDE_PT_main(bpy.types.Panel):
         wm = context.window_manager
         state = ctx.get_state(context)
 
-        # status line + display toggles
-        row = layout.row(align=True)
-        name = (state["active_object"] or "nothing")[:12]
-        row.label(text=f"{_short_mode(state)} | {name} | {state['selected_count']} sel")
-        sub = row.row(align=True)
-        sub.alignment = "RIGHT"
-        sub.prop(wm, "navguide_overlay", text="", icon="OVERLAY", toggle=True)
-        anim = sub.row(align=True)
-        anim.enabled = wm.navguide_overlay
-        anim.prop(wm, "navguide_animate", text="", icon="PLAY", toggle=True)
+        # status line
+        layout.label(text=f"{_short_mode(state)} | {(state['active_object'] or 'nothing')[:14]} | {state['selected_count']} sel")
+
+        # display toggles: plain labelled checkboxes
+        col = layout.column(align=True)
+        col.prop(wm, "navguide_overlay", text="Show hints in the viewport")
+        sub = col.column(align=True)
+        sub.enabled = wm.navguide_overlay
+        sub.prop(wm, "navguide_animate", text="Animated guidance")
 
         layout.prop(wm, "navguide_page", expand=True)
 
@@ -193,9 +192,15 @@ class NAVGUIDE_PT_main(bpy.types.Panel):
         layout.prop(wm, "navguide_query", text="", icon="VIEWZOOM")
         query = wm.navguide_query.strip()
         if not query:
-            _text(layout, "Type a tool or idea, e.g. extrude, copy, smooth.")
+            _text(layout, "Type a tool or idea, e.g. extrude, mirror, snap, light.")
+            box = layout.box()
+            box.label(text="Popular", icon="BOOKMARKS")
+            col = box.column(align=True)
+            col.scale_y = 0.8
+            for tool in finder.popular():
+                col.label(text=f"{tool['name']}: {tool.get('shortcut', '')}")
             return
-        results = finder.search(query, limit=2)
+        results = finder.search(query, limit=3)
         if not results:
             _text(layout, "No match. Try another word.", icon="ERROR")
             return
@@ -203,6 +208,8 @@ class NAVGUIDE_PT_main(bpy.types.Panel):
             box = layout.box()
             box.label(text=tool["name"], icon="RIGHTARROW")
             _text(box, tool["where"])
+            if tool.get("what"):
+                _text(box, tool["what"])
             if tool.get("shortcut"):
                 box.label(text=tool["shortcut"], icon="EVENT_RETURN")
             message, action = finder.mode_advice(tool, state)

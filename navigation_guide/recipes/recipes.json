@@ -757,6 +757,288 @@
           }
         }
       ]
+    },
+    {
+      "id": "mirror",
+      "title": "Model one side, get both (Mirror)",
+      "summary": "Use a Mirror modifier so edits on one half appear on the other.",
+      "keywords": [
+        "mirror",
+        "symmetry",
+        "symmetric",
+        "half",
+        "both sides",
+        "reflect",
+        "car",
+        "face",
+        "character"
+      ],
+      "steps": [
+        {
+          "short": "Have a cube",
+          "text": "Make sure there is a cube in the scene. Add one if not.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "min_mesh_objects": 1
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Select the cube",
+          "text": "Click the cube in the viewport so it has an orange outline.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Add Mirror",
+          "text": "Open the Properties editor on the right, click the wrench tab, then Add Modifier > Generate > Mirror.",
+          "shortcut": "Wrench tab > Add Modifier > Generate > Mirror",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "MIRROR"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Edit one side",
+          "text": "Press Tab for Edit Mode, select some points on one side and move them with G. The other side copies you.",
+          "shortcut": "Tab, then G",
+          "mode": "EDIT_MESH",
+          "done": {
+            "mode": "EDIT_MESH"
+          }
+        },
+        {
+          "short": "Back to Object Mode",
+          "text": "Press Tab again to leave Edit Mode. Press 'I did this' when done.",
+          "shortcut": "Tab"
+        }
+      ]
+    },
+    {
+      "id": "stairs",
+      "title": "Build stairs",
+      "summary": "One thin step repeated with an Array modifier.",
+      "keywords": [
+        "stairs",
+        "steps",
+        "staircase",
+        "stair",
+        "climb",
+        "ladder",
+        "array",
+        "repeat"
+      ],
+      "steps": [
+        {
+          "short": "Have a cube",
+          "text": "Make sure there is a cube in the scene. Add one if not.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "min_mesh_objects": 1
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Select the cube",
+          "text": "Click the cube in the viewport so it has an orange outline.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Make a flat step",
+          "text": "With the mouse over the viewport press S, then Z, type 0.25 and press Enter. This makes one low step.",
+          "shortcut": "S, Z, 0.25, Enter",
+          "mode": "OBJECT",
+          "done": {
+            "dim_max": {
+              "z": 0.8
+            }
+          },
+          "axis": "Z",
+          "highlight": true
+        },
+        {
+          "short": "Add Array",
+          "text": "Wrench tab > Add Modifier > Generate > Array.",
+          "shortcut": "Wrench tab > Add Modifier > Generate > Array",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "ARRAY"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Make it climb",
+          "text": "In the Array settings set Count to 6. Under Relative Offset set X to 0, Y to 1 and Z to 1. Press 'I did this' when you see stairs.",
+          "shortcut": "Array panel"
+        }
+      ]
+    },
+    {
+      "id": "smooth",
+      "title": "Make an object smooth",
+      "summary": "Subdivision Surface plus Shade Smooth for a soft, rounded look.",
+      "keywords": [
+        "smooth",
+        "round",
+        "soft",
+        "rounded",
+        "blocky",
+        "polish",
+        "subdivision",
+        "organic"
+      ],
+      "steps": [
+        {
+          "short": "Have a cube",
+          "text": "Make sure there is a cube in the scene. Add one if not.",
+          "shortcut": "Shift + A > Mesh > Cube",
+          "mode": "OBJECT",
+          "done": {
+            "min_mesh_objects": 1
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Select the cube",
+          "text": "Click the cube in the viewport so it has an orange outline.",
+          "shortcut": "Left click",
+          "mode": "OBJECT",
+          "done": {
+            "min_selected": 1,
+            "active_type": "MESH"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Add smoothing",
+          "text": "Wrench tab > Add Modifier > Generate > Subdivision Surface. Or press Ctrl + 2.",
+          "shortcut": "Ctrl + 2",
+          "mode": "OBJECT",
+          "done": {
+            "has_modifier": "SUBSURF"
+          },
+          "highlight": true
+        },
+        {
+          "short": "Shade smooth",
+          "text": "Object menu > Shade Smooth removes the faceted look. Press 'I did this' when done.",
+          "shortcut": "Object menu > Shade Smooth"
+        }
+      ]
+    },
+    {
+      "id": "lights_render",
+      "title": "Light the scene and render a picture",
+      "summary": "Add a light and a camera, look through the camera and render.",
+      "keywords": [
+        "render",
+        "light",
+        "lamp",
+        "camera",
+        "picture",
+        "image",
+        "photo",
+        "final",
+        "output",
+        "sun"
+      ],
+      "steps": [
+        {
+          "short": "Add a light",
+          "text": "Press Shift + A and choose Light > Sun (or Point). Without light a render is dark.",
+          "shortcut": "Shift + A > Light > Sun",
+          "mode": "OBJECT",
+          "done": {
+            "active_type": "LIGHT"
+          }
+        },
+        {
+          "short": "Add a camera",
+          "text": "Press Shift + A and choose Camera. The camera decides what the picture shows.",
+          "shortcut": "Shift + A > Camera",
+          "mode": "OBJECT",
+          "done": {
+            "active_type": "CAMERA"
+          }
+        },
+        {
+          "short": "Aim the camera",
+          "text": "Move around to the view you like, then press Ctrl + Alt + Numpad 0 to snap the camera to it. Press 'I did this' when done.",
+          "shortcut": "Ctrl + Alt + Numpad 0"
+        },
+        {
+          "short": "Look through it",
+          "text": "Press Numpad 0 to see the camera's view. Press 'I did this' when happy.",
+          "shortcut": "Numpad 0"
+        },
+        {
+          "short": "Render",
+          "text": "Press F12. Blender draws the picture in a new window. Press 'I did this' when done.",
+          "shortcut": "F12"
+        }
+      ]
+    },
+    {
+      "id": "parent_group",
+      "title": "Group objects so they move together",
+      "summary": "Parent one object to another.",
+      "keywords": [
+        "parent",
+        "child",
+        "group",
+        "attach",
+        "together",
+        "link",
+        "hierarchy",
+        "glue",
+        "wheel",
+        "door"
+      ],
+      "steps": [
+        {
+          "short": "Have two objects",
+          "text": "You need at least two objects. Add another with Shift + A.",
+          "shortcut": "Shift + A > Mesh",
+          "mode": "OBJECT",
+          "done": {
+            "min_mesh_objects": 2
+          },
+          "action": "add_cube",
+          "action_label": "Add a cube"
+        },
+        {
+          "short": "Pick child, then parent",
+          "text": "Click the object that should follow, then Shift + click the leader last so it is the active one. Press 'I did this' when done.",
+          "shortcut": "Click, then Shift + click"
+        },
+        {
+          "short": "Parent them",
+          "text": "With the mouse over the viewport press Ctrl + P and choose Object. Press 'I did this' when done.",
+          "shortcut": "Ctrl + P > Object"
+        },
+        {
+          "short": "Test it",
+          "text": "Select only the leader and press G to move it. The follower comes along. Right click to cancel.",
+          "shortcut": "G"
+        }
+      ]
     }
   ]
 }

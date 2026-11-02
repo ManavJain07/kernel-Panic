@@ -50,6 +50,19 @@ def redraw_all():
         pass
 
 
+def redraw_view():
+    """Redraw only the 3D drawing region (cheap). The sidebar is left alone."""
+    try:
+        for window in bpy.context.window_manager.windows:
+            for area in window.screen.areas:
+                if area.type == "VIEW_3D":
+                    for region in area.regions:
+                        if region.type == "WINDOW":
+                            region.tag_redraw()
+    except Exception:
+        pass
+
+
 def _current_step(recipe, index):
     steps = recipe["steps"]
     return steps[index] if index < len(steps) else None
