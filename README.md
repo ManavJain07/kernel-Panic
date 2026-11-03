@@ -3,6 +3,7 @@ https://docs.google.com/presentation/d/1Yolok7xpVubiltkrwu5ENy2ICPO1DA-D/edit?us
 
 
 
+
 # Blender Navigation Guide
 
 > A Blender add-on that makes Blender easier to learn, easier to find your way around, and easier to **operate for people who cannot use the standard keyboard-and-mouse workflow**.
