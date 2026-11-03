@@ -1,5 +1,5 @@
 #PPT File :
-https://docs.google.com/presentation/d/1K0-MgpuVs3k3h-1ZuE2rKO6g0d0ip4Cf/edit?usp=sharing&ouid=101484331737775157483&rtpof=true&sd=true
+https://docs.google.com/presentation/d/1Yolok7xpVubiltkrwu5ENy2ICPO1DA-D/edit?usp=sharing&ouid=101484331737775157483&rtpof=true&sd=true
 
 
 
